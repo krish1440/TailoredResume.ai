@@ -1,0 +1,184 @@
+{
+  "personal_info": {
+    "name": "Krish Chaudhary",
+    "email": "krishchaudhary144@gmail.com",
+    "phone": "+91 6353530662",
+    "linkedin": "linkedin.com/in/krish-chaudhary-krc8252/",
+    "github": "github.com/krish1440",
+    "portfolio": "portfolio-krish-chaudhary.vercel.app",
+    "kaggle": "kaggle.com/krishchaudhary14"
+  },
+  "professional_summaries": [
+    "Computer Science undergraduate specializing in data analytics, machine learning, and business intelligence. Experienced in analysing large datasets, building analytical dashboards, and developing data-driven solutions using Python, SQL, Power BI, and statistical modelling. Proven ability to convert raw data into actionable insights that improve operational efficiency, revenue, and decision-making.",
+    "Driven Computer Science student with a strong focus on Machine Learning, Natural Language Processing, Business Intelligence, Cloud Computing, and Computer Vision. Skilled in deploying AI models to derive strategic business value."
+  ],
+  "skills": {
+    "programming_languages": [
+      "Python",
+      "Java",
+      "C",
+      "JavaScript",
+      "SQL"
+    ],
+    "data_science_ml": [
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "XGBoost",
+      "LightGBM",
+      "CatBoost"
+    ],
+    "deep_learning_cv": [
+      "TensorFlow",
+      "PyTorch",
+      "Transformers (Hugging Face)",
+      "OpenCV"
+    ],
+    "data_visualization_bi": [
+      "Matplotlib",
+      "Seaborn",
+      "Plotly",
+      "Power BI",
+      "Tableau",
+      "Streamlit"
+    ],
+    "model_deployment_mlops": [
+      "FastAPI",
+      "Flask",
+      "Docker",
+      "MLflow",
+      "DVC",
+      "Git",
+      "GitHub"
+    ],
+    "development_tools": [
+      "Jupyter Notebook",
+      "VS Code",
+      "Anaconda"
+    ],
+    "core_strengths": [
+      "Business Analysis",
+      "Data Pipeline Development",
+      "Model Deployment"
+    ]
+  },
+  "education": [
+    {
+      "institution": "Parul University",
+      "location": "Vadodara, Gujarat",
+      "degree": "BTech Computer Science Engineering - Artificial Intelligence",
+      "start_date": "June 2023",
+      "end_date": "2027"
+    }
+  ],
+  "certifications": [
+    "IBM Data Analyst (Coursera)",
+    "Multidimensional Data Modeling (Infosys)",
+    "Accenture Job Simulation (Forage)",
+    "Generative AI for Business (IIM Mumbai)"
+  ],
+  "experience": [
+    {
+      "company": "Abhay Engineering",
+      "role": "Business Analyst",
+      "start_date": "April 2025",
+      "end_date": "May 2025",
+      "bullet_points": [
+        "Built an end-to-end analytics system for MSME order operations, reducing manual processing errors by 90% through automated tracking and validation workflows.",
+        "Designed analytical dashboards using RFM segmentation, CLV analysis, and regression-based sales forecasting, contributing to a 20% increase in customer retention and 35% growth in monthly revenue.",
+        "Implemented structured data storage and reporting pipelines with cloud-based document handling and Excel exports, reducing data retrieval time by 40%."
+      ]
+    },
+    {
+      "company": "iNeuron",
+      "role": "Data Analyst",
+      "start_date": "June 2024",
+      "end_date": "July 2024",
+      "bullet_points": [
+        "Analyzed crop production patterns across 646 districts by preprocessing 1.5M+ agricultural data points in Python, uncovering key high-yield crops and regional variations.",
+        "Built Power BI dashboards to visualize multi-year crop trends, highlighting state-wise and seasonal yield variations for major crops.",
+        "Delivered analytical reports identifying post-2010 yield declines and optimization opportunities across sugarcane, wheat, potato, and coconut production."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "OrderEazy Analytics",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "Streamlit",
+        "React.js",
+        "Supabase",
+        "Cloudinary",
+        "Gemini AI"
+      ],
+      "bullet_points": [
+        "Built a secure order management system supporting full CRUD operations, payment calculations, e-way bill uploads (PDF/images), delivery tracking, and role-based authentication.",
+        "Developed a centralized order management system that automated invoice and document workflows, reducing manual billing errors and credit note discrepancies by 90%.",
+        "Designed a comprehensive analytics module featuring revenue and quantity trends, customer activity metrics, CLV, retention insights, RFM segmentation, and sales forecasting.",
+        "Implemented RFM segmentation and sales forecasting models using Scikit-learn, while migrating legacy spreadsheet logs to a Supabase/PostgreSQL architecture, increasing repeat orders by 15% and improving query performance from 15 minutes to milliseconds.",
+        "Integrated an 'AI Business Analyst' module using Google Gemini 2.5 Flash to convert raw business metrics into plain-English insights, reducing executive reporting time by 70%.",
+        "Streamlined operational workflows by enabling Excel exports, seamless document handling, and a responsive interface with clear navigation."
+      ]
+    },
+    {
+      "name": "AI Stock News Sentiment",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "Streamlit",
+        "spaCy (NER)",
+        "FinBERT",
+        "SQLAlchemy",
+        "yfinance"
+      ],
+      "bullet_points": [
+        "Engineered an autonomous discovery engine that monitors live financial news streams (MoneyControl, Economic Times, LiveMint), utilizing spaCy NER and ticker validation to automatically identify and filter NSE/BSE entities with 100% accuracy and zero noise.",
+        "Integrated a FinBERT NLP pipeline to perform context-aware sentiment synthesis on raw financial news, enabling high-precision detection of market signals and distinguishing complex financial nuances.",
+        "Built a high-performance analytics dashboard using Streamlit and FastAPI with background tasking to visualize sentiment distribution and time-series trends."
+      ]
+    },
+    {
+      "name": "Smart Notes Application",
+      "technologies": [
+        "Python",
+        "Flask",
+        "AI/ML",
+        "PDF Processing"
+      ],
+      "bullet_points": [
+        "Engineered a full-stack AI-powered platform enabling secure PDF uploads, automated summarization, and conversational question answering, supported by authentication, cloud storage, and a daily usage quota system.",
+        "Integrated advanced NLP models to generate concise auto-summaries and context-aware chat responses, with features for note renaming, deletion, and structured dashboard organization.",
+        "Developed seamless PDF management workflows, real-time summaries, chat history retrieval, and polished exports to professionally formatted PDF documents."
+      ]
+    },
+    {
+      "name": "FaceGeo Attendance System",
+      "technologies": [
+        "Flask",
+        "Supabase",
+        "HTML",
+        "CSS",
+        "JS"
+      ],
+      "bullet_points": [
+        "Constructed a secure, role-based attendance platform integrating facial recognition and geo-fencing to ensure fraud-proof, real-time check-ins with dual verification of identity and location.",
+        "Orchestrated dashboards for users and organizations, enabling attendance tracking, report exports, manual request workflows, and administrative controls for zone setup and user management.",
+        "Enhanced operational reliability by implementing location-bound validation, instant face matching, visual attendance analytics, downloadable summaries, and a streamlined user flow for daily check-ins."
+      ]
+    },
+    {
+      "name": "Crop Production Analysis",
+      "technologies": [
+        "Pandas",
+        "Power BI"
+      ],
+      "bullet_points": [
+        "Processed and cleaned 20+ years of Indian agricultural records in Python, standardizing datasets and validating 1.5M+ entries to uncover long-term crop yield patterns and regional variations.",
+        "Derived crop productivity indicators (Production/Area) and enriched datasets with regional and crop-type classifications to enable deeper comparative evaluation of agricultural performance.",
+        "Designed interactive Power BI dashboards highlighting high-yield crops, leading states, and year-wise agricultural growth trends to support data-driven farming insights."
+      ]
+    }
+  ]
+}
