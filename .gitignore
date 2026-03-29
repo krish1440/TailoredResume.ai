@@ -1,0 +1,22 @@
+# Version 2 (Exclude for now)
+Tailored_Resume_V2/
+
+# Environment variables
+.env
+
+# PDF outputs
+*.pdf
+
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE specific
+.vscode/
+.idea/
+
+# Large JSON or logs if needed (though user said push some JSON for reference)
+# tailored_resume.json
+# analysis.json
+# score_report.json
