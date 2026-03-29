@@ -1,0 +1,12 @@
+{
+    "score": 88.27,
+    "keyword_score": 94.23,
+    "quant_score": 93.33,
+    "diversity_score": 86.67,
+    "word_count_score": 60.0,
+    "skills_cat_score": 100.0,
+    "feedback": [
+        "REPETITION DETECTED: Action verbs used more than once: deployed, developed",
+        "CRITICAL: Bullet length variance detected. Ensure each bullet is strictly between 20-25 words for ATS optimal depth."
+    ]
+}
