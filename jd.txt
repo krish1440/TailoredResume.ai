@@ -1,0 +1,21 @@
+Master Level Professional Job Description: AI, Machine Learning, Data Science, NLP, and Business Analyst Domains
+
+Overview:
+We are seeking a versatile and highly skilled Artificial Intelligence (AI) and Machine Learning (ML) Engineer with a strong background in Data Science, Natural Language Processing (NLP), and Business Analysis. This role requires a professional who can bridge the gap between complex technical implementation and strategic business value, architecting end-to-end intelligent systems.
+
+Key Responsibilities:
+1. AI/ML Engineering: Architect, develop, and deploy scalable Machine Learning and Deep Learning models using frameworks like PyTorch and TensorFlow. Specialize in Generative AI Development and Large Language Models (LLMs).
+2. Natural Language Processing (NLP): Build advanced autonomous NLP engines for sentiment analysis, entity identification (NER), and contextual document summarization using Transformers and FinBERT.
+3. Data Science & Engineering: Process large-scale datasets (1.5M+ records), perform feature engineering, and design robust ETL pipelines using Python (Pandas, NumPy) and SQL.
+4. Business Analysis & Intelligence: Translate raw data into actionable insights through RFM segmentation, sales forecasting, and revenue trend analysis. Build high-impact BI dashboards in Power BI and Streamlit.
+5. System Deployment (MLOps): Orchestrate secure, role-based production environments using FastAPI, Flask, and Docker. Ensure 90%+ automation in business workflows and document extraction.
+6. Computer Vision & IoT: Implement fraud-proof identification systems using Facial Recognition (Computer Vision) and Geo-fencing for real-time validation.
+
+Required Skills:
+- Programming: Python, SQL, REST APIs (FastAPI/Flask).
+- AI/ML: Generative AI, LLMs (Gemini, OpenAI), Transformers, CNN, LSTM, Scikit-learn.
+- Data: Postgres, Supabase, ETL, Data Orchestration.
+- Domain: Business Analytics, Financial News Sentiment, Document Automation.
+- Tools: Docker, Git/GitHub, Power BI, Streamlit.
+
+This role is for a high-performing professional capable of delivering end-to-end AI solutions that solve real-world business challenges.
