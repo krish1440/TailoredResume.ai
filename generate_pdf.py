@@ -80,6 +80,12 @@ def build_pdf(json_file="tailored_resume.json", output_pdf="Tailored_Resume.pdf"
         if not link.startswith("http"): link = f"https://{link}"
         display = pi["portfolio"].replace("https://", "").replace("www.", "")
         contacts.append(f'<a href="{link}">{display}</a>')
+
+    if pi.get("kaggle"):
+        link = pi["kaggle"]
+        if not link.startswith("http"): link = f"https://{link}"
+        display = pi["kaggle"].replace("https://", "").replace("www.", "")
+        contacts.append(f'<a href="{link}">{display}</a>')
     
     elements.append(Paragraph(" | ".join(contacts), styles['CompContact']))
 
@@ -140,7 +146,11 @@ def build_pdf(json_file="tailored_resume.json", output_pdf="Tailored_Resume.pdf"
             left = f"<b>{edu.get('institution', '')}</b> | {edu.get('location', '')}"
             right = f"<i>{edu.get('start_date', '')} - {edu.get('end_date', '')}</i>"
             elements.append(create_header(left, right))
-            elements.append(Paragraph(edu.get('degree', ''), styles['CompContent']))
+            degree_line = edu.get('degree', '')
+            gpa = edu.get('cgpa') or edu.get('gpa')
+            if gpa:
+                degree_line += f"  |  GPA: {gpa}"
+            elements.append(Paragraph(degree_line, styles['CompContent']))
             elements.append(Spacer(1, 2))
             
     # 7. Certifications
