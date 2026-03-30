@@ -1,0 +1,156 @@
+{
+    "personal_info": {
+        "name": "Krish Chaudhary",
+        "email": "krishchaudhary144@gmail.com",
+        "phone": "+91 6353530662",
+        "linkedin": "linkedin.com/in/krish-chaudhary-krc8252/",
+        "github": "github.com/krish1440",
+        "portfolio": "portfolio-krish-chaudhary.vercel.app",
+        "kaggle": "kaggle.com/krishchaudhary14"
+    },
+    "summary": "AI/ML Engineer and Data Science enthusiast pursuing BTech in Computer Science (AI) with hands-on experience building machine learning pipelines, NLP systems, and LLM-powered applications. Proficient in Python, scikit-learn, TensorFlow, FastAPI, and PostgreSQL. Delivered production-grade projects across sentiment analysis, predictive analytics, and intelligent document processing — reducing manual workflows by up to 90%. Seeking AI/ML or Data Science roles to apply analytical thinking and engineering skills to real-world problems.",
+    "skills": {
+        "Languages": [
+            "Python",
+            "SQL"
+        ],
+        "AI / ML / Deep Learning": [
+            "Machine Learning",
+            "Deep Learning",
+            "NLP",
+            "Computer Vision",
+            "scikit-learn",
+            "TensorFlow",
+            "Keras",
+            "Hugging Face Transformers",
+            "FinBERT",
+            "GenAI"
+        ],
+        "Data Science & Analysis": [
+            "Pandas",
+            "NumPy",
+            "Matplotlib",
+            "Seaborn",
+            "Feature Engineering"
+        ],
+        "Backend & APIs": [
+            "FastAPI",
+            "Flask",
+            "REST APIs",
+            "SQLAlchemy"
+        ],
+        "Databases": [
+            "PostgreSQL",
+            "Supabase",
+            "MySQL"
+        ],
+        "Tools & Platforms": [
+            "Git",
+            "GitHub",
+            "Power BI",
+            "Jupyter Notebook",
+            "Google Colab",
+            "VS Code",
+            "Docker (Basics)"
+        ],
+        "Core Competencies": [
+            "Data Pipelines",
+            "Model Deployment",
+            "Document Processing (PDFs)",
+            "Workflow Automation",
+            "Data Visualization",
+            "Data Extraction"
+        ]
+    },
+    "experience": [
+        {
+            "company": "Abhay Engineering",
+            "location": "Ahmedabad, Gujarat",
+            "role": "Business Analyst Intern",
+            "start_date": "April 2025",
+            "end_date": "May 2025",
+            "bullet_points": [
+                "Built an analytics system for MSME operations, automating 5+ manual tracking workflows and reducing human errors by 90%, saving approximately 10 hours of operational work per week.",
+                "Designed Python-based data pipelines for RFM customer segmentation and sales forecasting models, boosting customer retention by 20% and increasing revenue by 35% within the engagement period.",
+                "Configured structured PostgreSQL data storage with cloud-based document handling, accelerating data retrieval time by 40% across 3 core operational modules."
+            ]
+        },
+        {
+            "company": "iNeuron",
+            "location": "Remote",
+            "role": "Data Analyst Intern",
+            "start_date": "June 2024",
+            "end_date": "July 2024",
+            "bullet_points": [
+                "Processed and cleaned 1.5M+ agricultural data points using Python (Pandas, NumPy), uncovering 646 district-level yield patterns across 28 states for crop production insights.",
+                "Developed 5+ interactive multi-year crop trend dashboards using Matplotlib and Streamlit, visualizing seasonal and state-wise yield variations to support data-driven agricultural decisions.",
+                "Produced 3 detailed analytical reports on post-2010 yield declines, identifying production optimization opportunities across 10+ key crops and 15+ high-value districts."
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "name": "OrderEazy Analytics",
+            "technologies": [
+                "Python",
+                "FastAPI",
+                "React.js",
+                "PostgreSQL"
+            ],
+            "bullet_points": [
+                "Architected a FastAPI backend integrated with Supabase/PostgreSQL, automating billing workflows for 500+ monthly transactions and eliminating manual billing errors entirely across all transaction records.",
+                "Launched a Gemini API-powered AI Business Analyst module that auto-generates 10+ specific business insights per session, cutting manual reporting time by 70%.",
+                "Automated a document processing pipeline for e-way bill uploads (PDFs and images), eliminating 3+ manual extraction steps per workflow and improving data handling efficiency by 15%."
+            ]
+        },
+        {
+            "name": "AI Stock News Sentiment Analyser",
+            "technologies": [
+                "Python",
+                "FastAPI",
+                "Streamlit",
+                "spaCy",
+                "FinBERT",
+                "NLP",
+                "yfinance"
+            ],
+            "bullet_points": [
+                "Engineered a financial news discovery system using Python and FastAPI, continuously monitoring 50+ live news streams with 100% uptime and sub-second processing latency.",
+                "Deployed a FinBERT NLP sentiment classification pipeline achieving 85%+ accuracy, detecting buy/sell market signals across 200+ financial articles daily.",
+                "Constructed a REST API-driven analytics dashboard visualizing real-time sentiment and price trends for 20+ stock tickers, reducing manual market research time by 60%."
+            ]
+        },
+        {
+            "name": "Smart Notes Application",
+            "technologies": [
+                "Python",
+                "Flask",
+                "Hugging Face Transformers",
+                "NLP",
+                "GenAI",
+                "PDF Processing"
+            ],
+            "bullet_points": [
+                "Established an AI-powered Flask web platform for secure PDF uploads and automated summarization, supporting documents of 50+ pages with 95%+ content retention accuracy.",
+                "Implemented Hugging Face Transformer-based NLP models for GenAI document summarization and conversational Q&A, reducing average document review time by 50% per user session.",
+                "Optimized PDF management workflows with real-time summary generation and formatted export features, cutting average document turnaround time by 40% and streamlining delivery across the entire platform."
+            ]
+        }
+    ],
+    "education": [
+        {
+            "institution": "Parul University",
+            "location": "Vadodara, Gujarat",
+            "degree": "BTech Computer Science Engineering - Artificial Intelligence",
+            "cgpa": "8.05/10",
+            "start_date": "June 2023",
+            "end_date": "May 2027"
+        }
+    ],
+    "certifications": [
+        "IBM Data Analyst Professional Certificate (Coursera)",
+        "Multidimensional Data Modeling (Infosys Springboard)",
+        "Accenture Data Analytics Job Simulation (Forage)",
+        "Generative AI for Business (IIM Mumbai)"
+    ]
+}
