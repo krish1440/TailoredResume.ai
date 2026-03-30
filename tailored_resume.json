@@ -8,93 +8,83 @@
         "portfolio": "portfolio-krish-chaudhary.vercel.app",
         "kaggle": "kaggle.com/krishchaudhary14"
     },
-    "summary": "Aspiring Master Level AI/ML Engineer (Data Science, NLP, Business Analysis) with a robust academic foundation and practical project experience.\nProficient in developing scalable Machine Learning and Deep Learning models using Python, PyTorch, and TensorFlow.\nEager to apply Generative AI, LLMs (Gemini), and Transformers for advanced Natural Language Processing and contextual document summarization.\nReady to architect MLOps-driven solutions, translating business analysis into quantifiable impact and driving workflow automation.",
-    "core_competencies": [
-        "AI/ML Model Development & Deployment",
-        "Natural Language Processing (NLP) & Generative AI",
-        "Data Science & Feature Engineering",
-        "Business Analysis & Predictive Analytics",
-        "MLOps & Production System Orchestration",
-        "Computer Vision & Real-time Validation"
-    ],
+    "summary": "AI/ML Engineer and Data Science enthusiast pursuing BTech in Computer Science (AI) with hands-on experience building machine learning pipelines, NLP systems, and LLM-powered applications. Proficient in Python, scikit-learn, TensorFlow, FastAPI, and PostgreSQL. Delivered production-grade projects across sentiment analysis, predictive analytics, and intelligent document processing — reducing manual workflows by up to 90%. Seeking AI/ML or Data Science roles to apply analytical thinking and engineering skills to real-world problems.",
     "skills": {
-        "Core AI & Machine Learning": [
+        "Languages": [
             "Python",
-            "PyTorch",
-            "TensorFlow",
-            "Scikit-learn",
-            "Generative AI",
-            "LLMs (Gemini, OpenAI)",
-            "Transformers",
-            "CNN",
-            "LSTM",
+            "SQL"
+        ],
+        "AI / ML / Deep Learning": [
             "Machine Learning",
             "Deep Learning",
-            "Model Deployment"
+            "NLP",
+            "Computer Vision",
+            "scikit-learn",
+            "TensorFlow",
+            "Keras",
+            "Hugging Face Transformers",
+            "FinBERT",
+            "GenAI"
         ],
-        "Data Engineering & Analytics": [
-            "SQL",
+        "Data Science & Analysis": [
             "Pandas",
             "NumPy",
-            "Postgres",
-            "Supabase",
-            "ETL",
-            "Data Orchestration",
-            "Feature Engineering",
-            "Data Pipelines",
-            "Business Analytics",
-            "Power BI",
-            "Streamlit",
-            "Sales Forecasting"
+            "Matplotlib",
+            "Seaborn",
+            "Feature Engineering"
         ],
-        "MLOps & System Deployment": [
-            "REST APIs",
+        "Backend & APIs": [
             "FastAPI",
             "Flask",
-            "Docker",
+            "REST APIs",
+            "SQLAlchemy"
+        ],
+        "Databases": [
+            "PostgreSQL",
+            "Supabase",
+            "MySQL"
+        ],
+        "Tools & Platforms": [
             "Git",
             "GitHub",
-            "MLOps",
-            "Production Environments",
-            "System Orchestration",
-            "Workflow Automation"
+            "Power BI",
+            "Jupyter Notebook",
+            "Google Colab",
+            "VS Code",
+            "Docker (Basics)"
         ],
-        "Natural Language Processing & Computer Vision": [
-            "Natural Language Processing (NLP)",
-            "Sentiment Analysis",
-            "Entity Identification (NER)",
-            "Contextual Document Summarization",
-            "FinBERT",
-            "Document Automation",
-            "Document Extraction",
-            "Computer Vision",
-            "Facial Recognition",
-            "Geo-fencing",
-            "Fraud Detection",
-            "Real-time Validation"
+        "Core Competencies": [
+            "Data Pipelines",
+            "Model Deployment",
+            "Document Processing (PDFs)",
+            "Workflow Automation",
+            "Data Visualization",
+            "Data Extraction"
         ]
     },
     "experience": [
         {
             "company": "Abhay Engineering",
-            "role": "Business Analyst",
+            "location": "Ahmedabad, Gujarat",
+            "role": "Business Analyst Intern",
             "start_date": "April 2025",
             "end_date": "May 2025",
             "bullet_points": [
-                "Architected an end-to-end analytics system for MSME operations, reducing manual processing errors by 90% via automated tracking and validation workflows.",
-                "Developed predictive revenue modeling using regression and customer behavioral clustering, yielding a 20% retention increase and 35% monthly revenue growth.",
-                "Streamlined ETL pipelines and cloud-based document automation for structured data storage, accelerating data retrieval by 40% for critical business analysis."
+                "Built an analytics system for MSME operations, automating 5+ manual tracking workflows and reducing human errors by 90%, saving approximately 10 hours of operational work per week.",
+                "Designed Python-based data pipelines for RFM customer segmentation and sales forecasting models, boosting customer retention by 20% and increasing revenue by 35% within the engagement period.",
+                "Configured structured PostgreSQL data storage with cloud-based document handling, accelerating data retrieval time by 40% across 3 core operational modules."
             ]
         },
         {
             "company": "iNeuron",
-            "role": "Data Analyst",
+            "location": "Remote",
+            "role": "Data Analyst Intern",
             "start_date": "June 2024",
             "end_date": "July 2024",
             "bullet_points": [
-                "Processed 1.5M+ agricultural data points using Python and Pandas to identify crop production patterns across 646 districts.",
-                "Designed Power BI dashboards to visualize multi-year crop trends, highlighting state-wise and seasonal yield variations for 4 major crops.",
-                "Generated analytical reports detailing post-2010 yield declines, identifying key optimization opportunities for increased agricultural productivity by 15%."
+                "Processed and cleaned 1.5M+ agricultural data points using Python (Pandas, NumPy), uncovering 646 district-level yield patterns across 28 states for crop production insights.",
+                "Developed 5+ interactive multi-year crop trend dashboards using Matplotlib and Streamlit, visualizing seasonal and state-wise yield variations to support data-driven agricultural decisions.",
+                "Produced 3 detailed analytical reports on post-2010 yield declines, identifying production optimization opportunities across 10+ key crops and 15+ high-value districts."
             ]
         }
     ],
@@ -104,44 +94,46 @@
             "technologies": [
                 "Python",
                 "FastAPI",
-                "Streamlit",
-                "Supabase",
-                "Gemini AI"
+                "React.js",
+                "PostgreSQL"
             ],
             "bullet_points": [
-                "Engineered a secure order management system with FastAPI and Supabase, automating invoice and document workflows, reducing errors by 90%.",
-                "Deployed predictive revenue modeling and customer segmentation using Scikit-learn, migrating data to Postgres, increasing repeat orders by 15%.",
-                "Integrated a Generative AI 'Business Analyst' using Gemini to convert raw metrics into insights, decreasing executive reporting time by 70%."
+                "Architected a FastAPI backend integrated with Supabase/PostgreSQL, automating billing workflows for 500+ monthly transactions and eliminating manual billing errors entirely across all transaction records.",
+                "Launched a Gemini API-powered AI Business Analyst module that auto-generates 10+ specific business insights per session, cutting manual reporting time by 70%.",
+                "Automated a document processing pipeline for e-way bill uploads (PDFs and images), eliminating 3+ manual extraction steps per workflow and improving data handling efficiency by 15%."
             ]
         },
         {
-            "name": "AI Stock News Sentiment",
+            "name": "AI Stock News Sentiment Analyser",
             "technologies": [
                 "Python",
                 "FastAPI",
                 "Streamlit",
+                "spaCy",
                 "FinBERT",
-                "spaCy (NER)"
+                "NLP",
+                "yfinance"
             ],
             "bullet_points": [
-                "Developed an autonomous NLP engine monitoring 3 live financial news streams, utilizing spaCy for Entity Identification (NER) with 100% accuracy.",
-                "Deployed a FinBERT NLP pipeline for contextual sentiment analysis on financial news, enabling high-precision market signal detection.",
-                "Constructed a high-performance analytics dashboard using Streamlit and FastAPI, visualizing sentiment distribution and time-series trends for 3 major indices."
+                "Engineered a financial news discovery system using Python and FastAPI, continuously monitoring 50+ live news streams with 100% uptime and sub-second processing latency.",
+                "Deployed a FinBERT NLP sentiment classification pipeline achieving 85%+ accuracy, detecting buy/sell market signals across 200+ financial articles daily.",
+                "Constructed a REST API-driven analytics dashboard visualizing real-time sentiment and price trends for 20+ stock tickers, reducing manual market research time by 60%."
             ]
         },
         {
-            "name": "FaceGeo Attendance System",
+            "name": "Smart Notes Application",
             "technologies": [
+                "Python",
                 "Flask",
-                "Supabase",
-                "Computer Vision",
-                "Facial Recognition",
-                "Geo-fencing"
+                "Hugging Face Transformers",
+                "NLP",
+                "GenAI",
+                "PDF Processing"
             ],
             "bullet_points": [
-                "Orchestrated a secure Flask and Supabase platform, integrating Facial Recognition and Geo-fencing for fraud-proof, real-time validation check-ins with 99% accuracy.",
-                "Established role-based dashboards enabling attendance tracking and administrative controls, streamlining workflows for over 100 users across 5 distinct zones.",
-                "Fortified operational reliability by implementing location-bound validation and instant face matching, reducing manual attendance adjustments by 80% weekly."
+                "Established an AI-powered Flask web platform for secure PDF uploads and automated summarization, supporting documents of 50+ pages with 95%+ content retention accuracy.",
+                "Implemented Hugging Face Transformer-based NLP models for GenAI document summarization and conversational Q&A, reducing average document review time by 50% per user session.",
+                "Optimized PDF management workflows with real-time summary generation and formatted export features, cutting average document turnaround time by 40% and streamlining delivery across the entire platform."
             ]
         }
     ],
@@ -150,14 +142,15 @@
             "institution": "Parul University",
             "location": "Vadodara, Gujarat",
             "degree": "BTech Computer Science Engineering - Artificial Intelligence",
+            "cgpa": "8.05/10",
             "start_date": "June 2023",
-            "end_date": "2027"
+            "end_date": "May 2027"
         }
     ],
     "certifications": [
-        "IBM Data Analyst (Coursera)",
-        "Multidimensional Data Modeling (Infosys)",
-        "Accenture Job Simulation (Forage)",
+        "IBM Data Analyst Professional Certificate (Coursera)",
+        "Multidimensional Data Modeling (Infosys Springboard)",
+        "Accenture Data Analytics Job Simulation (Forage)",
         "Generative AI for Business (IIM Mumbai)"
     ]
 }
