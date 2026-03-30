@@ -1,0 +1,32 @@
+Job Title: AI/Ml Engineer (Entry Level / Fresher)
+
+ABOUT THE ROLE
+We are looking for a motivated fresher to contribute to AI-driven
+products and data-powered decision-making. You will work on building
+intelligent systems, processing data, and deploying solutions that
+create real business impact.
+
+RESPONSIBILITIES
+- Build and evaluate machine learning models to solve
+  classification, prediction, and automation problems.
+- Write clean, efficient code to process, clean, and
+  analyze structured and unstructured data.
+- Integrate AI capabilities and third-party services into
+  backend applications and workflows.
+- Deploy and maintain application backends and model APIs
+  in cloud or containerized environments.
+- Visualize data findings and communicate results clearly
+  to both technical and non-technical audiences.
+- Work with databases to store, retrieve, and manage
+  application and pipeline data reliably.
+- Maintain clean, version-controlled, and well-documented
+  codebases throughout the development lifecycle.
+
+REQUIRED SKILLS
+- Strong programming fundamentals (any language; Python preferred)
+- Working knowledge of machine learning concepts and workflows
+- Basic understanding of data handling and analysis
+- Familiarity with building or consuming APIs
+- Ability to work with relational databases and write queries
+- Understanding of deployment and version control basics
+- Good problem-solving and communication skills
