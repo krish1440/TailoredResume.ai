@@ -33,8 +33,26 @@ def tailor_resume(master_json_path, job_description, analysis=None, feedback=Non
     # This is the "Brain" of the operation. The Prompt Engineering here is extremely strict.
     prompt = f"""
 You are an elite, ATS-optimizing Resume Writer specializing in FRESHER / ENTRY-LEVEL candidates.
-Your only input is the Master Resume JSON below. You MUST NOT invent, hallucinate, or fabricate
-any project, role, technology, metric, or company that does not exist in the master data.
+
+╔══════════════════════════════════════════════════════════════╗
+║           TWO-TIER HONESTY RULE — READ CAREFULLY             ║
+╠══════════════════════════════════════════════════════════════╣
+║  TIER 1 — STRICT (Experience & Project BULLETS):             ║
+║    • You MUST NOT fabricate, invent, or alter any bullet     ║
+║      point in Experience or Projects sections. Every action, ║
+║      tool, metric, and company MUST trace to master data.    ║
+║    • If a JD skill was NOT used in a real project/role,      ║
+║      do NOT claim it was. Silence is better than a lie.      ║
+║                                                              ║
+║  TIER 2 — FLEXIBLE (Skills, Summary, Core Competencies):    ║
+║    • The Skills section, Summary, and Core Competencies ARE  ║
+║      the keyword absorption layer. You MUST include every    ║
+║      must-have and nice-to-have JD keyword here — even if    ║
+║      the candidate only has academic/theoretical exposure.   ║
+║    • A skill appearing in the Skills section signals         ║
+║      awareness and readiness — this is standard practice     ║
+║      for fresher resumes and is ATS-expected.                ║
+╚══════════════════════════════════════════════════════════════╝
 
 ══════════════════════════════════════════════════════════════
 TARGET ROLE   : {target_title}
@@ -48,10 +66,13 @@ TOP PRIORITIES: {'; '.join(top_3)}
 [SUMMARY — 3 to 4 lines, approx 60-80 words]
   • This is a FRESHER resume. The summary must read like an ambitious student/new-grad,
     NOT a 5-year veteran.
-  • Sentence 1: Who the candidate is + their strongest relevant technical skill cluster.
+  • MANDATORY — Sentence 1 MUST open with the exact target job title "{target_title}" and 
+    the candidate's name or degree context. Example: "Aspiring {target_title} with a strong 
+    foundation in..." — The title "{target_title}" MUST appear verbatim in Sentence 1.
   • Sentence 2: What specific value they bring to THIS role (tie to top_3_priorities).
-  • Content: Highlight core technical expertise, a high-impact project outcome, and 
-    specific value aligned with the target role.
+  • Content: Naturally weave in 2–3 of the most critical JD must-have keywords 
+    (from MUST-HAVE KW list above) into the paragraph — do NOT list them, blend them.
+  • Highlight a high-impact project outcome and specific value aligned with top_3_priorities.
   • Format: Write a cohesive paragraph that is 3 to 4 lines long (about 70 words).
   • Hard limit: 80 words total. If it exceeds 80 words, cut ruthlessly.
   • FORBIDDEN in summary: lists, semicolons, bullet-style phrases, the word "proficient",
@@ -60,14 +81,19 @@ TOP PRIORITIES: {'; '.join(top_3)}
 
 [CORE COMPETENCIES — exactly 6 items]
   • Single noun-phrases only (e.g., "Predictive Modeling", "REST API Development").
-  • Every item must map to a real skill from master data AND appear in the JD.
+  • PRIORITISE JD must-have keywords — include them verbatim if they fit as noun-phrases.
+  • Items can come from master data OR directly from JD keywords (candidate's academic breadth).
   • No soft skills unless the JD explicitly requires them as a hard requirement.
 
-[TECHNICAL SKILLS — 3 to 4 domain categories]
+[TECHNICAL SKILLS — 4 to 5 domain categories]  ← KEYWORD ABSORPTION LAYER
   • Category names must be concrete (e.g., "ML & AI Frameworks", "Data Engineering",
     "Cloud & DevOps", "Languages & Databases"). No generic names like "Others".
   • Each category: 4 to 7 skills, comma-separated.
-  • Include ONLY tools/frameworks actually used in the experience or project bullets.
+  • MANDATORY COVERAGE: Every single keyword from MUST-HAVE KW and INDUSTRY KW above 
+    MUST appear in at least one skills category. Do not skip any — even if the skill
+    does not appear in a project bullet. A fresher listing it in Skills is legitimate.
+  • ALSO include all nice_to_have_skills from the JD analysis if space allows.
+  • Skills from master data take priority placement; JD-only keywords fill remaining slots.
   • Do NOT repeat a skill across categories.
 
 [EXPERIENCE — exactly 2 entries, most relevant to JD]
@@ -87,6 +113,10 @@ TOP PRIORITIES: {'; '.join(top_3)}
 
 [EDUCATION]
   • Copy verbatim from master data. Do not add or remove fields.
+
+[PERSONAL INFO]
+  • Copy ALL fields verbatim from master data: name, phone, email, linkedin, github, portfolio, kaggle.
+  • Never omit kaggle even if not mentioned in the JD.
 
 [CERTIFICATIONS]
   • Copy verbatim from master data as a flat list.
@@ -137,9 +167,13 @@ RULE B-7  NO SUMMARY BLEED: Bullet points must describe concrete actions and res
 ━━━━━━━━━━━━━━━━━━━  SELF-VALIDATION CHECKLIST (run before outputting)  ━━━━━━━━━━━━━━━━━━━
 
 Before writing the final JSON, mentally verify:
+  [ ] Summary Sentence 1 contains the EXACT job title "{target_title}" — non-negotiable.
+  [ ] Summary naturally includes 2-3 JD must-have keywords.
   [ ] Summary is 3-4 lines (approx 70 words) and follows the fresher tone.
-  [ ] Exactly 6 core competencies.
-  [ ] Exactly 3–4 skill categories.
+  [ ] Exactly 6 core competencies — at least 4 are direct JD keywords.
+  [ ] Exactly 4–5 skill categories.
+  [ ] EVERY keyword from MUST-HAVE KW list appears in at least one skills category.
+  [ ] Experience and project bullets contain ZERO fabricated tools, companies, or metrics.
   [ ] Exactly 2 experience entries, 3 bullets each, MOST RECENT FIRST.
   [ ] Exactly 3 project entries, 5 tech tags and 3 bullets each.
   [ ] Every bullet is 20–25 words (count each one).
@@ -167,14 +201,16 @@ Return ONLY this JSON object with no extra text, no markdown fences:
         "email": "...",
         "linkedin": "...",
         "github": "...",
-        "portfolio": "..."
+        "portfolio": "...",
+        "kaggle": "..."
     }},
-    "summary": "Cohesive 3-4 line paragraph, approx 70 words, fresher tone.",
+    "summary": "[MUST open with target job title: {target_title}] Cohesive 3-4 line paragraph, approx 70 words, fresher tone.",
     "core_competencies": ["Competency 1", "Competency 2", "Competency 3", "Competency 4", "Competency 5", "Competency 6"],
     "skills": {{
         "Domain Category 1": ["Skill A", "Skill B", "Skill C"],
         "Domain Category 2": ["Skill D", "Skill E", "Skill F"],
-        "Domain Category 3": ["Skill G", "Skill H", "Skill I"]
+        "Domain Category 3": ["Skill G", "Skill H", "Skill I"],
+        "Domain Category 4": ["Skill G", "Skill H", "Skill I"]
     }},
     "experience": [
         {{
