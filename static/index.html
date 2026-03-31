@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tailored Resume AI | Perfectly Optimized Resumes</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
     <div id="loading">
         <div class="spinner"></div>
-        <p style="margin-top:1rem; font-weight:600;">Tailoring your resume... Please wait.</p>
+        <p style="margin-top:2rem; font-family:'Newsreader', serif; font-size: 1.2rem; font-style: italic;">Tailoring your resume... Please wait.</p>
     </div>
 
     <div class="container">
         <header>
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 <span>TailoredResume.ai</span>
             </a>
             <nav class="nav-links">
@@ -26,17 +25,23 @@
             </nav>
         </header>
 
-        <section class="hero" id="home">
+        <section class="hero">
             <div class="badge">V1.0 LIVE</div>
-            <h1>Perfectly Tailored <span style="color:var(--primary)">Resumes</span> in Seconds</h1>
+            <h1>Perfectly Tailored <span style="color:var(--primary-accent)">Resumes</span> in Seconds.</h1>
             <p>Our AI analyzes your master profile and target job description to build an ATS-optimized resume that gets you noticed.</p>
-            <br>
-            <a href="input.html" class="btn btn-primary">Start Tailoring Now</a>
+            
+            <div style="display: flex; gap: 1.5rem;">
+                <a href="input.html" class="btn btn-primary">Start Tailoring Now</a>
+                <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+            </div>
         </section>
 
-        <section id="how-it-works" style="padding: 4rem 0;">
-            <h2 style="text-align:center; margin-bottom: 3rem;">How it Works</h2>
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+        <section id="how-it-works" style="padding: 10rem 0 6rem;">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <div class="badge">Workflow</div>
+                <h2 style="font-family: 'Newsreader', serif; font-size: 2.5rem;">How it Works</h2>
+            </div>
+            <div class="sections-grid">
                 <div class="stat-card">
                     <h3>1. Input Profile</h3>
                     <p>Upload your master resume data in JSON format. This is your source of truth.</p>
@@ -52,8 +57,15 @@
             </div>
         </section>
 
-        <footer style="text-align:center; padding: 4rem 0; color:var(--on-surface-variant); border-top: 1px solid #e8eff3;">
-            <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
+        <footer style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 1rem;">TailoredResume.ai</p>
+                <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
+            </div>
+            <div class="nav-links">
+                <a href="https://github.com/krish1440/TailoredResume.ai" target="_blank">Code</a>
+                <a href="privacy.html">Privacy</a>
+            </div>
         </footer>
     </div>
 </body>
