@@ -10,7 +10,7 @@
     <div class="container">
         <header>
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 <span>TailoredResume.ai</span>
             </a>
             <nav class="nav-links">
@@ -19,21 +19,21 @@
             </nav>
         </header>
 
-        <section style="margin-bottom: 2rem;">
-            <h2>Master Resume Guide</h2>
-            <br>
-            <p style="color:var(--on-surface-variant)">The AI needs a structured <b>JSON</b> "source of truth". Follow this format for best results.</p>
+        <section style="margin-bottom: 4rem;">
+            <div class="badge">Guide</div>
+            <h1 style="font-size: 3rem;">Master Resume <br><i>Guide</i>.</h1>
+            <p style="color:var(--text-secondary); max-width: 600px;">The AI needs a structured <b>JSON</b> "source of truth". Follow this format for best results.</p>
         </section>
 
-        <div class="guide-content">
+        <div class="sections-grid" style="grid-template-columns: 1fr 1.5fr; gap: 6rem; align-items: start;">
             <div>
                 <h3>Key Tips</h3>
                 <br>
-                <div class="stat-card">
+                <div class="stat-card" style="margin-bottom: 3rem;">
                     <h4>1. Quantified Metrics</h4>
                     <p>Every project/experience bullet should have a number (%, $, count, time).</p>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" style="margin-bottom: 3rem;">
                     <h4>2. Project Narratives</h4>
                     <p>Include a "master_narrative" and "core_actions" list. The AI will weave these into unique bullets.</p>
                 </div>
@@ -41,14 +41,13 @@
                     <h4>3. JSON Structure</h4>
                     <p>Paste the sample on the right into your local file and fill your details.</p>
                 </div>
-                <br>
+                <br><br>
                 <button onclick="copySample()" class="btn btn-primary" style="width:100%">Copy Sample Format</button>
             </div>
 
-            <div>
-                <h3>Sample JSON Format</h3>
-                <br>
-                <pre id="sample-json">
+            <div class="card" style="padding: 3rem; background: var(--surface-low); margin: 0;">
+                <h3 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2rem;">Sample JSON Format</h3>
+                <pre id="sample-json" style="font-family: 'Inter', monospace; font-size: 0.85rem; line-height: 1.5; color: var(--text-primary); overflow-x: auto;">
 {
   "personal_info": {
     "name": "Your Full Name",
@@ -108,8 +107,17 @@
             </div>
         </div>
 
-        <footer style="text-align:center; padding: 4rem 0; color:var(--on-surface-variant); border-top: 1px solid #e8eff3;">
-            <p>&copy; 2026 TailoredResume.ai.</p>
+        <footer>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                <div>
+                    <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 1rem;">TailoredResume.ai</p>
+                    <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
+                </div>
+                <div class="nav-links">
+                    <a href="https://github.com/krish1440/TailoredResume.ai" target="_blank">Code</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
         </footer>
     </div>
 
@@ -118,7 +126,7 @@
         function copySample() {
             const text = document.getElementById('sample-json').innerText;
             navigator.clipboard.writeText(text).then(() => {
-                showNotify('Sample format' + ' copied to clipboard!');
+                showNotify('Sample format copied to clipboard!');
             });
         }
     </script>
