@@ -1,19 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Manrope:wght@500;600;700;800&display=swap');
 
 :root {
-    --bg-primary: #faf9f7;
-    --text-primary: #1a1c1b;
-    --text-secondary: #554336;
-    --surface: #ffffff;
-    --surface-low: #f4f3f1;
-    --surface-lowest: #ffffff;
-    --primary-accent: #d97706; /* Amber */
-    --primary-dim: #b15f00;
-    --outline: rgba(219, 194, 176, 0.3);
-    --radius-sm: 2px;
+    /* Design Tokens: The Precision Scriptorium */
+    --bg-primary: #faf9f7;      /* Primary Ivory Background */
+    --text-primary: #1a1c1b;     /* Primary Charcoal Text */
+    --text-secondary: #554336;   /* Muted Earth Tone Accent */
+    --surface: #ffffff;          /* Card Surfaces */
+    --surface-low: #f4f3f1;      /* Elevated Surfaces */
+    --surface-lowest: #ffffff;   /* Lowest Layer Surface */
+    --primary-accent: #d97706;   /* Amber Brand Accent */
+    --primary-dim: #b15f00;      /* Darkened Amber for Hover */
+    --outline: rgba(219, 194, 176, 0.3); /* Subtle Separators */
+    --radius-sm: 2px;            /* Precision Sharp Radius */
     --radius-md: 4px;
     --radius-xl: 12px;
-    --shadow-ambient: 0 20px 40px rgba(29, 28, 22, 0.05);
+    --shadow-ambient: 0 20px 40px rgba(29, 28, 22, 0.05); /* Tonal Shadow */
     --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
