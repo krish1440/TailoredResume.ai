@@ -1,6 +1,9 @@
-# Version 2 (Exclude for now)
+# Local-only artifacts (V1 remains local but ignored in GitHub)
+Tailored_Resume_V1/
 Tailored_Resume_V2/
 master prompt.txt
+Tailored_Resume.pdf
+
 # Environment variables
 .env
 
@@ -16,7 +19,6 @@ __pycache__/
 .vscode/
 .idea/
 
-# Large JSON or logs if needed (though user said push some JSON for reference)
-# tailored_resume.json
-# analysis.json
-# score_report.json
+# Web specific ignore (optional but good practice)
+output/
+uploads/
