@@ -91,7 +91,7 @@ python main.py
 ## 🧪 System Benchmarks
 - **Average ATS Match Score:** 96.4%
 - **Keyword Saturation:** 100% of "Must-Have" technical skills.
-- **Processing Time:** < 15 seconds per iteration.
+- **Processing Time:** < 1-2 Minutes per iteration.
 - **PDF Readability:** Validated against major ATS parsers.
 
 ---
