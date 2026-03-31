@@ -3,35 +3,37 @@
     "must_have_skills": [
         "Python",
         "Machine Learning",
-        "Data Analysis",
         "Data Cleaning",
-        "SQL",
+        "Data Analysis",
         "Relational Databases",
+        "SQL",
         "API Development",
         "Version Control",
-        "Git",
-        "Backend Development"
+        "Git"
     ],
     "nice_to_have_skills": [
         "Cloud Computing",
-        "Docker",
         "Containerization",
-        "Model Deployment",
-        "Data Visualization"
+        "Docker",
+        "Data Visualization",
+        "Backend Development",
+        "Automation",
+        "Model Deployment"
     ],
-    "experience_requirements": "Entry Level / Fresher",
+    "experience_requirements": "Fresher / Entry-level (0-1 years)",
     "industry_keywords": [
         "Artificial Intelligence",
         "Machine Learning",
         "Predictive Modeling",
-        "Data Pipelines",
-        "Classification",
-        "Automation",
-        "Model APIs"
+        "Data Science",
+        "MLOps",
+        "RESTful APIs",
+        "Structured and Unstructured Data",
+        "Software Development Lifecycle"
     ],
     "top_3_priorities": [
-        "Building and evaluating machine learning models to solve business problems",
-        "Writing clean, version-controlled code for data processing and model deployment",
-        "Integrating AI/ML models into functional backend applications and APIs"
+        "Ability to build and evaluate end-to-end machine learning workflows",
+        "Strong programming fundamentals and database management skills",
+        "Successful integration and deployment of AI models into production environments"
     ]
 }
