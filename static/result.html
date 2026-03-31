@@ -8,83 +8,86 @@
     <style>
         .resume-preview-card {
             background: #ffffff;
-            padding: 5rem;
+            padding: 40px 50px;
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-ambient);
-            color: #1a1c1b;
-            line-height: 1.4;
-            min-height: 1100px;
-            font-family: 'Inter', serif;
+            color: #000000;
+            line-height: 1.2;
+            min-height: 1056px; /* 11 inches at 96dpi */
+            width: 816px;       /* 8.5 inches at 96dpi */
+            font-family: 'Inter', Helvetica, Arial, sans-serif;
             border: 1px solid var(--outline);
+            margin: 0 auto;
             position: relative;
+            transform: scale(0.9); /* Scale down slightly to fit common screens */
+            transform-origin: top center;
         }
 
-        .resume-preview-card::after {
-            content: "RESUME PREVIEW";
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            color: var(--text-secondary);
-            opacity: 0.5;
+        .resume-preview-card * {
+            margin: 0;
+            padding: 0;
         }
 
         .p-name {
-            font-family: 'Newsreader', serif;
-            font-size: 2.2rem;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-            text-align: left;
+            font-size: 15pt;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2pt;
+            text-transform: uppercase;
         }
 
         .p-contact {
-            font-size: 0.85rem;
-            margin-bottom: 3rem;
-            color: var(--text-secondary);
-            letter-spacing: 0.02em;
+            font-size: 8.5pt;
+            text-align: center;
+            margin-bottom: 8pt;
+            color: #262626;
         }
 
         .p-section-title {
-            font-family: 'Newsreader', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 10pt;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid var(--outline);
-            padding-bottom: 0.5rem;
-            color: var(--primary-accent);
+            border-bottom: 0.8pt solid #000000;
+            margin-top: 6pt;
+            margin-bottom: 3pt;
+            padding-bottom: 1pt;
+            color: #000000;
         }
 
         .p-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
+            font-size: 9.5pt;
+            margin-top: 3pt;
+            margin-bottom: 1pt;
+        }
+
+        .p-date {
+            font-size: 8.5pt;
+            font-style: italic;
+            color: #333;
+            text-align: right;
         }
 
         .p-bullet {
-            font-size: 0.9rem;
-            padding-left: 1.5rem;
+            font-size: 9pt;
+            padding-left: 12pt;
             position: relative;
-            margin-bottom: 0.75rem;
-            color: #333;
+            margin-bottom: 2pt;
+            line-height: 1.1;
         }
 
         .p-bullet::before {
-            content: "—";
+            content: "•";
             position: absolute;
-            left: 0;
-            color: var(--primary-accent);
+            left: 3pt;
+            font-weight: bold;
         }
 
         .p-content {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            color: #333;
+            font-size: 9pt;
+            margin-bottom: 4pt;
+            line-height: 1.1;
         }
 
         .action-card {
@@ -201,9 +204,12 @@
 
             if (data.skills) {
                 html += `<div class="p-section-title">Technical Skills</div>`;
+                let skillLines = [];
                 for (let cat in data.skills) {
-                    html += `<div class="p-content"><b>${cat.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}:</b> ${data.skills[cat].join(', ')}</div>`;
+                    const label = cat.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    skillLines.push(`<b>${label}:</b> ${data.skills[cat].join(', ')}`);
                 }
+                html += `<div class="p-content">${skillLines.join('<br/>')}</div>`;
             }
 
             if (data.experience) {
@@ -212,7 +218,7 @@
                     html += `
                         <div class="p-row">
                             <b>${exp.company} | ${exp.role}</b>
-                            <i>${exp.start_date} - ${exp.end_date}</i>
+                            <span class="p-date">${exp.start_date} - ${exp.end_date}</span>
                         </div>
                         ${exp.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
                     `;
@@ -224,7 +230,7 @@
                 data.projects.forEach(p => {
                     html += `
                         <div class="p-row">
-                            <b>${p.name} | ${p.technologies.join(', ')}</b>
+                            <b>${p.name} | <i>${p.technologies.join(', ')}</i></b>
                         </div>
                         ${p.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
                     `;
@@ -238,14 +244,14 @@
                     html += `
                         <div class="p-row">
                             <b>${edu.institution} | ${edu.location}</b>
-                            <i>${edu.start_date} - ${edu.end_date}</i>
+                            <span class="p-date">${edu.start_date} - ${edu.end_date}</span>
                         </div>
                         <div class="p-content">${edu.degree}${gpa ? ` | GPA: ${gpa}` : ''}</div>
                     `;
                 });
             }
 
-            if (data.certifications) {
+            if (data.certifications && data.certifications.length > 0) {
                 html += `
                     <div class="p-section-title">Certifications</div>
                     <div class="p-content">${data.certifications.join(', ')}</div>
