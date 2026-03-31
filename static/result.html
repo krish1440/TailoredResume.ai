@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailored Result | Tailored Resume AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .result-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resume-preview-card {
+            background: #ffffff;
+            padding: 40px 60px; /* Mirror PDF margins */
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-soft);
+            color: #000000;
+            line-height: 1.2;
+            max-height: 850px;
+            overflow-y: auto;
+            font-family: 'Inter', 'Times New Roman', serif; /* PDF often feels like serif/standard fonts */
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .p-name {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .p-contact {
+            text-align: center;
+            font-size: 11.5px;
+            margin-bottom: 12px;
+            color: #222;
+        }
+
+        .p-section-title {
+            font-size: 13.5px;
+            font-weight: 800;
+            margin-top: 10px;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000;
+        }
+
+        .p-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+            margin-top: 5px;
+            margin-bottom: 3px;
+        }
+
+        .p-bullet {
+            font-size: 12px;
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+
+        .p-bullet::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+        }
+
+        .p-content {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .action-pane {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .status-pill {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .result-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span>TailoredResume.ai</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="input.html">Start Over</a>
+            </nav>
+        </header>
+
+        <section>
+            <div class="status-pill">
+                <span style="font-size: 1.2rem;">✨</span> Your ATS-Optimized Resume is Ready!
+            </div>
+            <br><br>
+            <p style="color:var(--on-surface-variant)">Preview the tailored content below and download your professional PDF for submission.</p>
+        </section>
+
+        <div class="result-layout">
+            <div class="resume-preview-card" id="resume-content">
+                <!-- Preview injected via JS -->
+            </div>
+
+            <div class="action-pane">
+                <div class="stat-card">
+                    <h3>ATS Match Score</h3>
+                    <div style="font-size: 2.8rem; font-weight: 800; color: var(--primary); margin: 0.5rem 0;" id="ats-score-val">0%</div>
+                    <p style="font-size: 0.85rem; color: var(--on-surface-variant);">Achieved through 3-stage agentic iteration & verification.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Actions</h3>
+                    <br>
+                    <a id="download-link" href="#" class="btn btn-primary" style="width:100%; text-align:center;">Download PDF</a>
+                    <br><br>
+                    <button onclick="copyJSON()" class="btn" style="width:100%; background:#f0f4f7;">Copy JSON</button>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Metadata</h3>
+                    <br>
+                    <div style="font-size: 0.9rem; color:var(--on-surface-variant)">
+                        <p><strong>Target Role:</strong> <span id="res-title">...</span></p>
+                        <p><strong>Status:</strong> Agentic Verified</p>
+                        <p><strong>ATS Compliance:</strong> Top Tier</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/scripts.js"></script>
+    <script>
+        // Check if data exists in sessionStorage
+        const tailoredData = JSON.parse(sessionStorage.getItem('tailored_resume'));
+        if (!tailoredData) {
+            window.location.href = 'input.html';
+        } else {
+            renderPreview(tailoredData);
+            document.getElementById('download-link').href = tailoredData.pdf_url;
+            document.getElementById('res-title').innerText = tailoredData.data.summary.split(' ')[1] || 'Target Role';
+            document.getElementById('ats-score-val').innerText = (sessionStorage.getItem('ats_score') || '0') + '%';
+        }
+
+        function renderPreview(res) {
+            const data = res.data;
+            const pi = data.personal_info;
+
+            let contacts = [];
+            if (pi.location) contacts.push(pi.location);
+            for (let f of ["phone", "email", "linkedin", "github", "portfolio", "kaggle"]) {
+                if (pi[f]) contacts.push(pi[f]);
+            }
+
+            let html = `
+                <div class="p-name">${pi.name}</div>
+                <div class="p-contact">${contacts.join(' | ')}</div>
+            `;
+
+            if (data.summary) {
+                html += `
+                    <div class="p-section-title">Professional Summary</div>
+                    <div class="p-content">${data.summary}</div>
+                `;
+            }
+
+            if (data.skills) {
+                html += `<div class="p-section-title">Technical Skills</div>`;
+                for (let cat in data.skills) {
+                    html += `<div class="p-content"><b>${cat.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}:</b> ${data.skills[cat].join(', ')}</div>`;
+                }
+            }
+
+            if (data.experience) {
+                html += `<div class="p-section-title">Experience</div>`;
+                data.experience.forEach(exp => {
+                    html += `
+                        <div class="p-row">
+                            <b>${exp.company} | ${exp.role}</b>
+                            <i>${exp.start_date} - ${exp.end_date}</i>
+                        </div>
+                        ${exp.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
+                    `;
+                });
+            }
+
+            if (data.projects) {
+                html += `<div class="p-section-title">Projects</div>`;
+                data.projects.forEach(p => {
+                    html += `
+                        <div class="p-row">
+                            <b>${p.name} | ${p.technologies.join(', ')}</b>
+                        </div>
+                        ${p.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
+                    `;
+                });
+            }
+
+            if (data.education) {
+                html += `<div class="p-section-title">Education</div>`;
+                data.education.forEach(edu => {
+                    const gpa = edu.cgpa || edu.gpa;
+                    html += `
+                        <div class="p-row">
+                            <b>${edu.institution} | ${edu.location}</b>
+                            <i>${edu.start_date} - ${edu.end_date}</i>
+                        </div>
+                        <div class="p-content">${edu.degree}${gpa ? ` | GPA: ${gpa}` : ''}</div>
+                    `;
+                });
+            }
+
+            if (data.certifications) {
+                html += `
+                    <div class="p-section-title">Certifications</div>
+                    <div class="p-content">${data.certifications.join(', ')}</div>
+                `;
+            }
+
+            document.getElementById('resume-content').innerHTML = html;
+        }
+
+        function copyJSON() {
+            const data = JSON.parse(sessionStorage.getItem('tailored_resume')).data;
+            navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => {
+                showNotify('JSON exported to clipboard successfully!');
+            });
+        }
+    </script>
+</body>
+</html>

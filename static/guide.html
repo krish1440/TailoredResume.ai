@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Resume Guide | Tailored Resume AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span>TailoredResume.ai</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="input.html">Tailor Now</a>
+            </nav>
+        </header>
+
+        <section style="margin-bottom: 2rem;">
+            <h2>Master Resume Guide</h2>
+            <br>
+            <p style="color:var(--on-surface-variant)">The AI needs a structured <b>JSON</b> "source of truth". Follow this format for best results.</p>
+        </section>
+
+        <div class="guide-content">
+            <div>
+                <h3>Key Tips</h3>
+                <br>
+                <div class="stat-card">
+                    <h4>1. Quantified Metrics</h4>
+                    <p>Every project/experience bullet should have a number (%, $, count, time).</p>
+                </div>
+                <div class="stat-card">
+                    <h4>2. Project Narratives</h4>
+                    <p>Include a "master_narrative" and "core_actions" list. The AI will weave these into unique bullets.</p>
+                </div>
+                <div class="stat-card">
+                    <h4>3. JSON Structure</h4>
+                    <p>Paste the sample on the right into your local file and fill your details.</p>
+                </div>
+                <br>
+                <button onclick="copySample()" class="btn btn-primary" style="width:100%">Copy Sample Format</button>
+            </div>
+
+            <div>
+                <h3>Sample JSON Format</h3>
+                <br>
+                <pre id="sample-json">
+{
+  "personal_info": {
+    "name": "Your Full Name",
+    "location": "City, State",
+    "email": "email@address.com",
+    "phone": "+91 0000000000",
+    "linkedin": "linkedin.com/in/username",
+    "github": "github.com/username"
+  },
+  "professional_summaries": [
+    "Experienced Data Analyst specializing in Python and SQL...",
+    "Aspiring ML Engineer with a focus on NLP and Deep Learning..."
+  ],
+  "skills": {
+    "languages": ["Python", "Java", "SQL"],
+    "frameworks": ["FastAPI", "React", "TensorFlow"],
+    "data_science": ["Pandas", "Scikit-learn"]
+  },
+  "experience": [
+    {
+      "company": "Tech Corp",
+      "role": "Data Analyst Intern",
+      "start_date": "Jan 2024",
+      "end_date": "May 2024",
+      "bullet_points": [
+        "Reduced query latency by 45% using optimized SQL indexing.",
+        "Delivered 12+ BI dashboards to executive leadership."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name",
+      "tech_stack": ["Python", "FastAPI"],
+      "master_narrative": "Detailed story of your project...",
+      "quantified_impact": [
+        "Saved 20 hours a week.",
+        "Increased accuracy by 30%."
+      ],
+      "core_actions": [
+        "Architected a scalable backend.",
+        "Implemented real-time monitoring."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University Name",
+      "degree": "B.Tech in CS",
+      "start_date": "2021",
+      "end_date": "2025",
+      "gpa": "9.0"
+    }
+  ]
+}
+                </pre>
+            </div>
+        </div>
+
+        <footer style="text-align:center; padding: 4rem 0; color:var(--on-surface-variant); border-top: 1px solid #e8eff3;">
+            <p>&copy; 2026 TailoredResume.ai.</p>
+        </footer>
+    </div>
+
+    <script src="js/scripts.js"></script>
+    <script>
+        function copySample() {
+            const text = document.getElementById('sample-json').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotify('Sample format' + ' copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

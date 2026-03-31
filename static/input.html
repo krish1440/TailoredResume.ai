@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Details | Tailored Resume AI</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top:1rem; font-weight:600;">Tailoring your resume using Gemini AI...</p>
+    </div>
+
+    <div class="container">
+        <header>
+            <a href="index.html" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span>TailoredResume.ai</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="guide.html">Master Resume Guide</a>
+            </nav>
+        </header>
+
+        <section style="margin-bottom: 2rem;">
+            <h2>Step 1: Input Your Core Details</h2>
+            <br>
+            <p style="color:var(--on-surface-variant)">Paste your Master Resume JSON data and the Job Description you want to target.</p>
+        </section>
+
+        <form id="tailor-form">
+            <div class="card">
+                <div class="input-group">
+                    <label>Master Resume (JSON Format)</label>
+                    <textarea id="master_json" required placeholder="Paste your master resume JSON here... (See Guide for format)" rows="12"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>Target Job Description</label>
+                    <textarea id="jd" required placeholder="Paste the job description here..." rows="12"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%">Generate Tailored Resume</button>
+            </div>
+        </form>
+
+        <footer style="text-align:center; padding: 2rem 0; color:var(--on-surface-variant); border-top: 1px solid #e8eff3;">
+            <p>&copy; 2026 TailoredResume.ai.</p>
+        </footer>
+    </div>
+
+    <script src="js/scripts.js"></script>
+</body>
+</html>
