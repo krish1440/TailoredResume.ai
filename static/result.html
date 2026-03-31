@@ -6,100 +6,101 @@
     <title>Tailored Result | Tailored Resume AI</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        .result-layout {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
         .resume-preview-card {
             background: #ffffff;
-            padding: 40px 60px; /* Mirror PDF margins */
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-soft);
-            color: #000000;
-            line-height: 1.2;
-            max-height: 850px;
-            overflow-y: auto;
-            font-family: 'Inter', 'Times New Roman', serif; /* PDF often feels like serif/standard fonts */
-            margin: 0 auto;
-            max-width: 800px;
+            padding: 5rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-ambient);
+            color: #1a1c1b;
+            line-height: 1.4;
+            min-height: 1100px;
+            font-family: 'Inter', serif;
+            border: 1px solid var(--outline);
+            position: relative;
+        }
+
+        .resume-preview-card::after {
+            content: "RESUME PREVIEW";
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            opacity: 0.5;
         }
 
         .p-name {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 2px;
-            text-transform: uppercase;
+            font-family: 'Newsreader', serif;
+            font-size: 2.2rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            text-align: left;
         }
 
         .p-contact {
-            text-align: center;
-            font-size: 11.5px;
-            margin-bottom: 12px;
-            color: #222;
+            font-size: 0.85rem;
+            margin-bottom: 3rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
         }
 
         .p-section-title {
-            font-size: 13.5px;
-            font-weight: 800;
-            margin-top: 10px;
-            margin-bottom: 2px;
+            font-family: 'Newsreader', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
             text-transform: uppercase;
-            border-bottom: 1px solid #000;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--outline);
+            padding-bottom: 0.5rem;
+            color: var(--primary-accent);
         }
 
         .p-row {
             display: flex;
             justify-content: space-between;
-            font-size: 12.5px;
-            margin-top: 5px;
-            margin-bottom: 3px;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .p-bullet {
-            font-size: 12px;
-            padding-left: 14px;
+            font-size: 0.9rem;
+            padding-left: 1.5rem;
             position: relative;
-            margin-bottom: 2px;
-            line-height: 1.3;
+            margin-bottom: 0.75rem;
+            color: #333;
         }
 
         .p-bullet::before {
-            content: "•";
+            content: "—";
             position: absolute;
             left: 0;
+            color: var(--primary-accent);
         }
 
         .p-content {
-            font-size: 12px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: #333;
         }
 
-        .action-pane {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        .action-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--outline);
+            margin-bottom: 2rem;
         }
 
-        .status-pill {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        @media (max-width: 900px) {
-            .result-layout {
-                grid-template-columns: 1fr;
-            }
+        .action-card h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
         }
     </style>
 </head>
@@ -107,7 +108,7 @@
     <div class="container">
         <header>
             <a href="index.html" class="logo">
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 <span>TailoredResume.ai</span>
             </a>
             <nav class="nav-links">
@@ -116,50 +117,56 @@
             </nav>
         </header>
 
-        <section>
-            <div class="status-pill">
-                <span style="font-size: 1.2rem;">✨</span> Your ATS-Optimized Resume is Ready!
-            </div>
-            <br><br>
-            <p style="color:var(--on-surface-variant)">Preview the tailored content below and download your professional PDF for submission.</p>
+        <section style="margin-bottom: 4rem;">
+            <div class="badge">Success</div>
+            <h1 style="font-size: 3rem;">Your Tailored <br><i>Resume is Ready</i>.</h1>
+            <p style="color:var(--text-secondary); max-width: 600px;">Review your ATS-optimized resume below and download the final PDF version.</p>
         </section>
 
-        <div class="result-layout">
+        <div class="result-grid">
             <div class="resume-preview-card" id="resume-content">
                 <!-- Preview injected via JS -->
             </div>
 
-            <div class="action-pane">
-                <div class="stat-card">
-                    <h3>ATS Match Score</h3>
-                    <div style="font-size: 2.8rem; font-weight: 800; color: var(--primary); margin: 0.5rem 0;" id="ats-score-val">0%</div>
-                    <p style="font-size: 0.85rem; color: var(--on-surface-variant);">Achieved through 3-stage agentic iteration & verification.</p>
+            <div class="sidebar">
+                <div class="score-display">
+                    <div class="score-circle" id="ats-score-val">0</div>
+                    <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary);">ATS Match Score</p>
                 </div>
 
-                <div class="stat-card">
+                <div class="action-card">
                     <h3>Actions</h3>
-                    <br>
-                    <a id="download-link" href="#" class="btn btn-primary" style="width:100%; text-align:center;">Download PDF</a>
-                    <br><br>
-                    <button onclick="copyJSON()" class="btn" style="width:100%; background:#f0f4f7;">Copy JSON</button>
+                    <a id="download-link" href="#" class="btn btn-primary" style="width:100%; text-align:center; margin-bottom: 1rem;">Download PDF</a>
+                    <button onclick="copyJSON()" class="btn btn-secondary" style="width:100%">Copy JSON</button>
                 </div>
 
-                <div class="stat-card">
+                <div class="action-card" style="background: var(--bg-primary); border-style: dashed;">
                     <h3>Metadata</h3>
-                    <br>
-                    <div style="font-size: 0.9rem; color:var(--on-surface-variant)">
-                        <p><strong>Target Role:</strong> <span id="res-title">...</span></p>
-                        <p><strong>Status:</strong> Agentic Verified</p>
-                        <p><strong>ATS Compliance:</strong> Top Tier</p>
+                    <div style="font-size: 0.85rem; color:var(--text-secondary)">
+                        <p style="margin-bottom: 0.5rem;"><strong>Target Role:</strong> <span id="res-title">...</span></p>
+                        <p style="margin-bottom: 0.5rem;"><strong>Status:</strong> Agentic Verified</p>
+                        <p><strong>Compliance:</strong> High-Performance</p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <footer>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                <div>
+                    <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 1rem;">TailoredResume.ai</p>
+                    <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
+                </div>
+                <div class="nav-links">
+                    <a href="https://github.com/krish1440/TailoredResume.ai" target="_blank">Code</a>
+                    <a href="privacy.html">Privacy</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script src="js/scripts.js"></script>
     <script>
-        // Check if data exists in sessionStorage
         const tailoredData = JSON.parse(sessionStorage.getItem('tailored_resume'));
         if (!tailoredData) {
             window.location.href = 'input.html';
