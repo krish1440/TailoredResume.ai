@@ -1,11 +1,9 @@
 {
-    "score": 89.0,
-    "keyword_score": 90.0,
-    "quant_score": 73.33,
+    "score": 100.0,
+    "keyword_score": 100.0,
+    "quant_score": 100.0,
     "diversity_score": 100.0,
     "word_count_score": 100.0,
     "skills_cat_score": 100.0,
-    "feedback": [
-        "IMPACT RATIO LOW: Every single bullet point must contain a quantifiable metric (%, $, #)."
-    ]
+    "feedback": []
 }
