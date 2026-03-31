@@ -550,6 +550,10 @@ async def get_sample():
         "education": [{"institution": "Univ", "degree": "B.Tech", "start_date": "2020", "end_date": "2024"}]
     }
 
+@app.get("/privacy")
+async def privacy_page():
+    return FileResponse("static/privacy.html")
+
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
