@@ -23,8 +23,11 @@ load_dotenv()
 app = FastAPI()
 
 # Configuration
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# UPLOAD_DIR = "uploads"
+# os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 # Configure Gemini
 api_key = os.getenv("GEMINI_API_KEY")
@@ -556,26 +559,26 @@ async def get_sample():
 
 @app.get("/")
 async def home_page():
-    return FileResponse("static/index.html")
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 @app.get("/input")
 async def input_page():
-    return FileResponse("static/input.html")
+    return FileResponse(os.path.join(STATIC_DIR, "input.html"))
 
 @app.get("/result")
 async def result_page():
-    return FileResponse("static/result.html")
+    return FileResponse(os.path.join(STATIC_DIR, "result.html"))
 
 @app.get("/guide")
 async def guide_page():
-    return FileResponse("static/guide.html")
+    return FileResponse(os.path.join(STATIC_DIR, "guide.html"))
 
 @app.get("/privacy")
 async def privacy_page():
-    return FileResponse("static/privacy.html")
+    return FileResponse(os.path.join(STATIC_DIR, "privacy.html"))
 
-# Mount static files AFTER routes, without html=True to prevent 404 on clean URLs
-app.mount("/", StaticFiles(directory="static"), name="static")
+# Mount static files AFTER routes
+app.mount("/", StaticFiles(directory=STATIC_DIR), name="static")
 
 if __name__ == "__main__":
     import uvicorn
