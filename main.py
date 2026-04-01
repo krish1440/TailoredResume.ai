@@ -577,6 +577,10 @@ async def guide_page():
 async def privacy_page():
     return FileResponse(os.path.join(STATIC_DIR, "privacy.html"))
 
+@app.get("/about")
+async def about_page():
+    return FileResponse(os.path.join(STATIC_DIR, "about.html"))
+
 # Mount static files AFTER routes
 app.mount("/", StaticFiles(directory=STATIC_DIR), name="static")
 
