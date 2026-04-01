@@ -5,7 +5,7 @@ import time
 import google.generativeai as genai
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from datetime import datetime
@@ -23,9 +23,7 @@ app = FastAPI()
 
 # Configuration
 UPLOAD_DIR = "uploads"
-OUTPUT_DIR = "output"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Configure Gemini
 api_key = os.getenv("GEMINI_API_KEY")
@@ -34,16 +32,17 @@ if api_key:
 
 # Models from V1
 MODELS_TO_TRY = [
-    'gemini-3-flash-preview',
-    'gemini-2.5-flash-lite',
-    'gemini-3.1-flash-lite-preview',
-    'gemini-2.0-flash'
+        'gemini-3-flash-preview',
+        'gemini-2.5-flash-lite',
+        'gemini-3.1-flash-lite-preview',
+        'gemini-2.0-flash'
 ]
 
+import io
 # ----------------- PDF BUILDER -----------------
-def create_pdf(data: dict, output_path: str):
+def create_pdf(data: dict, output_buffer):
     doc = SimpleDocTemplate(
-        output_path,
+        output_buffer,
         pagesize=letter,
         rightMargin=22,
         leftMargin=22,
@@ -513,25 +512,29 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
 
         if not best_data: raise Exception("Iterative tailoring failed.")
 
-        result_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        pdf_path = os.path.join(OUTPUT_DIR, f"result_{result_id}.pdf")
-        create_pdf(best_data, pdf_path)
-        
         return {
             "success": True,
             "data": best_data,
-            "score": final_report['score'],
-            "pdf_url": f"/api/download/{result_id}"
+            "score": final_report['score']
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"success": False, "error": str(e)})
 
-@app.get("/api/download/{result_id}")
-async def download_pdf(result_id: str):
-    file_path = os.path.join(OUTPUT_DIR, f"result_{result_id}.pdf")
-    if os.path.exists(file_path):
-        return FileResponse(file_path, media_type="application/pdf", filename=f"Tailored_Resume_{result_id}.pdf")
-    raise HTTPException(status_code=404, detail="File not found")
+@app.post("/api/download")
+async def download_pdf_direct(data: dict):
+    try:
+        buffer = io.BytesIO()
+        create_pdf(data, buffer)
+        buffer.seek(0)
+        
+        filename = f"Tailored_Resume_{datetime.now().strftime('%Y%m%d%H%M')}.pdf"
+        return StreamingResponse(
+            buffer, 
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/sample_master")
 async def get_sample():
@@ -550,11 +553,28 @@ async def get_sample():
         "education": [{"institution": "Univ", "degree": "B.Tech", "start_date": "2020", "end_date": "2024"}]
     }
 
+@app.get("/")
+async def home_page():
+    return FileResponse("static/index.html")
+
+@app.get("/input")
+async def input_page():
+    return FileResponse("static/input.html")
+
+@app.get("/result")
+async def result_page():
+    return FileResponse("static/result.html")
+
+@app.get("/guide")
+async def guide_page():
+    return FileResponse("static/guide.html")
+
 @app.get("/privacy")
 async def privacy_page():
     return FileResponse("static/privacy.html")
 
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+# Mount static files AFTER routes, without html=True to prevent 404 on clean URLs
+app.mount("/", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
