@@ -7,17 +7,20 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <a href="index.html" class="logo">
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 <span>TailoredResume.ai</span>
             </a>
             <nav class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="input.html">Tailor Now</a>
+                <a href="/">Home</a>
+                <a href="/input">Tailor Now</a>
             </nav>
-        </header>
+        </div>
+    </header>
+
+    <div class="container">
 
         <section style="margin-bottom: 4rem;">
             <div class="badge">Guide</div>
@@ -110,12 +113,15 @@
         <footer>
             <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
                 <div>
-                    <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 1rem;">TailoredResume.ai</p>
+                    <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 0.5rem;">TailoredResume.ai</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Designed and developed by <a href="https://portfolio-krish-chaudhary.vercel.app/" target="_blank" style="color: var(--primary-accent); text-decoration: none; font-weight: 600;">Krish Chaudhary</a>
+                    </p>
                     <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
                 </div>
                 <div class="nav-links">
                     <a href="https://github.com/krish1440/TailoredResume.ai" target="_blank">Code</a>
-                    <a href="privacy.html">Privacy</a>
+                    <a href="/privacy">Privacy</a>
                 </div>
             </div>
         </footer>
