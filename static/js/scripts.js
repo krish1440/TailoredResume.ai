@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (result.success) {
                     sessionStorage.setItem('tailored_resume', JSON.stringify(result));
                     sessionStorage.setItem('ats_score', result.score);
-                    window.location.href = 'result.html';
+                    window.location.href = '/result';
                 } else {
                     showNotify('Tailoring failed: ' + result.error, 'error');
                 }
