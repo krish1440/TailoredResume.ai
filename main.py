@@ -505,7 +505,7 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
             for proj in tailored_data.get('projects', []):
                 proj['bullet_points'] = proj['bullet_points'][:3]
 
-            if report['score'] >= 85.0:
+            if report['score'] >= 95.0:
                 best_data = tailored_data
                 break
             else:
