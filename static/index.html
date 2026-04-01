@@ -15,26 +15,34 @@
         <p style="margin-top:2rem; font-family:'Newsreader', serif; font-size: 1.2rem; font-style: italic;">Tailoring your resume... Please wait.</p>
     </div>
 
-    <div class="container" role="main">
-        <header>
-            <a href="index.html" class="logo">
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                 <span>TailoredResume.ai</span>
             </a>
             <nav class="nav-links">
                 <a href="/">Home</a>
                 <a href="#how-it-works">How it Works</a>
-                <a href="guide.html">Master Resume Guide</a>
+                <a href="/guide">Master Resume Guide</a>
             </nav>
-        </header>
+        </div>
+    </header>
+
+    <div class="container" role="main">
 
         <section class="hero">
+            <div class="background-visuals">
+                <svg class="bg-shape bg-shape-1" width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M50 0L53.0612 37.7551L91.8367 40.8163L53.0612 43.8776L50 81.6327L46.9388 43.8776L8.16327 40.8163L46.9388 37.7551L50 0Z" fill="var(--primary-accent)" fill-opacity="0.12"/></svg>
+                <svg class="bg-shape bg-shape-2" width="120" height="150" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="100" height="130" rx="2" stroke="var(--primary-accent)" stroke-opacity="0.15" stroke-width="2"/><line x1="30" y1="40" x2="90" y2="40" stroke="var(--primary-accent)" stroke-opacity="0.15" stroke-width="2"/><line x1="30" y1="60" x2="90" y2="60" stroke="var(--primary-accent)" stroke-opacity="0.15" stroke-width="2"/><line x1="30" y1="80" x2="70" y2="80" stroke="var(--primary-accent)" stroke-opacity="0.15" stroke-width="2"/></svg>
+                <svg class="bg-shape bg-shape-3" width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="4" fill="var(--primary-accent)" fill-opacity="0.18"/><circle cx="160" cy="70" r="3" fill="var(--primary-accent)" fill-opacity="0.18"/><circle cx="100" cy="150" r="5" fill="var(--primary-accent)" fill-opacity="0.18"/><path d="M40 40L160 70 M160 70L100 150" stroke="var(--primary-accent)" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="4 4"/></svg>
+            </div>
             <div class="badge">V1.0 LIVE</div>
             <h1>Perfectly Tailored <span style="color:var(--primary-accent)">Resumes</span> in Seconds.</h1>
             <p>Our AI analyzes your master profile and target job description to build an ATS-optimized resume that gets you noticed.</p>
             
             <div style="display: flex; gap: 1.5rem;">
-                <a href="input.html" class="btn btn-primary">Start Tailoring Now</a>
+                <a href="/input" id="start-tailoring-btn" class="btn btn-primary">Start Tailoring Now</a>
                 <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
             </div>
         </section>
@@ -63,13 +71,44 @@
         <footer style="display: flex; justify-content: space-between; align-items: flex-end;">
             <div>
                 <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 1rem;">TailoredResume.ai</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    Designed and developed by <a href="https://portfolio-krish-chaudhary.vercel.app/" target="_blank" style="color: var(--primary-accent); text-decoration: none; font-weight: 600;">Krish Chaudhary</a>
+                </p>
                 <p>&copy; 2026 TailoredResume.ai. Built for the modern career.</p>
             </div>
             <div class="nav-links">
                 <a href="https://github.com/krish1440/TailoredResume.ai" target="_blank">Code</a>
-                <a href="privacy.html">Privacy</a>
+                <a href="/privacy">Privacy</a>
             </div>
         </footer>
+    <div id="guide-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="badge">Recommendation</div>
+            <h2>Wait, have you seen the <i>Guide</i>?</h2>
+            <p>Our AI requires a specific JSON format for your master profile to work its magic. We highly recommend viewing the guide first.</p>
+            <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+                <a href="/guide" class="btn btn-primary" style="flex:1">View Master Guide</a>
+                <button onclick="closeModal()" class="btn btn-secondary" style="flex:1">I've Seen It</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const startBtn = document.getElementById('start-tailoring-btn');
+        const modal = document.getElementById('guide-modal');
+
+        startBtn.addEventListener('click', function(e) {
+            if (!localStorage.getItem('guide_viewed')) {
+                e.preventDefault();
+                modal.classList.add('active');
+            }
+        });
+
+        function closeModal() {
+            localStorage.setItem('guide_viewed', 'true');
+            modal.classList.remove('active');
+            window.location.href = '/input';
+        }
+    </script>
 </body>
 </html>
