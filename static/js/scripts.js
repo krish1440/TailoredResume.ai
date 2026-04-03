@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const masterJson = document.querySelector('#master_json').value;
             const jd = document.querySelector('#jd').value;
             const loading = document.getElementById('loading');
@@ -74,5 +74,232 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Bi-directional Sync
+    document.getElementById('tailor-form').addEventListener('input', (e) => {
+        if (e.target.closest('#builder-container')) {
+            syncFormToJson();
+        }
+    });
+
+    // Initialize with EMPTY items (NOT samples)
+    if (document.getElementById('builder-container')) {
+        addItem('summaries');
+        addItem('experience');
+        addItem('projects');
+        addItem('education');
+        addItem('skills');
+    }
 });
+
+function switchTab(target) {
+    const builder = document.getElementById('builder-container');
+    const jsonContainer = document.getElementById('json-container');
+    const btns = document.querySelectorAll('.tab-btn');
+
+    btns.forEach(b => b.classList.remove('active'));
+    
+    if (target === 'form') {
+        builder.style.display = 'block';
+        jsonContainer.style.display = 'none';
+        btns[0].classList.add('active');
+        syncJsonToForm();
+    } else {
+        builder.style.display = 'none';
+        jsonContainer.style.display = 'block';
+        btns[1].classList.add('active');
+        syncFormToJson();
+    }
+}
+
+function syncFormToJson() {
+    const data = {
+        personal_info: {},
+        professional_summaries: [],
+        skills: {},
+        experience: [],
+        projects: [],
+        education: []
+    };
+
+    // Personal Info
+    document.querySelectorAll('[data-path^="personal_info."]').forEach(input => {
+        const key = input.dataset.path.split('.')[1];
+        data.personal_info[key] = input.value;
+    });
+
+    // Professional Summaries
+    document.querySelectorAll('.summary-item textarea').forEach(textarea => {
+        if (textarea.value.trim()) data.professional_summaries.push(textarea.value.trim());
+    });
+
+    // Skills
+    document.querySelectorAll('.skill-group').forEach(group => {
+        const cat = group.querySelector('.skill-cat').value || 'skills';
+        const items = group.querySelector('.skill-items').value.split(',').map(s => s.trim()).filter(s => s);
+        data.skills[cat] = items;
+    });
+
+    // Experience
+    document.querySelectorAll('.experience-item').forEach(item => {
+        const entry = {};
+        item.querySelectorAll('[data-field]').forEach(input => {
+            const field = input.dataset.field;
+            if (field === 'bullet_points') {
+                entry[field] = Array.from(item.querySelectorAll('.bullet-input')).map(bi => bi.value.trim()).filter(v => v);
+            } else {
+                entry[field] = input.value;
+            }
+        });
+        data.experience.push(entry);
+    });
+
+    // Projects
+    document.querySelectorAll('.projects-item').forEach(item => {
+        const entry = {
+            name: item.querySelector('[data-field="name"]').value,
+            tech_stack: item.querySelector('[data-field="tech_stack"]').value.split(',').map(t => t.trim()).filter(t => t),
+            master_narrative: item.querySelector('[data-field="master_narrative"]').value,
+            quantified_impact: Array.from(item.querySelectorAll('.impact-input')).map(i => i.value.trim()).filter(v => v),
+            core_actions: Array.from(item.querySelectorAll('.action-input')).map(i => i.value.trim()).filter(v => v)
+        };
+        data.projects.push(entry);
+    });
+
+    // Education
+    document.querySelectorAll('.education-item').forEach(item => {
+        const entry = {};
+        item.querySelectorAll('[data-field]').forEach(input => {
+            entry[input.dataset.field] = input.value;
+        });
+        data.education.push(entry);
+    });
+
+    document.getElementById('master_json').value = JSON.stringify(data, null, 2);
+}
+
+function syncJsonToForm() {
+    try {
+        const data = JSON.parse(document.getElementById('master_json').value);
+        
+        // Personal Info
+        Object.entries(data.personal_info || {}).forEach(([key, val]) => {
+            const input = document.querySelector(`[data-path="personal_info.${key}"]`);
+            if (input) input.value = val;
+        });
+
+        // Lists
+        document.getElementById('summaries-list').innerHTML = '';
+        document.getElementById('experience-list').innerHTML = '';
+        document.getElementById('projects-list').innerHTML = '';
+        document.getElementById('education-list').innerHTML = '';
+        document.getElementById('skills-list').innerHTML = '';
+
+        (data.professional_summaries || []).forEach(s => addItem('summaries', s));
+        (data.experience || []).forEach(exp => addItem('experience', exp));
+        (data.projects || []).forEach(proj => addItem('projects', proj));
+        (data.education || []).forEach(edu => addItem('education', edu));
+        Object.entries(data.skills || {}).forEach(([cat, items]) => addItem('skills', {cat, items}));
+
+    } catch (e) { console.warn("Sync failed: Invalid JSON"); }
+}
+
+function addItem(type, data = null) {
+    const list = document.getElementById(`${type}-list`);
+    const div = document.createElement('div');
+    div.className = `${type}-item card`;
+    div.style.marginBottom = '1.5rem';
+    div.style.padding = '1.5rem';
+
+    let html = '';
+    if (type === 'summaries') {
+        html = `<textarea class="input-field" placeholder="Professional Summary Option" rows="3">${data || ''}</textarea>`;
+    } else if (type === 'experience') {
+        html = `
+            <div class="form-row">
+                <input type="text" class="input-field" placeholder="Company Name" data-field="company" value="${data?.company || ''}">
+                <input type="text" class="input-field" placeholder="Role Title" data-field="role" value="${data?.role || ''}">
+            </div>
+            <div class="form-row">
+                <input type="text" class="input-field" placeholder="Start Date" data-field="start_date" value="${data?.start_date || ''}">
+                <input type="text" class="input-field" placeholder="End Date" data-field="end_date" value="${data?.end_date || ''}">
+            </div>
+            <div class="bullet-container">
+                <label style="font-size:0.85rem">Experience Bullets (Min 3)</label>
+                <div class="bullets-list">
+                    ${(data?.bullet_points || ["", "", ""]).map(bp => `<input type="text" class="input-field bullet-input" placeholder="Role-Specific Bullet Point" value="${bp}" style="margin-bottom:5px">`).join('')}
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'bullet-input', 'Role-Specific Bullet Point')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Bullet</button>
+            </div>
+        `;
+    } else if (type === 'projects') {
+        html = `
+            <div class="form-row">
+                <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}">
+                <input type="text" class="input-field" placeholder="Tech Stack (e.g. Python, React)" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}">
+            </div>
+            <div style="margin-top:1rem">
+                <label style="font-size:0.85rem">Master Narrative</label>
+                <textarea class="input-field" data-field="master_narrative" placeholder="Detailed story of your project" rows="4">${data?.master_narrative || ''}</textarea>
+            </div>
+            <div class="form-row" style="margin-top:1rem">
+                <div>
+                    <label style="font-size:0.85rem">Quantified Impacts (Min 3)</label>
+                    <div class="impacts-list">
+                        ${(data?.quantified_impact || ["", "", ""]).map(i => `<input type="text" class="input-field impact-input" placeholder="Quantified Impact" value="${i}" style="margin-bottom:5px">`).join('')}
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'impact-input', 'Quantified Impact')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Impact</button>
+                </div>
+                <div>
+                    <label style="font-size:0.85rem">Core Actions (Min 3)</label>
+                    <div class="actions-list">
+                        ${(data?.core_actions || ["", "", ""]).map(a => `<input type="text" class="input-field action-input" placeholder="Core Technical Action" value="${a}" style="margin-bottom:5px">`).join('')}
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'action-input', 'Core Technical Action')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Action</button>
+                </div>
+            </div>
+        `;
+    } else if (type === 'education') {
+        html = `
+            <input type="text" class="input-field" placeholder="Institution Name" data-field="institution" value="${data?.institution || ''}" style="margin-bottom:1rem">
+            <div class="form-row">
+                <input type="text" class="input-field" placeholder="Degree Type" data-field="degree" value="${data?.degree || ''}">
+                <input type="text" class="input-field" placeholder="GPA / CGPA" data-field="gpa" value="${data?.gpa || ''}">
+            </div>
+            <div class="form-row" style="margin-top:10px">
+                <input type="text" class="input-field" placeholder="Start Year" data-field="start_date" value="${data?.start_date || ''}">
+                <input type="text" class="input-field" placeholder="End Year" data-field="end_date" value="${data?.end_date || ''}">
+            </div>
+        `;
+    } else if (type === 'skills') {
+        div.className = 'skill-group card';
+        html = `
+            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Skill Domain / Category</label>
+                    <input type="text" class="input-field skill-cat" placeholder="Skill Domain" value="${data?.cat || ''}">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Specific Skills (comma separated)</label>
+                    <input type="text" class="input-field skill-items" placeholder="List of Skills" value="${(data?.items || []).join(', ')}">
+                </div>
+            </div>
+        `;
+    }
+
+    div.innerHTML = html + `<button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top:1.5rem; width:100%; border-color: rgba(255, 107, 107, 0.3);">Remove Section</button>`;
+    list.appendChild(div);
+    if (!data) syncFormToJson();
+}
+
+function addNestedInput(btn, className, placeholder) {
+    const list = btn.parentElement.querySelector('div');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = `input-field ${className}`;
+    input.placeholder = placeholder;
+    input.style.marginBottom = '5px';
+    list.appendChild(input);
+    syncFormToJson();
+}
 // Version 1.1
