@@ -227,7 +227,7 @@ function addItem(type, data = null) {
 
     let html = '';
     if (type === 'summaries') {
-        html = `<textarea class="input-field" placeholder="Professional Summary Option" rows="3">${data || ''}</textarea>`;
+        html = `<textarea class="input-field" placeholder="Professional Summary" rows="3">${data || ''}</textarea>`;
     } else if (type === 'experience') {
         html = `
             <div class="form-row">
@@ -255,7 +255,7 @@ function addItem(type, data = null) {
         html = `
             <div class="form-row">
                 <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}">
-                <input type="text" class="input-field" placeholder="GitHub Link (Optional)" data-field="github_link" value="${data?.github_link || ''}">
+                <input type="text" class="input-field" placeholder="GitHub Link" data-field="github_link" value="${data?.github_link || ''}">
             </div>
             <div class="form-row" style="margin-top:0.5rem">
                 <input type="text" class="input-field" placeholder="Tech Stack" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}">
