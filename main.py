@@ -36,10 +36,9 @@ if api_key:
 
 # Models from V1
 MODELS_TO_TRY = [
-        'gemini-3-flash-preview',
-        'gemini-2.5-flash-lite',
-        'gemini-3.1-flash-lite-preview',
-        'gemini-2.0-flash'
+    'gemini-flash-lite-latest',
+    'gemini-2.0-flash',
+    'gemini-flash-latest'
 ]
 
 import io
@@ -217,7 +216,17 @@ def score_resume_internal(data, analysis):
         feedback.append(f"MISSING CRITICAL TERMS: {', '.join(missing[:5])}")
 
     final_score = (scores['keyword'] * 30 + scores['quant'] * 30 + scores['diversity'] * 15 + scores['word_count'] * 15 + scores['skills_cat'] * 10)
-    return {"score": round(final_score, 2), "feedback": feedback}
+    return {
+        "score": round(final_score, 2), 
+        "feedback": feedback,
+        "metrics": {
+            "keyword": round(scores['keyword'] * 100, 2),
+            "quant": round(scores['quant'] * 100, 2),
+            "diversity": round(scores['diversity'] * 100, 2),
+            "word_count": round(scores['word_count'] * 100, 2),
+            "skills": round(scores['skills_cat'] * 100, 2)
+        }
+    }
 
 # ----------------- PIPELINE FUNCTIONS -----------------
 
@@ -244,9 +253,16 @@ def analyze_jd(jd_text):
     for model_name in MODELS_TO_TRY:
         try:
             model = genai.GenerativeModel(model_name, generation_config={"response_mime_type": "application/json"})
-            return json.loads(model.generate_content(prompt).text)
-        except: continue
+            response = model.generate_content(prompt)
+            if not response.text:
+                print(f">>> EMPTY RESPONSE from {model_name}")
+                continue
+            return json.loads(response.text)
+        except Exception as e:
+            print(f">>> Gemini Error with {model_name}: {e}")
+            continue
     return None
+
 
 def tailor_resume_attempt(master_data, job_description, analysis, feedback=None):
     target_title = analysis.get("ideal_job_title", "Target Role")
@@ -519,7 +535,8 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
         return {
             "success": True,
             "data": best_data,
-            "score": final_report['score']
+            "score": final_report['score'],
+            "metrics": final_report.get('metrics', {})
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"success": False, "error": str(e)})
