@@ -217,58 +217,73 @@ function addItem(type, data = null) {
     } else if (type === 'experience') {
         html = `
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Company Name" data-field="company" value="${data?.company || ''}">
-                <input type="text" class="input-field" placeholder="Role Title" data-field="role" value="${data?.role || ''}">
+                <input type="text" class="input-field" placeholder="Company Name" data-field="company" value="${data?.company || ''}" required>
+                <input type="text" class="input-field" placeholder="Role Title" data-field="role" value="${data?.role || ''}" required>
             </div>
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Start Date" data-field="start_date" value="${data?.start_date || ''}">
-                <input type="text" class="input-field" placeholder="End Date" data-field="end_date" value="${data?.end_date || ''}">
+                <input type="text" class="input-field" placeholder="Start Date" data-field="start_date" value="${data?.start_date || ''}" required>
+                <input type="text" class="input-field" placeholder="End Date" data-field="end_date" value="${data?.end_date || ''}" required>
             </div>
             <div class="bullet-container">
-                <label style="font-size:0.85rem">Experience Bullets (Min 3)</label>
+                <label style="font-size:0.85rem">Experience Bullets (Min 3 Required)*</label>
                 <div class="bullets-list">
-                    ${(data?.bullet_points || ["", "", ""]).map(bp => `<input type="text" class="input-field bullet-input" placeholder="Role-Specific Bullet Point" value="${bp}" style="margin-bottom:5px">`).join('')}
+                    ${(data?.bullet_points || ["", "", ""]).map((bp, i) => `
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${i+1}.</span>
+                            <input type="text" class="input-field bullet-input" placeholder="Bullet Point" value="${bp}" ${i < 3 ? 'required' : ''}>
+                        </div>
+                    `).join('')}
                 </div>
-                <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'bullet-input', 'Role-Specific Bullet Point')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Bullet</button>
+                <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'bullet-input', 'Bullet Point')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add More Bullets</button>
             </div>
         `;
     } else if (type === 'projects') {
         html = `
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}">
-                <input type="text" class="input-field" placeholder="Tech Stack (e.g. Python, React)" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}">
+                <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}" required>
+                <input type="text" class="input-field" placeholder="Tech Stack" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}" required>
             </div>
             <div style="margin-top:1rem">
-                <label style="font-size:0.85rem">Master Narrative</label>
-                <textarea class="input-field" data-field="master_narrative" placeholder="Detailed story of your project" rows="4">${data?.master_narrative || ''}</textarea>
+                <label style="font-size:0.85rem">Master Narrative*</label>
+                <textarea class="input-field" data-field="master_narrative" placeholder="Detailed story of your project" rows="4" required>${data?.master_narrative || ''}</textarea>
             </div>
             <div class="form-row" style="margin-top:1rem">
                 <div>
-                    <label style="font-size:0.85rem">Quantified Impacts (Min 3)</label>
+                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Quantified Impacts (Min 3 Required)*</label>
                     <div class="impacts-list">
-                        ${(data?.quantified_impact || ["", "", ""]).map(i => `<input type="text" class="input-field impact-input" placeholder="Quantified Impact" value="${i}" style="margin-bottom:5px">`).join('')}
+                        ${(data?.quantified_impact || ["", "", ""]).map((i, idx) => `
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
+                                <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${idx+1}.</span>
+                                <input type="text" class="input-field impact-input" placeholder="Quantified Impact" value="${i}" ${idx < 3 ? 'required' : ''}>
+                            </div>
+                        `).join('')}
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'impact-input', 'Quantified Impact')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Impact</button>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'impact-input', 'Quantified Impact')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Impact</button>
                 </div>
                 <div>
-                    <label style="font-size:0.85rem">Core Actions (Min 3)</label>
+                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Core Actions (Min 3 Required)*</label>
                     <div class="actions-list">
-                        ${(data?.core_actions || ["", "", ""]).map(a => `<input type="text" class="input-field action-input" placeholder="Core Technical Action" value="${a}" style="margin-bottom:5px">`).join('')}
+                        ${(data?.core_actions || ["", "", ""]).map((a, idx) => `
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
+                                <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${idx+1}.</span>
+                                <input type="text" class="input-field action-input" placeholder="Technical Core Action" value="${a}" ${idx < 3 ? 'required' : ''}>
+                            </div>
+                        `).join('')}
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'action-input', 'Core Technical Action')" style="font-size:0.7rem; padding:5px 10px; margin-top:5px">+ Add Action</button>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'action-input', 'Technical Core Action')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Action</button>
                 </div>
             </div>
         `;
     } else if (type === 'education') {
         html = `
-            <input type="text" class="input-field" placeholder="Institution Name" data-field="institution" value="${data?.institution || ''}" style="margin-bottom:1rem">
+            <input type="text" class="input-field" placeholder="Institution Name" data-field="institution" value="${data?.institution || ''}" required style="margin-bottom:1rem">
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Degree Type" data-field="degree" value="${data?.degree || ''}">
-                <input type="text" class="input-field" placeholder="GPA / CGPA" data-field="gpa" value="${data?.gpa || ''}">
+                <input type="text" class="input-field" placeholder="Degree Type" data-field="degree" value="${data?.degree || ''}" required>
+                <input type="text" class="input-field" placeholder="GPA / CGPA" data-field="gpa" value="${data?.gpa || ''}" required>
             </div>
             <div class="form-row" style="margin-top:10px">
-                <input type="text" class="input-field" placeholder="Start Year" data-field="start_date" value="${data?.start_date || ''}">
-                <input type="text" class="input-field" placeholder="End Year" data-field="end_date" value="${data?.end_date || ''}">
+                <input type="text" class="input-field" placeholder="Start Year" data-field="start_date" value="${data?.start_date || ''}" required>
+                <input type="text" class="input-field" placeholder="End Year" data-field="end_date" value="${data?.end_date || ''}" required>
             </div>
         `;
     } else if (type === 'skills') {
@@ -276,12 +291,12 @@ function addItem(type, data = null) {
         html = `
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <div>
-                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Skill Domain / Category</label>
-                    <input type="text" class="input-field skill-cat" placeholder="Skill Domain" value="${data?.cat || ''}">
+                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Skill Domain (e.g. Languages)*</label>
+                    <input type="text" class="input-field skill-cat" placeholder="Skill Domain" value="${data?.cat || ''}" required>
                 </div>
                 <div>
-                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Specific Skills (comma separated)</label>
-                    <input type="text" class="input-field skill-items" placeholder="List of Skills" value="${(data?.items || []).join(', ')}">
+                    <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">List of Skills*</label>
+                    <input type="text" class="input-field skill-items" placeholder="List of Skills" value="${(data?.items || []).join(', ')}" required>
                 </div>
             </div>
         `;
@@ -294,12 +309,18 @@ function addItem(type, data = null) {
 
 function addNestedInput(btn, className, placeholder) {
     const list = btn.parentElement.querySelector('div');
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = `input-field ${className}`;
-    input.placeholder = placeholder;
-    input.style.marginBottom = '5px';
-    list.appendChild(input);
+    const existingCount = list.children.length;
+    const div = document.createElement('div');
+    div.style.display = 'flex';
+    div.style.alignItems = 'center';
+    div.style.gap = '8px';
+    div.style.marginBottom = '5px';
+    
+    div.innerHTML = `
+        <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${existingCount + 1}.</span>
+        <input type="text" class="input-field ${className}" placeholder="${placeholder}">
+    `;
+    list.appendChild(div);
     syncFormToJson();
 }
-// Version 1.1
+// Version 1.2
