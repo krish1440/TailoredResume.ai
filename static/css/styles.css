@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Manrope:wght@500;600;700;800&display=swap');
 
 :root {
-    /* Design Tokens: The Refined Manuscript */
-    --bg-primary: #f2f1eb;      /* Slightly Darker Vellum Background */
-    --text-primary: #1a1c1b;     /* Primary Charcoal Text */
+    /* Design Tokens: The Precision Scriptorium */
+    --bg-primary: #faf9f7;      /* Ivory Vellum Background */
+    --text-primary: #1a1c1b;     /* Obsidian Ink Text */
     --text-secondary: #554336;   /* Muted Earth Tone Accent */
     --surface: #ffffff;          /* Card Surfaces */
-    --surface-low: #e8e7e1;      /* Slightly Darker Surface Shifts */
-    --surface-high: #e2e1d9;     /* High Contrast Surfaces */
-    --primary-accent: #d97706;   /* Amber Brand Accent */
+    --surface-low: #f4f3f1;      /* Recessed Surface */
+    --surface-high: #efeeec;     /* Elevated Surface */
+    --primary-accent: #d97706;   /* Authoritative Amber */
     --primary-dim: #b15f00;      /* Darkened Amber for Hover */
-    --outline: rgba(219, 194, 176, 0.4); /* More Defined Ghost Border */
+    --outline: rgba(136, 115, 100, 0.15); /* The Ghost Border */
     --radius-sm: 2px;            /* Precision Sharp Radius */
     --radius-md: 4px;
-    --radius-xl: 12px;
-    --shadow-ambient: 0 20px 40px rgba(29, 28, 22, 0.08); /* Stronger Tonal Shadow */
+    --radius-xl: 8px;
+    --shadow-ambient: 0 40px 80px rgba(26, 28, 27, 0.04); /* Ultra-Diffused Ambient Light */
     --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     --primary-gradient: linear-gradient(135deg, #d97706 0%, #b15f00 100%);
 }
@@ -484,22 +484,32 @@ textarea:focus, input[type="text"]:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    display: flex;
+    background: rgba(10, 12, 11, 0.95); /* Deep obsidian background */
+    backdrop-filter: blur(12px);
+    display: none; /* Controlled by JS */
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 9999;
+    flex-direction: column;
 }
 
 .loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(217, 119, 6, 0.1);
     border-top: 3px solid var(--primary-accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: 0 auto;
+    margin-bottom: 2rem;
+}
+
+.loading-overlay p {
+    color: var(--primary-accent) !important;
+    font-family: 'Newsreader', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 @keyframes spin {
@@ -648,6 +658,30 @@ footer p {
 }
 
 /* Profile Builder Form */
+.item-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    border: 1px solid var(--outline); /* Felt border */
+    transition: var(--transition-smooth);
+}
+
+.item-card:hover {
+    background: var(--surface-low);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-ambient);
+}
+
+.item-card h4 {
+    color: var(--primary-accent);
+    margin-bottom: 2rem;
+    font-family: 'Newsreader', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
 .form-section {
     background: white;
     border: 1px solid var(--border-color);
@@ -684,20 +718,35 @@ footer p {
     }
 }
 
-.input-field {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
+.form-group label {
+    display: block;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 0.65rem;
 }
 
-.input-field:focus {
+.form-group input, 
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--outline);
+    border-radius: 0;
+    transition: var(--transition-smooth);
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
     outline: none;
-    border-color: var(--primary-accent);
-    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+    border-bottom: 1px solid var(--primary-accent);
 }
 
 .bullet-item {
@@ -707,59 +756,65 @@ footer p {
 }
 
 .remove-btn {
-    background: #fff5f5;
-    color: #e53e3e;
-    border: 1px solid #fed7d7;
-    border-radius: 6px;
-    padding: 0 12px;
+    background: transparent;
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.75rem;
     cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.2s;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
 }
 
 .remove-btn:hover {
-    background: #fed7d7;
+    background: #fef2f2;
+    border-color: #ef4444;
 }
 
 .add-btn {
-    background: #f0ebff;
+    background: var(--surface-low);
     color: var(--primary-accent);
     border: 1px dashed var(--primary-accent);
-    border-radius: 8px;
-    padding: 0.8rem;
+    border-radius: var(--radius-sm);
+    padding: 1rem;
     width: 100%;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.9rem;
-    margin-top: 1rem;
-    transition: all 0.2s;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 1.5rem;
+    transition: var(--transition-smooth);
 }
 
 .add-btn:hover {
-    background: #e5dbff;
+    background: var(--surface-high);
+    border-style: solid;
 }
 
 .form-tabs {
     display: flex;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 .tab-btn {
-    padding: 0.8rem 1.5rem;
-    border-radius: 100px;
-    border: 1px solid var(--border-color);
-    background: white;
+    padding: 1rem 2rem;
+    background: var(--surface-low);
+    border: 1px solid var(--outline);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
+    font-weight: 500;
+    transition: var(--transition-smooth);
 }
 
 .tab-btn.active {
-    background: var(--text-primary);
+    background: var(--primary-accent);
     color: white;
-    border-color: var(--text-primary);
+    border-color: var(--primary-accent);
+    box-shadow: 0 10px 20px rgba(217, 119, 6, 0.1);
 }
 
 /* Version 1.1 */
-
