@@ -36,9 +36,10 @@ if api_key:
 
 # Models from V1
 MODELS_TO_TRY = [
-    'gemini-flash-lite-latest',
-    'gemini-2.0-flash',
-    'gemini-flash-latest'
+        'gemini-3-flash-preview',
+        'gemini-2.5-flash-lite',
+        'gemini-3.1-flash-lite-preview',
+        'gemini-2.0-flash'
 ]
 
 import io
@@ -276,12 +277,14 @@ You are an elite, ATS-optimizing Resume Writer specializing in FRESHER / ENTRY-L
 ╔══════════════════════════════════════════════════════════════╗
 ║           TWO-TIER HONESTY RULE — READ CAREFULLY             ║
 ╠══════════════════════════════════════════════════════════════╣
-║  TIER 1 — STRICT (Experience & Project BULLETS):             ║
-║    • You MUST NOT fabricate, invent, or alter any bullet     ║
-║      point in Experience or Projects sections. Every action, ║
-║      tool, metric, and company MUST trace to master data.    ║
-║    • If a JD skill was NOT used in a real project/role,      ║
-║      do NOT claim it was. Silence is better than a lie.      ║
+║  TIER 1 — STRICT (Data Integrity):                          ║
+║    • USE USER DATA AS-IS: Your primary task is to maintain   ║
+║      the user's original company names, roles, and metrics.  ║
+║    • DO NOT rewrite the meaning of bullets. Simply rephrase  ║
+║      them to be exactly 20-25 words and ensure each starts   ║
+║      with a unique action verb.                              ║
+║    • QUANTIFICATION: Use the user's provided metrics. If the  ║
+║      user provided a number, DO NOT change it.               ║
 ║                                                              ║
 ║  TIER 2 — FLEXIBLE (Skills, Summary, Core Competencies):    ║
 ║    • The Skills section, Summary, and Core Competencies ARE  ║
