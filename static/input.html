@@ -45,27 +45,27 @@
         </section>
 
         <div class="form-tabs">
-            <button type="button" class="tab-btn active" onclick="switchTab('form')">Profile Builder</button>
-            <button type="button" class="tab-btn" onclick="switchTab('json')">Direct JSON Editor</button>
+            <button type="button" class="tab-btn active" onclick="switchTab('json')">Direct JSON Editor</button>
+            <button type="button" class="tab-btn" onclick="switchTab('form')">Profile Builder</button>
         </div>
 
         <form id="tailor-form">
             <!-- PROFILE BUILDER (FORM) -->
-            <div id="builder-container">
+            <div id="builder-container" style="display: none;">
                 <!-- Personal Info -->
                 <div class="form-section">
                     <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Personal Info</h3>
                     <div class="form-row">
-                        <input type="text" class="input-field" placeholder="Full Name" data-path="personal_info.name" required>
-                        <input type="text" class="input-field" placeholder="Location" data-path="personal_info.location" required>
+                        <input type="text" class="input-field" placeholder="Full Name" data-path="personal_info.name">
+                        <input type="text" class="input-field" placeholder="Location" data-path="personal_info.location">
                     </div>
                     <div class="form-row">
-                        <input type="email" class="input-field" placeholder="Email Address" data-path="personal_info.email" required>
-                        <input type="text" class="input-field" placeholder="Phone Number" data-path="personal_info.phone" required>
+                        <input type="email" class="input-field" placeholder="Email Address" data-path="personal_info.email">
+                        <input type="text" class="input-field" placeholder="Phone Number" data-path="personal_info.phone">
                     </div>
                     <div class="form-row">
-                        <input type="text" class="input-field" placeholder="LinkedIn Profile" data-path="personal_info.linkedin" required>
-                        <input type="text" class="input-field" placeholder="GitHub Username" data-path="personal_info.github" required>
+                        <input type="text" class="input-field" placeholder="LinkedIn Profile" data-path="personal_info.linkedin">
+                        <input type="text" class="input-field" placeholder="GitHub Username" data-path="personal_info.github">
                     </div>
                 </div>
 
@@ -106,7 +106,7 @@
             </div>
 
             <!-- JSON EDITOR -->
-            <div id="json-container" style="display: none;">
+            <div id="json-container" style="display: block;">
                 <div class="card">
                     <div class="input-group">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -145,6 +145,11 @@
                 </div>
             </div>
         </footer>
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 1.5rem; color: #fff; font-weight: 500; letter-spacing: 0.05em;">TAILORING YOUR FUTURE...</p>
+        </div>
     </div>
 
     <script src="js/scripts.js"></script>

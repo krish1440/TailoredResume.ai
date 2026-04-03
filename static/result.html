@@ -131,8 +131,11 @@
         </section>
 
         <div class="result-grid">
-            <div class="resume-preview-card" id="resume-content">
-                <!-- Preview injected via JS -->
+            <div class="resume-preview-container" style="position: sticky; top: 8rem;">
+                <div class="badge" style="margin-bottom: 1rem; background: var(--primary-accent); color: white; border: none;">Live PDF Preview</div>
+                <div class="card" style="height: 1100px; padding: 0; overflow: hidden; border: 1px solid var(--outline); background: #525659;">
+                    <iframe id="pdf-preview-frame" style="width: 100%; height: 100%; border: none;"></iframe>
+                </div>
             </div>
 
             <div class="sidebar">
@@ -172,12 +175,14 @@
                     <button onclick="copyJSON()" class="btn btn-secondary" style="width:100%">Copy JSON</button>
                 </div>
 
-                <div class="action-card" style="background: var(--bg-primary); border-style: dashed;">
-                    <h3>Metadata</h3>
+                <div id="metadata-card" class="action-card" style="background: var(--bg-primary); border-style: dashed;">
+                    <h3>Tailoring Metadata</h3>
                     <div style="font-size: 0.85rem; color:var(--text-secondary)">
-                        <p style="margin-bottom: 0.5rem;"><strong>Target Role:</strong> <span id="res-title">...</span></p>
-                        <p style="margin-bottom: 0.5rem;"><strong>Scan Status:</strong> Context-Optimized</p>
-                        <p><strong>ATS Compliance:</strong> High-Compatibility</p>
+                        <p style="margin-bottom: 0.8rem;"><strong>Base Role:</strong> <span id="res-title">...</span></p>
+                        <div id="project-links-meta" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--outline);">
+                            <p style="margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Project Repositories:</p>
+                            <!-- Links will be injected here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -206,8 +211,23 @@
         if (!tailoredData) {
             window.location.href = '/input';
         } else {
-            renderPreview(tailoredData);
+            loadPDFPreview();
+            
+            // Populate Metadata Sidebar
             document.getElementById('res-title').innerText = tailoredData.data.personal_info.name.split(' ')[0] || 'Target Role';
+            const linksMeta = document.getElementById('project-links-meta');
+            (tailoredData.data.projects || []).forEach(p => {
+                if (p.github_link) {
+                    const div = document.createElement('div');
+                    div.style.marginBottom = '0.5rem';
+                    div.innerHTML = `
+                        <p style="margin:0; font-size: 0.8rem; font-weight: 500">${p.name}</p>
+                        <a href="${p.github_link}" target="_blank" style="font-size: 0.75rem; color: var(--primary-accent); text-decoration: underline;">GitHub Repo ↗</a>
+                    `;
+                    linksMeta.appendChild(div);
+                }
+            });
+            if (linksMeta.children.length === 1) linksMeta.style.display = 'none';
             
             // Populate Main Score
             const score = sessionStorage.getItem('ats_score') || '0';
@@ -268,85 +288,25 @@
             }
         }
 
-        function renderPreview(res) {
-            const data = res.data;
-            const pi = data.personal_info;
+        async function loadPDFPreview() {
+            const res = JSON.parse(sessionStorage.getItem('tailored_resume'));
+            if (!res) return;
 
-            let contacts = [];
-            if (pi.location) contacts.push(pi.location);
-            for (let f of ["phone", "email", "linkedin", "github", "portfolio", "kaggle"]) {
-                if (pi[f]) contacts.push(pi[f]);
-            }
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(res.data)
+                });
 
-            let html = `
-                <div class="p-name">${pi.name}</div>
-                <div class="p-contact">${contacts.join(' | ')}</div>
-            `;
-
-            if (data.summary) {
-                html += `
-                    <div class="p-section-title">Professional Summary</div>
-                    <div class="p-content">${data.summary}</div>
-                `;
-            }
-
-            if (data.skills) {
-                html += `<div class="p-section-title">Technical Skills</div>`;
-                let skillLines = [];
-                for (let cat in data.skills) {
-                    const label = cat.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    skillLines.push(`<b>${label}:</b> ${data.skills[cat].join(', ')}`);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    document.getElementById('pdf-preview-frame').src = url + '#toolbar=0&navpanes=0';
                 }
-                html += `<div class="p-content">${skillLines.join('<br/>')}</div>`;
+            } catch (err) {
+                console.error("PDF Preview Error:", err);
             }
-
-            if (data.experience) {
-                html += `<div class="p-section-title">Experience</div>`;
-                data.experience.forEach(exp => {
-                    html += `
-                        <div class="p-row">
-                            <b>${exp.company} | ${exp.role}</b>
-                            <span class="p-date">${exp.start_date} - ${exp.end_date}</span>
-                        </div>
-                        ${exp.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
-                    `;
-                });
-            }
-
-            if (data.projects) {
-                html += `<div class="p-section-title">Projects</div>`;
-                data.projects.forEach(p => {
-                    html += `
-                        <div class="p-row">
-                            <b>${p.name} | <i>${p.technologies.join(', ')}</i></b>
-                        </div>
-                        ${p.bullet_points.map(b => `<div class="p-bullet">${b}</div>`).join('')}
-                    `;
-                });
-            }
-
-            if (data.education) {
-                html += `<div class="p-section-title">Education</div>`;
-                data.education.forEach(edu => {
-                    const gpa = edu.cgpa || edu.gpa;
-                    html += `
-                        <div class="p-row">
-                            <b>${edu.institution} | ${edu.location}</b>
-                            <span class="p-date">${edu.start_date} - ${edu.end_date}</span>
-                        </div>
-                        <div class="p-content">${edu.degree}${gpa ? ` | GPA: ${gpa}` : ''}</div>
-                    `;
-                });
-            }
-
-            if (data.certifications && data.certifications.length > 0) {
-                html += `
-                    <div class="p-section-title">Certifications</div>
-                    <div class="p-content">${data.certifications.join(', ')}</div>
-                `;
-            }
-
-            document.getElementById('resume-content').innerHTML = html;
         }
 
         function copyJSON() {

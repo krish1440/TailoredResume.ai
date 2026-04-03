@@ -116,6 +116,7 @@
   "projects": [
     {
       "name": "TailoredResume.ai",
+      "github_link": "https://github.com/krish1440/TailoredResume.ai",
       "tech_stack": [
         "Python 3.12",
         "FastAPI",
@@ -144,6 +145,7 @@
     },
     {
       "name": "OrderEazy Analytics",
+      "github_link": "https://github.com/krish1440/OrderEasy",
       "tech_stack": [
         "React 18+",
         "TypeScript",
@@ -175,6 +177,7 @@
     },
     {
       "name": "AI Stock News Sentiment Analysis",
+      "github_link": "https://github.com/krish1440/AI-Stock-News-Sentiment",
       "tech_stack": [
         "Python 3.12",
         "FastAPI",

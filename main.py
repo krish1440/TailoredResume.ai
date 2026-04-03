@@ -134,7 +134,12 @@ def create_pdf(data: dict, output_buffer):
             for p in data[key]:
                 pname = p.get("name", "")
                 techs = ", ".join(p.get("technologies", []))
-                elements.append(create_header_table(f"<b>{pname}</b> | <i>{techs}</i>", ""))
+                github = p.get("github_link", "")
+                right_text = ""
+                if github:
+                    link = github if github.startswith("http") else f"https://{github}"
+                    right_text = f'<a href="{link}"><i>GitHub</i></a>'
+                elements.append(create_header_table(f"<b>{pname}</b> | <i>{techs}</i>", right_text))
                 for b in p.get("bullet_points", []):
                     elements.append(Paragraph(f"• {b}", styles['CompResumeBullet']))
         elif key == "education":
@@ -399,6 +404,10 @@ RULE B-6  GROWTH SIGNAL (at least 1 bullet per section): Show technical evolutio
 RULE B-7  NO SUMMARY BLEED: Bullet points must describe concrete actions and results.
           They must NOT be a rewording of the summary or a generic statement of skills.
 
+RULE B-8  METADATA PRESERVATION: You MUST include the "github_link" for every project 
+          provided in the input data. Do NOT omit this field. If no link is provided, 
+          use an empty string "".
+
 ━━━━━━━━━━━━━━━━━━━  SELF-VALIDATION CHECKLIST (run before outputting)  ━━━━━━━━━━━━━━━━━━━
 
 Before writing the final JSON, mentally verify:
@@ -463,6 +472,7 @@ Return ONLY this JSON object with no extra text, no markdown fences:
     "projects": [
         {{
             "name": "Project Name",
+            "github_link": "github.com/...",
             "technologies": ["Tech1", "Tech2", "Tech3", "Tech4", "Tech5"],
             "bullet_points": [
                 "Action verb + task + quantified result, 20-25 words total.",

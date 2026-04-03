@@ -32,22 +32,36 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const masterJson = document.querySelector('#master_json').value;
-            const jd = document.querySelector('#jd').value;
-            const loading = document.getElementById('loading');
+            const masterJsonRaw = document.getElementById('master_json').value.trim();
+            const jd = document.getElementById('jd').value.trim();
+            const submitBtn = form.querySelector('button[type="submit"]');
 
-            // Simple validation
-            try {
-                JSON.parse(masterJson);
-            } catch (err) {
-                showNotify('Invalid JSON format in Master Resume data.', 'error');
+            if (!masterJsonRaw) {
+                showNotify('Please provide your Master Resume data.', 'error');
+                return;
+            }
+            if (!jd) {
+                showNotify('Please provide a Job Description.', 'error');
                 return;
             }
 
+            try {
+                JSON.parse(masterJsonRaw);
+            } catch (err) {
+                showNotify('Invalid JSON in Master Resume. Please fix it or use the Builder tab.', 'error');
+                return;
+            }
+
+            // UI Feedback
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Tailoring Your Resume...';
+
+            const loading = document.getElementById('loading');
             loading.style.display = 'flex';
 
             const formData = new FormData();
-            formData.append('master_json', masterJson);
+            formData.append('master_json', masterJsonRaw);
             formData.append('jd', jd);
 
             try {
@@ -55,6 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     body: formData
                 });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Server error occurred');
+                }
 
                 const result = await response.json();
 
@@ -68,9 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Submission failed:', error);
-                showNotify('Technical error. Please try again.', 'error');
+                showNotify('Technical error: ' + error.message, 'error');
             } finally {
                 loading.style.display = 'none';
+                submitBtn.disabled = false;
             }
         });
     }
@@ -82,14 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize with EMPTY items (NOT samples)
-    if (document.getElementById('builder-container')) {
-        addItem('summaries');
-        addItem('experience');
-        addItem('projects');
-        addItem('education');
-        addItem('skills');
-    }
+    // Start with a clean slate (NO auto-items)
 });
 
 function switchTab(target) {
@@ -102,12 +115,12 @@ function switchTab(target) {
     if (target === 'form') {
         builder.style.display = 'block';
         jsonContainer.style.display = 'none';
-        btns[0].classList.add('active');
+        btns[1].classList.add('active');
         syncJsonToForm();
     } else {
         builder.style.display = 'none';
         jsonContainer.style.display = 'block';
-        btns[1].classList.add('active');
+        btns[0].classList.add('active');
         syncFormToJson();
     }
 }
@@ -158,6 +171,7 @@ function syncFormToJson() {
     document.querySelectorAll('.projects-item').forEach(item => {
         const entry = {
             name: item.querySelector('[data-field="name"]').value,
+            github_link: item.querySelector('[data-field="github_link"]')?.value || '',
             tech_stack: item.querySelector('[data-field="tech_stack"]').value.split(',').map(t => t.trim()).filter(t => t),
             master_narrative: item.querySelector('[data-field="master_narrative"]').value,
             quantified_impact: Array.from(item.querySelectorAll('.impact-input')).map(i => i.value.trim()).filter(v => v),
@@ -217,20 +231,20 @@ function addItem(type, data = null) {
     } else if (type === 'experience') {
         html = `
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Company Name" data-field="company" value="${data?.company || ''}" required>
-                <input type="text" class="input-field" placeholder="Role Title" data-field="role" value="${data?.role || ''}" required>
+                <input type="text" class="input-field" placeholder="Company Name" data-field="company" value="${data?.company || ''}">
+                <input type="text" class="input-field" placeholder="Role Title" data-field="role" value="${data?.role || ''}">
             </div>
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Start Date" data-field="start_date" value="${data?.start_date || ''}" required>
-                <input type="text" class="input-field" placeholder="End Date" data-field="end_date" value="${data?.end_date || ''}" required>
+                <input type="text" class="input-field" placeholder="Start Date" data-field="start_date" value="${data?.start_date || ''}">
+                <input type="text" class="input-field" placeholder="End Date" data-field="end_date" value="${data?.end_date || ''}">
             </div>
             <div class="bullet-container">
-                <label style="font-size:0.85rem">Experience Bullets (Min 3 Required)*</label>
+                <label style="font-size:0.85rem">Experience Bullets (Min 3)*</label>
                 <div class="bullets-list">
                     ${(data?.bullet_points || ["", "", ""]).map((bp, i) => `
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
                             <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${i+1}.</span>
-                            <input type="text" class="input-field bullet-input" placeholder="Bullet Point" value="${bp}" ${i < 3 ? 'required' : ''}>
+                            <input type="text" class="input-field bullet-input" placeholder="Bullet Point" value="${bp}">
                         </div>
                     `).join('')}
                 </div>
@@ -240,50 +254,53 @@ function addItem(type, data = null) {
     } else if (type === 'projects') {
         html = `
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}" required>
-                <input type="text" class="input-field" placeholder="Tech Stack" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}" required>
+                <input type="text" class="input-field" placeholder="Project Name" data-field="name" value="${data?.name || ''}">
+                <input type="text" class="input-field" placeholder="GitHub Link (Optional)" data-field="github_link" value="${data?.github_link || ''}">
+            </div>
+            <div class="form-row" style="margin-top:0.5rem">
+                <input type="text" class="input-field" placeholder="Tech Stack" data-field="tech_stack" value="${(data?.tech_stack || []).join(', ')}">
             </div>
             <div style="margin-top:1rem">
                 <label style="font-size:0.85rem">Master Narrative*</label>
-                <textarea class="input-field" data-field="master_narrative" placeholder="Detailed story of your project" rows="4" required>${data?.master_narrative || ''}</textarea>
+                <textarea class="input-field" data-field="master_narrative" placeholder="Detailed story" rows="4">${data?.master_narrative || ''}</textarea>
             </div>
             <div class="form-row" style="margin-top:1rem">
                 <div>
-                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Quantified Impacts (Min 3 Required)*</label>
+                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Quantified Impacts (Min 3)*</label>
                     <div class="impacts-list">
                         ${(data?.quantified_impact || ["", "", ""]).map((i, idx) => `
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
                                 <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${idx+1}.</span>
-                                <input type="text" class="input-field impact-input" placeholder="Quantified Impact" value="${i}" ${idx < 3 ? 'required' : ''}>
+                                <input type="text" class="input-field impact-input" placeholder="Impact" value="${i}">
                             </div>
                         `).join('')}
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'impact-input', 'Quantified Impact')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Impact</button>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'impact-input', 'Impact')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Impact</button>
                 </div>
                 <div>
-                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Core Actions (Min 3 Required)*</label>
+                    <label style="font-size:0.85rem; display:block; margin-bottom:0.5rem">Core Actions (Min 3)*</label>
                     <div class="actions-list">
                         ${(data?.core_actions || ["", "", ""]).map((a, idx) => `
                             <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px">
                                 <span style="font-size:0.75rem; color:var(--text-secondary); width:15px">${idx+1}.</span>
-                                <input type="text" class="input-field action-input" placeholder="Technical Core Action" value="${a}" ${idx < 3 ? 'required' : ''}>
+                                <input type="text" class="input-field action-input" placeholder="Action" value="${a}">
                             </div>
                         `).join('')}
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'action-input', 'Technical Core Action')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Action</button>
+                    <button type="button" class="btn btn-secondary" onclick="addNestedInput(this, 'action-input', 'Action')" style="font-size:0.75rem; padding:5px 12px; margin-top:5px; border-radius:20px">+ Add Action</button>
                 </div>
             </div>
         `;
     } else if (type === 'education') {
         html = `
-            <input type="text" class="input-field" placeholder="Institution Name" data-field="institution" value="${data?.institution || ''}" required style="margin-bottom:1rem">
+            <input type="text" class="input-field" placeholder="Institution Name" data-field="institution" value="${data?.institution || ''}" style="margin-bottom:1rem">
             <div class="form-row">
-                <input type="text" class="input-field" placeholder="Degree Type" data-field="degree" value="${data?.degree || ''}" required>
-                <input type="text" class="input-field" placeholder="GPA / CGPA" data-field="gpa" value="${data?.gpa || ''}" required>
+                <input type="text" class="input-field" placeholder="Degree Type" data-field="degree" value="${data?.degree || ''}">
+                <input type="text" class="input-field" placeholder="GPA / CGPA" data-field="gpa" value="${data?.gpa || ''}">
             </div>
             <div class="form-row" style="margin-top:10px">
-                <input type="text" class="input-field" placeholder="Start Year" data-field="start_date" value="${data?.start_date || ''}" required>
-                <input type="text" class="input-field" placeholder="End Year" data-field="end_date" value="${data?.end_date || ''}" required>
+                <input type="text" class="input-field" placeholder="Start Year" data-field="start_date" value="${data?.start_date || ''}">
+                <input type="text" class="input-field" placeholder="End Year" data-field="end_date" value="${data?.end_date || ''}">
             </div>
         `;
     } else if (type === 'skills') {
@@ -292,11 +309,11 @@ function addItem(type, data = null) {
             <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <div>
                     <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Skill Domain (e.g. Languages)*</label>
-                    <input type="text" class="input-field skill-cat" placeholder="Skill Domain" value="${data?.cat || ''}" required>
+                    <input type="text" class="input-field skill-cat" placeholder="Skill Domain" value="${data?.cat || ''}">
                 </div>
                 <div>
                     <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">List of Skills*</label>
-                    <input type="text" class="input-field skill-items" placeholder="List of Skills" value="${(data?.items || []).join(', ')}" required>
+                    <input type="text" class="input-field skill-items" placeholder="List of Skills" value="${(data?.items || []).join(', ')}">
                 </div>
             </div>
         `;
