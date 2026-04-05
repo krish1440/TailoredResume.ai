@@ -11,7 +11,6 @@ resumes for ATS compliance and professional excellence.
 
 import os
 import json
-# v1.1.0-main
 import re
 import time
 import google.generativeai as genai
@@ -23,7 +22,6 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from dotenv import load_dotenv
 
-# PDF imports
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -37,19 +35,13 @@ app = FastAPI(
     version="1.1.0"
 )
 
-# Configuration
-# UPLOAD_DIR = "uploads"
-# os.makedirs(UPLOAD_DIR, exist_ok=True)
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-# Configure Gemini
 api_key = os.getenv("GEMINI_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
 
-# Models from V1
 MODELS_TO_TRY = [
         'gemini-3-flash-preview',
         'gemini-2.5-flash-lite',
@@ -58,7 +50,7 @@ MODELS_TO_TRY = [
 ]
 
 import io
-# ----------------- PDF BUILDER -----------------
+
 def create_pdf(data: dict, output_buffer):
     """Generates an ATS-optimized PDF resume from structured JSON data.
 
@@ -187,7 +179,6 @@ def create_pdf(data: dict, output_buffer):
 
     doc.build(elements, onFirstPage=add_meta, onLaterPages=add_meta)
 
-# ----------------- SCORING ENGINE (V1) -----------------
 def check_quantification(bullet_points: List[str]) -> float:
     """Calculates the ratio of quantified bullet points (containing numbers).
 
@@ -283,8 +274,6 @@ def score_resume_internal(data: Dict[str, Any], analysis: Dict[str, Any]) -> Dic
             "skills": round(scores['skills_cat'] * 100, 2)
         }
     }
-
-# ----------------- PIPELINE FUNCTIONS -----------------
 
 def analyze_jd(jd_text: str) -> Optional[Dict[str, Any]]:
     """Uses GenAI to analyze a Job Description and extract structural requirements.
@@ -567,8 +556,6 @@ Return ONLY this JSON object with no extra text, no markdown fences:
             return json.loads(model.generate_content(prompt).text)
         except: continue
     return None
-
-# ----------------- ENDPOINTS -----------------
 
 @app.post("/api/tailor")
 async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
