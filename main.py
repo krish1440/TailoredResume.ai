@@ -1,3 +1,14 @@
+"""
+TailoredResume.ai - Agentic AI Resume Tailoring Backend
+======================================================
+Author: Krish Chaudhary
+Version: 1.1.0
+
+This module provides the core logic for an agentic AI-driven resume tailoring platform.
+It leverages Google Gemini AI models to analyze job descriptions and optimize candidate
+resumes for ATS compliance and professional excellence.
+"""
+
 import os
 import json
 # v1.1.0-main
@@ -20,7 +31,11 @@ from reportlab.lib.colors import Color
 
 load_dotenv()
 
-app = FastAPI()
+app = FastAPI(
+    title="TailoredResume.ai API",
+    description="Agentic AI Resume Tailoring Service using Google Gemini",
+    version="1.1.0"
+)
 
 # Configuration
 # UPLOAD_DIR = "uploads"
@@ -45,6 +60,16 @@ MODELS_TO_TRY = [
 import io
 # ----------------- PDF BUILDER -----------------
 def create_pdf(data: dict, output_buffer):
+    """Generates an ATS-optimized PDF resume from structured JSON data.
+
+    Args:
+        data (dict): The structured resume data containing personal information,
+            summary, skills, experience, projects, and education.
+        output_buffer (io.BytesIO): The buffer where the generated PDF will be written.
+
+    Returns:
+        None: The PDF is written directly to the output_buffer.
+    """
     doc = SimpleDocTemplate(
         output_buffer,
         pagesize=letter,
@@ -163,20 +188,45 @@ def create_pdf(data: dict, output_buffer):
     doc.build(elements, onFirstPage=add_meta, onLaterPages=add_meta)
 
 # ----------------- SCORING ENGINE (V1) -----------------
-def check_quantification(bullet_points):
+def check_quantification(bullet_points: List[str]) -> float:
+    """Calculates the ratio of quantified bullet points (containing numbers).
+
+    Args:
+        bullet_points (List[str]): List of resume bullet points.
+
+    Returns:
+        float: A score between 0.0 and 1.0 representing the quantification ratio.
+    """
     scored = 0
     for bullet in bullet_points:
         if re.search(r'\d', bullet): scored += 1
     return scored / len(bullet_points) if bullet_points else 0
 
-def get_action_verbs(bullet_points):
+def get_action_verbs(bullet_points: List[str]) -> List[str]:
+    """Extracts the first action verb from each bullet point.
+
+    Args:
+        bullet_points (List[str]): List of resume bullet points.
+
+    Returns:
+        List[str]: A list of lowercase action verbs extracted from the start of bullets.
+    """
     verbs = []
     for bullet in bullet_points:
         clean = re.sub(r'^[•\-\*\d\.\s]+', '', bullet).strip()
         if clean: verbs.append(clean.split()[0].rstrip(',').lower())
     return verbs
 
-def score_resume_internal(data, analysis):
+def score_resume_internal(data: Dict[str, Any], analysis: Dict[str, Any]) -> Dict[str, Any]:
+    """Evaluates the tailored resume against the JD analysis using an ATS scoring algorithm.
+
+    Args:
+        data (Dict[str, Any]): The tailored resume JSON data.
+        analysis (Dict[str, Any]): The extracted keywords and priorities from the JD.
+
+    Returns:
+        Dict[str, Any]: A report containing the final score, feedback list, and individual metrics.
+    """
     all_text = json.dumps(data).lower()
     feedback = []
     scores = {}
@@ -236,7 +286,15 @@ def score_resume_internal(data, analysis):
 
 # ----------------- PIPELINE FUNCTIONS -----------------
 
-def analyze_jd(jd_text):
+def analyze_jd(jd_text: str) -> Optional[Dict[str, Any]]:
+    """Uses GenAI to analyze a Job Description and extract structural requirements.
+
+    Args:
+        jd_text (str): The raw text of the job description.
+
+    Returns:
+        Optional[Dict[str, Any]]: The structured analysis result, or None if analysis fails.
+    """
     prompt = f"""
     You are an expert Talent Acquisition Specialist and ATS Algorithm Expert.
     Analyze the following Job Description and extract structural data for a resume builder.
@@ -270,7 +328,18 @@ def analyze_jd(jd_text):
     return None
 
 
-def tailor_resume_attempt(master_data, job_description, analysis, feedback=None):
+def tailor_resume_attempt(master_data: Dict[str, Any], job_description: str, analysis: Dict[str, Any], feedback: str = None) -> Optional[Dict[str, Any]]:
+    """Performs a single attempt to tailor a resume using Agentic AI logic.
+
+    Args:
+        master_data (Dict[str, Any]): The user's original master resume JSON.
+        job_description (str): The target job description text.
+        analysis (Dict[str, Any]): The keywords and priorities extracted from the JD.
+        feedback (str, optional): Feedback from a previous failed scoring attempt to guide refinement.
+
+    Returns:
+        Optional[Dict[str, Any]]: The tailored resume JSON, or None if generation fails.
+    """
     target_title = analysis.get("ideal_job_title", "Target Role")
     keywords = analysis.get("must_have_skills", [])
     industry_kw = analysis.get("industry_keywords", [])
@@ -279,28 +348,26 @@ def tailor_resume_attempt(master_data, job_description, analysis, feedback=None)
     prompt = f"""
 You are an elite, ATS-optimizing Resume Writer specializing in FRESHER / ENTRY-LEVEL candidates.
 
-╔══════════════════════════════════════════════════════════════╗
-║           TWO-TIER HONESTY RULE — READ CAREFULLY             ║
-╠══════════════════════════════════════════════════════════════╣
-║  TIER 1 — STRICT (Data Integrity):                           ║
-║    • USE USER DATA AS-IS: Your primary task is to maintain   ║
-║      the user's original company names, roles, and metrics.  ║
-║    • DO NOT rewrite the meaning of bullets. Simply rephrase  ║
-║      them to be exactly 20-25 words and ensure each starts   ║
-║      with a unique action verb.                              ║
-║    • QUANTIFICATION: Use the user's provided metrics. If the ║
-║      user provided a number, DO NOT change it.               ║
-║                                                              ║
-║  TIER 2 — FLEXIBLE (Skills, Summary, Core Competencies):     ║
-║    • The Skills section, Summary, and Core Competencies ARE  ║
-║      the keyword absorption layer. You MUST include every    ║
-║      must-have and nice-to-have JD keyword here — even if    ║
-║      the candidate only has academic/theoretical exposure.   ║
-║    • A skill appearing in the Skills section signals         ║
-║      awareness and readiness — this is standard practice     ║
-║      for fresher resumes and is ATS-expected.                ║
-╚══════════════════════════════════════════════════════════════╝
 
+           TWO-TIER HONESTY RULE — READ CAREFULLY             
+
+  TIER 1 — STRICT (Data Integrity):                           
+    • USE USER DATA AS-IS: Your primary task is to maintain   
+      the user's original company names, roles, and metrics.  
+    • DO NOT rewrite the meaning of bullets. Simply rephrase  
+      them to be exactly 20-25 words and ensure each starts   
+      with a unique action verb.                              
+    • QUANTIFICATION: Use the user's provided metrics. If the 
+      user provided a number, DO NOT change it.               
+                                                              
+  TIER 2 — FLEXIBLE (Skills, Summary, Core Competencies):     
+    • The Skills section, Summary, and Core Competencies ARE  
+      the keyword absorption layer. You MUST include every    
+      must-have and nice-to-have JD keyword here — even if    
+      the candidate only has academic/theoretical exposure.   
+    • A skill appearing in the Skills section signals         
+      awareness and readiness — this is standard practice     
+      for fresher resumes and is ATS-expected.                
 ══════════════════════════════════════════════════════════════
 TARGET ROLE   : {target_title}
 MUST-HAVE KW  : {', '.join(keywords)}
@@ -505,6 +572,18 @@ Return ONLY this JSON object with no extra text, no markdown fences:
 
 @app.post("/api/tailor")
 async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
+    """API endpoint to tailor a resume from master JSON and JD text.
+
+    Uses an iterative loop (max 3 attempts) to generate and score a resume until
+    it reaches a high-fidelity threshold.
+
+    Args:
+        master_json (str): User's master profile in JSON string format.
+        jd (str): The raw job description text.
+
+    Returns:
+        JSONResponse: A success object with tailored data and scores, or an error response.
+    """
     try:
         master_data = json.loads(master_json)
         analysis = analyze_jd(jd)
@@ -556,6 +635,14 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
 
 @app.post("/api/download")
 async def download_pdf_direct(data: dict):
+    """API endpoint to generate and stream a PDF resume.
+
+    Args:
+        data (dict): The finalized resume JSON data.
+
+    Returns:
+        StreamingResponse: A PDF file stream with appropriate headers.
+    """
     try:
         buffer = io.BytesIO()
         create_pdf(data, buffer)
@@ -572,6 +659,11 @@ async def download_pdf_direct(data: dict):
 
 @app.get("/api/sample_master")
 async def get_sample():
+    """Returns a sample master resume JSON for user reference.
+
+    Returns:
+        dict: A template containing correctly structured personal info, skills, and experience.
+    """
     return {
         "personal_info": {
             "name": "Your Name", 
