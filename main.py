@@ -611,6 +611,36 @@ async def privacy_page():
 async def about_page():
     return FileResponse(os.path.join(STATIC_DIR, "about.html"))
 
+@app.get("/robots.txt")
+async def robots_txt():
+    return FileResponse(os.path.join(STATIC_DIR, "robots.txt"))
+
+@app.get("/sitemap.xml")
+async def sitemap_xml():
+    return FileResponse(os.path.join(STATIC_DIR, "sitemap.xml"))
+
+@app.get("/seo.json")
+async def seo_json():
+    return FileResponse(os.path.join(STATIC_DIR, "seo.json"))
+
+@app.get("/api/seo/sitemap")
+async def get_seo_sitemap():
+    return {
+        "success": True,
+        "base_url": "https://tailored-resume-ai.vercel.app",
+        "seo_config": "https://tailored-resume-ai.vercel.app/seo.json",
+        "sitemap": "https://tailored-resume-ai.vercel.app/sitemap.xml",
+        "robots": "https://tailored-resume-ai.vercel.app/robots.txt",
+        "author": "Krish Chaudhary",
+        "urls": [
+            {"path": "/", "name": "WorkSpace (Home)", "priority": 1.0, "changefreq": "monthly"},
+            {"path": "/guide", "name": "Master Resume Guide", "priority": 0.8, "changefreq": "monthly"},
+            {"path": "/about", "name": "Project Architecture", "priority": 0.7, "changefreq": "monthly"},
+            {"path": "/input", "name": "AI Tailoring Dashboard", "priority": 0.6, "changefreq": "monthly"},
+            {"path": "/privacy", "name": "Security Policy", "priority": 0.3, "changefreq": "yearly"}
+        ]
+    }
+
 # Mount static files AFTER routes
 app.mount("/", StaticFiles(directory=STATIC_DIR), name="static")
 
