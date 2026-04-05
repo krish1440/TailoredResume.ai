@@ -1,9 +1,3 @@
 User-agent: *
 Allow: /
-Allow: /input
-Allow: /about
-Allow: /guide
-Allow: /privacy
-Disallow: /result  # Don't index result pages (they are personal and temporary)
-
 Sitemap: https://tailored-resume-ai.vercel.app/sitemap.xml
