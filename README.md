@@ -46,53 +46,73 @@ Mandates that every single action verb used in the resume is unique. No more "De
 
 ---
 
-## 🛠️ Technical Architecture
+## 🏗️ Technical Architecture & Workflow
 
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Interface** | Modern Vanilla JS + CSS3 | High-performance, glassmorphic UI with zero dependency bloat. |
-| **Logic Server** | FastAPI (Python 3.12) | Asynchronous, concurrent processing of AI pipelines. |
-| **Intelligence** | Google Gemini (3.0 Pro/Flash) | Large-context job analysis and structured JSON synthesis. |
-| **Rendering** | ReportLab PDF | Precise, coordinate-based PDF layout for 100% ATS readability. |
+### 1. The Discovery Agent (`analyze_jd`)
+The pipeline begins by "Interrogating" the Job Description. It doesn't just look for words; it looks for **intent**. 
+- **Output:** A structured JSON containing `must_have_skills`, `industry_keywords`, and `top_3_priorities`.
+
+### 2. The Synthesis Agent (`tailor_resume_attempt`)
+Using **Governance Prompting**, this agent transforms the master data.
+- **Strict Mode:** Ensures bullet points match the **20-25 word sweet spot** that ATS parsers love.
+- **Quantification:** Enforces a "Show, Don't Tell" policy by requiring numeric metrics in every bullet.
+
+### 3. The Critic Agent (`score_resume_internal`)
+This acts as an internal gatekeeper, scoring the resume on:
+- **Keyword Match (30%)**
+- **Impact Density (30%)**
+- **Verb Diversity (15%)**
+- **Structural Integrity (25%)**
 
 ---
 
-## 🚀 Professional Installation
+## 📡 API Reference
 
-### 1. Clone & Environment Sync
+### `POST /api/tailor`
+The primary endpoint for resume engineering.
+- **Form Data:**
+  - `master_json`: The user's complete profile.
+  - `jd`: The target job description.
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "data": { ...tailored_json... },
+    "score": 96.5,
+    "metrics": { "keyword": 100, "quant": 92, ... }
+  }
+  ```
+
+### `POST /api/download`
+Converts and streams a JSON resume into a professional PDF.
+- **Body:** `{ "resume_data": { ... } }`
+- **Output:** Binary PDF Stream.
+
+---
+
+## 🛠️ Advanced Developer Setup
+
+### Prerequisites
+- Python 3.12 or higher.
+- Google Cloud Project with Gemini API access.
+- [ReportLab](https://www.reportlab.com/) for PDF rendering.
+
+### Setting up the Logic Engine
 ```powershell
-git clone https://github.com/krish1440/TailoredResume.ai.git
-cd TailoredResume.ai
+# 1. Initialize environment
+python -m venv .venv
+source .venv/bin/activate  # Or .venv\Scripts\activate on Windows
 
-# Create Virtual Environment (Recommended)
-python -m venv venv
-.\venv\Scripts\activate
-```
-
-### 2. Dependency Management
-```powershell
+# 2. Install core Stack
 pip install -r requirements.txt
-```
 
-### 3. Credentials Configuration
-Create a `.env` in the root and add your endpoint key:
-```env
-GEMINI_API_KEY="YOUR_KEY_HERE"
+# 3. Launch Development Server
+uvicorn main:app --reload --port 8000
 ```
-
-### 4. Boot the Engine
-```powershell
-python main.py
-```
-> **Access:** Navigate to [http://localhost:8000](http://localhost:8000) to start engineering your career.
 
 ---
 
-## 🧪 System Benchmarks
-- **Average ATS Match Score:** 96.4%
-- **Keyword Saturation:** 100% of "Must-Have" technical skills.
-- **Processing Time:** < 1-2 Minutes per iteration.
-- **PDF Readability:** Validated against major ATS parsers.
+## 📜 License & Contribution
+This project is open-source under the **MIT License**. Contributions to the Agentic Loop logic or the PDF rendering engine are welcome.
 
----
 *Developed with Strategic Engineering for High-Growth Roles by **Krish Chaudhary**.*
