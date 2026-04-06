@@ -7,6 +7,12 @@ Version: 1.1.0
 This module provides the core logic for an agentic AI-driven resume tailoring platform.
 It leverages Google Gemini AI models to analyze job descriptions and optimize candidate
 resumes for ATS compliance and professional excellence.
+
+Core Features:
+- JD Analysis: Extracting keywords, priorities, and requirements.
+- Agentic Tailoring: Iterative resume generation with feedback loops.
+- ATS Scoring: Evaluating resumes based on keyword match, quantification, and diversity.
+- PDF Generation: Creating professional, ATS-optimized PDF documents.
 """
 
 import os
@@ -54,10 +60,27 @@ import io
 def create_pdf(data: dict, output_buffer):
     """Generates an ATS-optimized PDF resume from structured JSON data.
 
+    This function uses the ReportLab library to build a professional resume layout.
+    It handles personal information, professional summaries, technical skills,
+    work experience, personal projects, education, and certifications.
+
+    Design Goals:
+    - Maximum Readability: Using standard fonts and clear hierarchies.
+    - ATS Compliance: Avoiding complex graphics that confuse parsers.
+    - Professional Aesthetic: Clean lines, consistent spacing, and bold highlights.
+
     Args:
         data (dict): The structured resume data containing personal information,
-            summary, skills, experience, projects, and education.
-        output_buffer (io.BytesIO): The buffer where the generated PDF will be written.
+            summary, skills, experience, projects, and education. Expected keys:
+            - "personal_info": dict with name, email, phone, linkedin, etc.
+            - "summary": string of professional summary.
+            - "skills": dict or list of technical skills.
+            - "experience": list of work history entries.
+            - "projects": list of project entries.
+            - "education": list of academic history.
+            - "certifications": list of professional certifications.
+        output_buffer (io.BytesIO): The in-memory buffer where the PDF content 
+            will be written for streaming or saving.
 
     Returns:
         None: The PDF is written directly to the output_buffer.
@@ -180,13 +203,16 @@ def create_pdf(data: dict, output_buffer):
     doc.build(elements, onFirstPage=add_meta, onLaterPages=add_meta)
 
 def check_quantification(bullet_points: List[str]) -> float:
-    """Calculates the ratio of quantified bullet points (containing numbers).
+    """Calculates the ratio of quantified bullet points in a resume section.
+
+    A bullet point is considered "quantified" if it contains at least one digit (0-9).
+    This is a critical metric for modern resumes as it demonstrates impact and results.
 
     Args:
-        bullet_points (List[str]): List of resume bullet points.
+        bullet_points (List[str]): A list of string representations of resume bullets.
 
     Returns:
-        float: A score between 0.0 and 1.0 representing the quantification ratio.
+        float: A value between 0.0 and 1.0. (e.g., 0.85 means 85% of bullets are quantified).
     """
     scored = 0
     for bullet in bullet_points:
@@ -194,13 +220,21 @@ def check_quantification(bullet_points: List[str]) -> float:
     return scored / len(bullet_points) if bullet_points else 0
 
 def get_action_verbs(bullet_points: List[str]) -> List[str]:
-    """Extracts the first action verb from each bullet point.
+    """Extracts the primary action verb from the beginning of each bullet point.
+
+    Used to detect linguistic diversity and ensure that the candidate is using 
+    strong, varied terminology rather than repeating "Developed" or "Worked on".
+
+    Algorithm:
+    1. Removes leading bullet symbols (*, -, •, digits).
+    2. Takes the first word of the remaining string.
+    3. Normalizes to lowercase and clears punctuation.
 
     Args:
-        bullet_points (List[str]): List of resume bullet points.
+        bullet_points (List[str]): A list of resume bullet points.
 
     Returns:
-        List[str]: A list of lowercase action verbs extracted from the start of bullets.
+        List[str]: A list of lowercase verbs (one per bullet point).
     """
     verbs = []
     for bullet in bullet_points:
@@ -209,14 +243,26 @@ def get_action_verbs(bullet_points: List[str]) -> List[str]:
     return verbs
 
 def score_resume_internal(data: Dict[str, Any], analysis: Dict[str, Any]) -> Dict[str, Any]:
-    """Evaluates the tailored resume against the JD analysis using an ATS scoring algorithm.
+    """Evaluates the engineered resume against specific JD requirements using an ATS algorithm.
+
+    This function simulates a high-tier Applicant Tracking System (ATS) by scoring the 
+    resume on five key dimensions: Keyword Saturation, Impact Quantification, 
+    Linguistic Diversity, Word Count Precision, and Skill Categorization.
+
+    Scoring Weights:
+    - Keywords: 30% (Critical for initial filters)
+    - Quantification: 30% (Measures impact/results)
+    - Diversity: 15% (Measures professional communication quality)
+    - Word Count: 15% (Enforces conciseness and readability)
+    - Skill Category: 10% (Ensures structured technical layout)
 
     Args:
-        data (Dict[str, Any]): The tailored resume JSON data.
-        analysis (Dict[str, Any]): The extracted keywords and priorities from the JD.
+        data (Dict[str, Any]): The generated resume JSON object.
+        analysis (Dict[str, Any]): The structured JD analysis containing required skills.
 
     Returns:
-        Dict[str, Any]: A report containing the final score, feedback list, and individual metrics.
+        Dict[str, Any]: A report object with the final score, feedback messages, 
+            and breakdown of individual category metrics.
     """
     all_text = json.dumps(data).lower()
     feedback = []
@@ -276,13 +322,22 @@ def score_resume_internal(data: Dict[str, Any], analysis: Dict[str, Any]) -> Dic
     }
 
 def analyze_jd(jd_text: str) -> Optional[Dict[str, Any]]:
-    """Uses GenAI to analyze a Job Description and extract structural requirements.
+    """Leverages LLM intelligence to deep-scan a Job Description and extract structural requirements.
+
+    This function acts as the "Discovery Agent" in the pipeline. It parses the JD 
+    to find not just keywords, but the company's implicit priorities and desired 
+    experience profile.
+
+    Features:
+    - Model Fallback: Tries multiple Gemini versions to ensure uptime and quality.
+    - JSON Extraction: Forces the LLM to output structured data for programmatic use.
 
     Args:
-        jd_text (str): The raw text of the job description.
+        jd_text (str): The raw text of the job description provided by the user.
 
     Returns:
-        Optional[Dict[str, Any]]: The structured analysis result, or None if analysis fails.
+        Optional[Dict[str, Any]]: A dictionary containing 'must_have_skills', 
+            'nice_to_have_skills', 'ideal_job_title', etc. Returns None on total failure.
     """
     prompt = f"""
     You are an expert Talent Acquisition Specialist and ATS Algorithm Expert.
@@ -318,16 +373,27 @@ def analyze_jd(jd_text: str) -> Optional[Dict[str, Any]]:
 
 
 def tailor_resume_attempt(master_data: Dict[str, Any], job_description: str, analysis: Dict[str, Any], feedback: str = None) -> Optional[Dict[str, Any]]:
-    """Performs a single attempt to tailor a resume using Agentic AI logic.
+    """Executes a single engineering attempt to transform a master resume into a tailored version.
+
+    This is the core "Synthesis Agent". It uses "Governance Prompting" — a strict 
+    set of rules that prevent hallucinations while maximizing keyword absorption.
+
+    Governance Rules Applied:
+    - Word count enforcement (20-25 words per bullet).
+    - Hard number requirement for every bullet point.
+    - Zero action verb repetition across all entries.
+    - Fresh/Entry-level tone specifically optimized for new grads.
 
     Args:
-        master_data (Dict[str, Any]): The user's original master resume JSON.
-        job_description (str): The target job description text.
-        analysis (Dict[str, Any]): The keywords and priorities extracted from the JD.
-        feedback (str, optional): Feedback from a previous failed scoring attempt to guide refinement.
+        master_data (Dict[str, Any]): The candidate's comprehensive master resume.
+        job_description (str): the target JD text.
+        analysis (Dict[str, Any]): The discovering requirements from analyze_jd.
+        feedback (str, optional): Corrective feedback from the ATS scorer if this 
+            is a retry attempt. This allows the model to "learn" from its previous score.
 
     Returns:
-        Optional[Dict[str, Any]]: The tailored resume JSON, or None if generation fails.
+        Optional[Dict[str, Any]]: The tailored resume JSON object, or None if the 
+            LLM fails to produce valid JSON.
     """
     target_title = analysis.get("ideal_job_title", "Target Role")
     keywords = analysis.get("must_have_skills", [])
@@ -559,18 +625,28 @@ Return ONLY this JSON object with no extra text, no markdown fences:
 
 @app.post("/api/tailor")
 async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
-    """API endpoint to tailor a resume from master JSON and JD text.
+    """Primary API endpoint for the AI Tailoring Pipeline.
 
-    Uses an iterative loop (max 3 attempts) to generate and score a resume until
-    it reaches a high-fidelity threshold.
+    This function coordinates the "Agentic Loop":
+    1. JD Discovery: Analyzes the target job requirements.
+    2. Synthesis: Attempts to generate an optimized resume.
+    3. Evaluation: Scores the resume using the internal ATS Scorer.
+    4. Iteration: If the score is below the 95% threshold, it provides feedback 
+       to the Synthesis agent and tries again (up to 3 times).
+    5. Finalization: Cleans up data and returns the highest-scoring version.
+
+    Complexity: O(N) where N is max_attempts.
+    Network: Multiple calls to Google Gemini API.
 
     Args:
-        master_json (str): User's master profile in JSON string format.
-        jd (str): The raw job description text.
+        master_json (str): User's profile data in JSON format (received as Form data).
+        jd (str): The raw text of the job description.
 
     Returns:
-        JSONResponse: A success object with tailored data and scores, or an error response.
+        dict: A success payload containing the best tailored JSON data, 
+            the final ATS score, and detailed performance metrics.
     """
+    # ... logic starts here ...
     try:
         master_data = json.loads(master_json)
         analysis = analyze_jd(jd)
