@@ -1,3 +1,11 @@
+# TailoredResume.ai Robots.txt
+# Advanced SEO Crawling Configuration
+
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /uploads/
+
+# Sitemap location for search engines
 Sitemap: https://tailored-resume-ai.vercel.app/sitemap.xml
