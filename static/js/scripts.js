@@ -1,4 +1,20 @@
-// Notification System
+/**
+ * TailoredResume.ai - Frontend Core Logic
+ * ========================================
+ * This script handles the complex bi-directional synchronization between the
+ * visual "Profile Builder" and the raw "JSON Editor". It also coordinates
+ * the asynchronous communication with the FastAPI backend for resume tailoring.
+ * 
+ * Version: 1.2.0
+ * Author: Krish Chaudhary
+ */
+
+// --- NOTIFICATION SYSTEM ---
+/**
+ * Displays a toast notification to the user.
+ * @param {string} msg - The message to display.
+ * @param {'success'|'error'} type - The nature of the message.
+ */
 function showNotify(msg, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -95,7 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Bi-directional Sync
+    // --- DATA SYNCHRONIZATION ---
+    /**
+     * Monitors all inputs within the builder to ensure the JSON state 
+     * is always up-to-date for the backend request.
+     */
     document.getElementById('tailor-form').addEventListener('input', (e) => {
         if (e.target.closest('#builder-container')) {
             syncFormToJson();
@@ -105,6 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start with a clean slate (NO auto-items)
 });
 
+/**
+ * Toggles between the human-friendly Profile Builder and the power-user JSON Editor.
+ * @param {'json'|'form'} target - The view to switch to.
+ */
 function switchTab(target) {
     const builder = document.getElementById('builder-container');
     const jsonContainer = document.getElementById('json-container');
@@ -125,6 +149,10 @@ function switchTab(target) {
     }
 }
 
+/**
+ * Scrapes all data from the Builder UI and serializes it into a structured
+ * JSON string within the hidden/tabbed textarea.
+ */
 function syncFormToJson() {
     const data = {
         personal_info: {},
@@ -192,6 +220,10 @@ function syncFormToJson() {
     document.getElementById('master_json').value = JSON.stringify(data, null, 2);
 }
 
+/**
+ * Parses the raw JSON string and rebuilds the entire Builder UI (Experience, 
+ * Projects, Education sections) to match.
+ */
 function syncJsonToForm() {
     try {
         const data = JSON.parse(document.getElementById('master_json').value);
@@ -218,6 +250,12 @@ function syncJsonToForm() {
     } catch (e) { console.warn("Sync failed: Invalid JSON"); }
 }
 
+/**
+ * Dynamically injects a new data entry section into the Builder UI.
+ * Handles different templates for 'summaries', 'experience', 'projects', etc.
+ * @param {string} type - The section type.
+ * @param {Object} [data] - Optional initial data to populate the fields.
+ */
 function addItem(type, data = null) {
     const list = document.getElementById(`${type}-list`);
     const div = document.createElement('div');
