@@ -22,3 +22,17 @@ __pycache__/
 # Web specific ignore (optional but good practice)
 output/
 uploads/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
