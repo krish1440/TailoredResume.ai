@@ -46,7 +46,27 @@ Mandates that every single action verb used in the resume is unique. No more "De
 
 ---
 
-## 🏗️ Technical Architecture & Workflow
+## 🛠️ Key Platform Features
+
+- [x] **Agentic Analysis:** Deep job description parsing for intent extraction.
+- [x] **Precision Scriptorium:** High-fidelity rewriting of resume bullets.
+- [x] **ATS Scorer:** Internal validator for keyword and impact metrics.
+- [x] **JSON-to-PDF:** Instant conversion from data structure to professional document.
+- [x] **Mobile Warning:** Desktop-optimized UX with responsive safety nets.
+- [x] **SEO Ready:** Complete metadata, sitemaps, and robots configuration.
+
+---
+
+## 🎨 Design System & Aesthetics
+
+TailoredResume.ai is built with a bespoke design system titled **"The Precision Scriptorium"**:
+- **Typography:** Inter for clarity, Newsreader for editorial authority.
+- **Palette:** Ivory Vellum (`#faf9f7`) and Authoritative Amber (`#d97706`).
+- **Surface Geometry:** Minimalistic sharp radii (2px-4px) for a professional Swiss feel.
+- **Micro-Animations:** Fluid, high-performance transitions for landing page interactions.
+
+---
+
 
 ### 1. The Discovery Agent (`analyze_jd`)
 The pipeline begins by "Interrogating" the Job Description. It doesn't just look for words; it looks for **intent**. 
