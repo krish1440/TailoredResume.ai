@@ -1,4 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Manrope:wght@500;600;700;800&display=swap');
+
+/* Scroll to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background: var(--surface);
+    color: var(--primary-accent);
+    border: 1px solid var(--outline);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-smooth);
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    background: var(--primary-accent);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(217, 119, 6, 0.2);
+}
+
 
 :root {
     /* Design Tokens: The Precision Scriptorium */
@@ -239,8 +273,9 @@ header {
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(217, 119, 6, 0.15);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(217, 119, 6, 0.25);
+    filter: brightness(1.1);
 }
 
 .btn-secondary {
@@ -252,7 +287,9 @@ header {
 .btn-secondary:hover {
     background: var(--surface-low);
     border-color: var(--text-primary);
+    transform: translateY(-2px);
 }
+
 
 /* Home Page Content */
 .badge {
