@@ -11,9 +11,16 @@
     "Precision Scriptorium",
     "ATS Resume Success",
     "Free Resume Tailoring",
-    "Graduate CV Optimization"
+    "Graduate CV Optimization",
+    "AI Resume Rewriter",
+    "Career Engineering",
+    "Custom Resume Builder",
+    "Job Description Analysis"
   ],
+  "last_updated": "2026-04-08",
+  "status": "Production Live",
   "pages": [
+
     {"url": "/", "title": "Home", "description": "Elite agentic AI resume tailoring by Krish Chaudhary."},
     {"url": "/guide", "title": "Master Guide", "description": "Master the JSON resume format for AI optimization."},
     {"url": "/about", "title": "About", "description": "Discover the architecture behind the Precision Scriptorium engine."},
