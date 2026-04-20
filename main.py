@@ -778,6 +778,14 @@ async def sitemap_xml():
 async def seo_json():
     return FileResponse(os.path.join(STATIC_DIR, "seo.json"))
 
+@app.get("/manifest.json")
+async def manifest_json():
+    return FileResponse(os.path.join(STATIC_DIR, "manifest.json"))
+
+@app.get("/browserconfig.xml")
+async def browserconfig_xml():
+    return FileResponse(os.path.join(STATIC_DIR, "browserconfig.xml"))
+
 @app.get("/api/seo/sitemap")
 async def get_seo_sitemap():
     return {
