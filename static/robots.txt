@@ -1,11 +1,21 @@
 # TailoredResume.ai Robots.txt
-# Advanced SEO Crawling Configuration
+# Advanced SEO Crawling Configuration 2026
 
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /_next/
 Disallow: /uploads/
+Crawl-delay: 1
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /uploads/
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
 
 # Sitemap location for search engines
 Sitemap: https://tailored-resume-ai.vercel.app/sitemap.xml
