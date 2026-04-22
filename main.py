@@ -766,6 +766,10 @@ async def privacy_page():
 async def about_page():
     return FileResponse(os.path.join(STATIC_DIR, "about.html"))
 
+@app.get("/editor")
+async def editor_page():
+    return FileResponse(os.path.join(STATIC_DIR, "editor.html"))
+
 @app.get("/robots.txt")
 async def robots_txt():
     return FileResponse(os.path.join(STATIC_DIR, "robots.txt"))
