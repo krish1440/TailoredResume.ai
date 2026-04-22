@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--
+  TailoredResume.ai - JSON to PDF Editor
+  ========================================
+  File: editor.html
+  Purpose: Allows users to paste, edit JSON and instantly download/preview PDF.
+  Author: Krish Chaudhary
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to PDF Editor | Tailored Resume AI</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+            min-height: 700px;
+        }
+
+        .json-editor-pane {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #json-input {
+            flex-grow: 1;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            padding: 1.5rem;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--outline);
+            resize: none;
+            line-height: 1.5;
+            outline: none;
+        }
+
+        #json-input:focus {
+            border-color: var(--primary-accent);
+        }
+
+        .preview-pane {
+            background: #525659;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--outline);
+        }
+
+        #pdf-preview {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .error-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #ef4444;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-ambient);
+            display: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 1024px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+            .preview-pane {
+                height: 600px;
+            }
+        }
+    </style>
+</head>
+<body class="mobile-blocked">
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                <span>TailoredResume.ai</span>
+            </a>
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                <a href="/guide">Guide</a>
+                <a href="/input">Tailor Resume</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section style="margin-bottom: 2rem;">
+            <div class="badge">Utility</div>
+            <h1 style="font-size: 2.5rem;">JSON to PDF <br><i>Direct Converter</i>.</h1>
+            <p style="color:var(--text-secondary); max-width: 600px;">Paste your resume JSON below to instantly generate and preview your professional PDF. Perfect for manual edits.</p>
+        </section>
+
+        <div class="toolbar">
+            <div>
+                <button onclick="beautifyJSON()" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Beautify JSON</button>
+                <button onclick="loadSample()" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Load Sample</button>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="updatePreview()" class="btn btn-secondary">Refresh Preview</button>
+                <button onclick="downloadPDF()" class="btn btn-primary">Download PDF</button>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <div class="json-editor-pane">
+                <textarea id="json-input" placeholder="Paste your resume JSON here..." spellcheck="false"></textarea>
+            </div>
+            <div class="preview-pane">
+                <div style="background: #323639; color: #fff; padding: 0.5rem 1rem; font-size: 0.8rem; border-bottom: 1px solid #444;">PDF Preview</div>
+                <iframe id="pdf-preview" src="about:blank"></iframe>
+            </div>
+        </div>
+
+        <footer>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%;">
+                <div>
+                    <p style="font-family: 'Newsreader', serif; font-size: 1.2rem; margin-bottom: 0.5rem;">TailoredResume.ai</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        Developed by <a href="https://portfolio-krish-chaudhary.vercel.app/" target="_blank" style="color: var(--primary-accent); text-decoration: none; font-weight: 600;">Krish Chaudhary</a>
+                    </p>
+                    <p>&copy; 2026 TailoredResume.ai. Precision Utility.</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <button id="back-to-top" class="back-to-top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <script src="js/common.js"></script>
+    <script>
+        const jsonInput = document.getElementById('json-input');
+        const pdfPreview = document.getElementById('pdf-preview');
+
+        // Check if there is data in session storage from the result page
+        const existingData = sessionStorage.getItem('tailored_resume');
+        if (existingData) {
+            try {
+                const parsed = JSON.parse(existingData);
+                jsonInput.value = JSON.stringify(parsed.data, null, 2);
+                updatePreview();
+            } catch (e) {}
+        }
+
+        async function updatePreview() {
+            const content = jsonInput.value.trim();
+            if (!content) return;
+
+            try {
+                const data = JSON.parse(content);
+
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    pdfPreview.src = url + '#toolbar=0&navpanes=0';
+                } else {
+                    showNotify("Server failed to generate PDF.", "error");
+                }
+            } catch (e) {
+                // Silently wait for valid JSON if auto-updating
+            }
+        }
+
+        async function downloadPDF() {
+            try {
+                const data = JSON.parse(jsonInput.value);
+                showNotify("Generating download...");
+                
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Resume_Edit_${new Date().getTime()}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    showNotify("PDF downloaded successfully!");
+                } else {
+                    showNotify("Download failed.", "error");
+                }
+            } catch (e) {
+                showNotify("Cannot download: Invalid JSON format.", "error");
+            }
+        }
+
+        function beautifyJSON() {
+            try {
+                const obj = JSON.parse(jsonInput.value);
+                jsonInput.value = JSON.stringify(obj, null, 2);
+                showNotify("JSON formatted.");
+            } catch (e) {
+                showNotify("Cannot format: Invalid JSON.", "error");
+            }
+        }
+
+        async function loadSample() {
+            try {
+                const res = await fetch('/api/sample_master');
+                const data = await res.json();
+                jsonInput.value = JSON.stringify(data, null, 2);
+                updatePreview();
+                showNotify("Sample loaded.");
+            } catch (e) {
+                showNotify("Failed to load sample.", "error");
+            }
+        }
+
+        // Add auto-update on pause (debounced)
+        let timeout = null;
+        jsonInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(updatePreview, 1500);
+        });
+    </script>
+</body>
+</html>
