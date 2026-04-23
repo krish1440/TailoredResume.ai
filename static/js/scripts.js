@@ -378,4 +378,35 @@ function addNestedInput(btn, className, placeholder) {
     list.appendChild(div);
     syncFormToJson();
 }
-// Version 1.2
+async function loadSample() {
+    // Get the button that was clicked
+    const btn = document.querySelector('button[onclick="loadSample()"]');
+    const originalText = btn.innerHTML;
+    
+    try {
+        btn.innerHTML = '<span class="loading-spinner" style="width:12px; height:12px; border-width:2px;"></span> Loading...';
+        btn.disabled = true;
+        
+        const response = await fetch('/api/sample_master');
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.error);
+        
+        document.getElementById('master_json').value = JSON.stringify(data, null, 2);
+        showNotify('Sample data loaded successfully!');
+        
+        // If we are in the Builder tab, we need to sync back to the form
+        const builder = document.getElementById('builder-container');
+        if (builder && builder.style.display === 'block') {
+            syncJsonToForm();
+        }
+    } catch (e) {
+        showNotify('Failed to load sample: ' + e.message, 'error');
+    } finally {
+        if (btn) {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+}
+// Version 1.2.1
