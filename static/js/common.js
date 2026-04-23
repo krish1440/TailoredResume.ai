@@ -45,3 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return tc;
     }
 });
+/**
+ * Copies text to clipboard and shows a notification.
+ * @param {string} text - The string to copy.
+ * @param {string} successMsg - Message to show on success.
+ */
+window.copyText = (text, successMsg = 'Copied to clipboard!') => {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        if (typeof showNotify === 'function') {
+            showNotify(successMsg);
+        } else {
+            alert(successMsg);
+        }
+    }).catch(err => {
+        console.error('Copy failed:', err);
+        if (typeof showNotify === 'function') {
+            showNotify('Failed to copy text', 'error');
+        }
+    });
+};
