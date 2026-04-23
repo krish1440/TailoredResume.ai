@@ -722,9 +722,9 @@ async def download_pdf_direct(data: dict):
 
 @app.get("/api/sample_master")
 async def get_sample():
-    """Returns the full master_resume.json as a sample for user reference."""
+    """Returns the standardized sample_master.json for user reference."""
     try:
-        sample_path = os.path.join(BASE_DIR, "master_resume.json")
+        sample_path = os.path.join(STATIC_DIR, "sample_master.json")
         with open(sample_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
