@@ -1,0 +1,56 @@
+{
+  "personal_info": {
+    "name": "Your Full Name",
+    "location": "City, State",
+    "email": "email@address.com",
+    "phone": "+91 0000000000",
+    "linkedin": "linkedin.com/in/username",
+    "github": "github.com/username"
+  },
+  "professional_summaries": [
+    "Experienced Data Analyst specializing in Python and SQL...",
+    "Aspiring ML Engineer with a focus on NLP and Deep Learning..."
+  ],
+  "skills": {
+    "languages": ["Python", "Java", "SQL"],
+    "frameworks": ["FastAPI", "React", "TensorFlow"],
+    "data_science": ["Pandas", "Scikit-learn"]
+  },
+  "experience": [
+    {
+      "company": "Tech Corp",
+      "role": "Data Analyst Intern",
+      "start_date": "Jan 2024",
+      "end_date": "May 2024",
+      "bullet_points": [
+        "Reduced query latency by 45% using optimized SQL indexing.",
+        "Delivered 12+ BI dashboards to executive leadership."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name",
+      "github_link": "github.com/username/project",
+      "tech_stack": ["Python", "FastAPI"],
+      "master_narrative": "Detailed story of your project...",
+      "quantified_impact": [
+        "Saved 20 hours a week.",
+        "Increased accuracy by 30%."
+      ],
+      "core_actions": [
+        "Architected a scalable backend.",
+        "Implemented real-time monitoring."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University Name",
+      "degree": "B.Tech in CS",
+      "start_date": "2021",
+      "end_date": "2025",
+      "gpa": "9.0"
+    }
+  ]
+}
