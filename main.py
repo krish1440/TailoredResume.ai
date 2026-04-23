@@ -722,25 +722,13 @@ async def download_pdf_direct(data: dict):
 
 @app.get("/api/sample_master")
 async def get_sample():
-    """Returns a sample master resume JSON for user reference.
-
-    Returns:
-        dict: A template containing correctly structured personal info, skills, and experience.
-    """
-    return {
-        "personal_info": {
-            "name": "Your Name", 
-            "location": "New York, NY",
-            "email": "email@example.com",
-            "phone": "+91 1234567890",
-            "linkedin": "linkedin.com/in/yourname",
-            "github": "github.com/yourname"
-        },
-        "skills": {"languages": ["Python", "JavaScript"]},
-        "experience": [{"company": "Tech", "role": "Intern", "start_date": "Jan 2024", "end_date": "Present", "bullet_points": ["Automated reports with Python, saving 15h weekly."]}],
-        "projects": [{"name": "AI App", "technologies": ["Python"], "bullet_points": ["Built AI tool resulting in 30% cost savings."]}],
-        "education": [{"institution": "Univ", "degree": "B.Tech", "start_date": "2020", "end_date": "2024"}]
-    }
+    """Returns the full master_resume.json as a sample for user reference."""
+    try:
+        sample_path = os.path.join(BASE_DIR, "master_resume.json")
+        with open(sample_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        return {"error": f"Could not load sample: {str(e)}"}
 
 @app.get("/")
 async def home_page():
