@@ -122,8 +122,12 @@
                 <button onclick="copySample()" class="btn btn-primary" style="width:100%">Copy Sample Format</button>
             </div>
 
-            <div class="card" style="padding: 3rem; background: var(--surface-low); margin: 0;">
+            <div class="card" style="padding: 3rem; background: var(--surface-low); margin: 0; position: relative;">
                 <h3 style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2rem;">Sample JSON Format</h3>
+                <button onclick="copySample()" title="Copy to clipboard" style="position: absolute; top: 2rem; right: 2rem; background: var(--surface-high); border: 1px solid var(--outline); color: var(--text-primary); padding: 8px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span style="font-size: 0.8rem; font-weight: 500;">Copy</span>
+                </button>
                 <pre id="sample-json" style="font-family: 'Inter', monospace; font-size: 0.85rem; line-height: 1.5; color: var(--text-primary); overflow-x: auto;">
 {
   "personal_info": {
@@ -214,9 +218,25 @@
     <script src="js/scripts.js"></script>
     <script>
         function copySample() {
-            const text = document.getElementById('sample-json').innerText;
+            const pre = document.getElementById('sample-json');
+            const text = pre.innerText;
+            const btn = document.querySelector('.card button');
+            const originalContent = btn.innerHTML;
+            
             navigator.clipboard.writeText(text).then(() => {
                 showNotify('Sample format copied to clipboard!');
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span style="font-size: 0.8rem; font-weight: 500;">Copied!</span>
+                `;
+                btn.style.borderColor = 'var(--primary-accent)';
+                btn.style.color = 'var(--primary-accent)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 2000);
             });
         }
     </script>
