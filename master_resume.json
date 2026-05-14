@@ -114,7 +114,35 @@
     }
   ],
   "projects": [
-    {
+  {
+  "name": "Email Automator & AI Sales Agent",
+  "github_link": "https://github.com/krish1440/LangGraph-Email-Automator",
+  "tech_stack": [
+    "Python",
+    "LangGraph",
+    "Google Workspace APIs",
+    "OAuth 2.0",
+    "Agentic AI Pipelines",
+    "GitHub Actions",
+    "State Machine Architecture"
+  ],
+  "master_narrative": "Constructed an advanced, dual-purpose agentic email automation engine powered by LangGraph and Google Gemini 2.5 Flash, designed to act as a 24/7 intelligent responder for both a personal AI/ML portfolio and a live B2B engineering business (Abhay Engineering). The system leverages a state-machine architecture with conditional LLM-based routing to deliver contextually accurate, knowledge-grounded replies autonomously, using a serverless GitHub Actions deployment pipeline.",
+  "quantified_impact": [
+    "Eliminated 100% of manual email triage effort by deploying a fully autonomous LangGraph state-machine that classifies, routes, and responds to inbound inquiries without human intervention.",
+    "Achieved zero-cost 24/7 operation by provisioning a serverless GitHub Actions cron pipeline that triggers the full AI workflow every 15 minutes across both live production domains.",
+    "Reduced average lead response time from hours to under 15 minutes by automating contextual B2B sales reply generation with professional office CC-routing logic.",
+    "Maintained 100% reply accuracy across 2 distinct knowledge domains by constructing separate Markdown-based knowledge bases for precise product, pricing, and project-level retrieval.",
+    "Scaled the system to handle dual-site inquiry volumes simultaneously by architecting a modular, node-based LangGraph pipeline with isolated processing stages per domain."
+  ],
+  "core_actions": [
+    "Constructed a stateful agentic pipeline using LangGraph's StateGraph, defining modular nodes for email fetching, LLM-based intent parsing, knowledge retrieval, reply generation, and Gmail dispatch.",
+    "Formulated a dual-persona AI routing system with conditional edges that distinguish between B2B sales inquiries and personal portfolio outreach, applying domain-specific response policies to each.",
+    "Provisioned a serverless CI/CD automation workflow via GitHub Actions with a 15-minute cron schedule, enabling zero-infrastructure continuous operation in production.",
+    "Assembled two structured Markdown knowledge bases encoding product specifications, pricing policies, project details, and persona-specific communication guidelines for grounded LLM response generation.",
+    "Orchestrated the full email lifecycle — from inbox monitoring and entity extraction to AI-driven reply synthesis and automated dispatch — using LangChain and Gmail API v1."
+  ]
+},
+{
       "name": "TailoredResume.ai",
       "github_link": "https://github.com/krish1440/TailoredResume.ai",
       "tech_stack": [
