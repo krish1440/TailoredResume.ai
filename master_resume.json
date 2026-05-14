@@ -265,6 +265,7 @@
     },
     {
       "name": "Smart Notes Application",
+      "github_link": "https://github.com/krish1440/Smart-Notes",
       "tech_stack": [
         "Python",
         "Flask",
