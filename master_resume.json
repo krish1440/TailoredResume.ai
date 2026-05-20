@@ -10,20 +10,23 @@
     "kaggle": "kaggle.com/krishchaudhary14"
   },
   "professional_summaries": [
-    "Computer Science undergraduate specializing in data analytics, machine learning, and business intelligence. Experienced in analysing large datasets, building analytical dashboards, and developing data-driven solutions using Python, SQL, Power BI, and statistical modelling. Proven ability to convert raw data into actionable insights that improve operational efficiency, revenue, and decision-making.",
-    "Driven Computer Science student with a strong focus on Machine Learning, Natural Language Processing, Business Intelligence, Cloud Computing, and Computer Vision. Skilled in deploying AI models to derive strategic business value."
+    "Computer Science undergraduate specializing in Agentic AI, MLOps, and Business Intelligence. Proficient in architecting state-machine workflows with LangGraph, deploying scalable AI services via FastAPI/Docker, and optimizing LLMs through fine-tuning and quantization. Proven track record in converting complex data into strategic insights that drive revenue and operational efficiency.",
+    "Driven AI Engineer and Data Analyst with expertise in Generative AI, RAG-based systems, and MLOps. Skilled in building autonomous agentic pipelines, conducting deep statistical audits, and deploying production-grade ML models. Focused on leveraging cutting-edge technology like MCP and Transformers to solve high-impact business problems."
   ],
   "skills": {
     "programming_languages": [
       "Python",
       "Java",
-      "C",
+      "C/C++",
       "JavaScript",
       "SQL"
     ],
     "data_science_ml": [
-      "Pandas",
-      "NumPy",
+      "Statistical Modeling",
+      "Hypothesis Testing",
+      "EDA",
+      "Feature Engineering",
+      "Time-Series Forecasting",
       "Scikit-learn",
       "XGBoost",
       "LightGBM",
@@ -32,15 +35,21 @@
     "ai_specializations": [
       "Generative AI",
       "Large Language Models (LLMs)",
-      "NLP",
-      "Computer Vision",
+      "LangChain",
+      "LangGraph",
+      "Agentic AI Pipelines",
+      "MCP (Model Context Protocol)",
       "RAG-based systems",
-      "LangChain"
+      "Prompt Engineering",
+      "Semantic Search"
     ],
     "deep_learning_cv": [
       "TensorFlow",
       "PyTorch",
       "Transformers (Hugging Face)",
+      "Fine-tuning (PEFT/LoRA/QLoRA)",
+      "LLM Quantization",
+      "Computer Vision",
       "OpenCV"
     ],
     "data_visualization_bi": [
@@ -49,28 +58,41 @@
       "Plotly",
       "Power BI",
       "Tableau",
+      "Looker Studio",
       "Streamlit"
     ],
     "model_deployment_mlops": [
       "FastAPI",
       "Flask",
       "Docker",
+      "Kubernetes",
       "MLflow",
+      "Weights & Biases (W&B)",
       "DVC",
-      "Git",
-      "GitHub",
-      "APIs",
-      "Cloud Platforms"
+      "CI/CD (GitHub Actions)",
+      "Model Monitoring",
+      "Cloud Deployment (AWS/GCP/Vercel)",
+      "Git/GitHub",
+      "RESTful APIs"
     ],
     "development_tools": [
       "Jupyter Notebook",
       "VS Code",
+      "Postman",
+      "PySpark",
       "Anaconda"
     ],
+    "Vector Databases": [
+      "Pinecone",
+      "ChromaDB",
+      "Milvus",
+      "FAISS"
+    ],
     "core_strengths": [
-      "Business Analysis",
-      "Data Pipeline Development",
-      "Model Deployment"
+      "Agentic Workflow Design",
+      "Data Pipeline Engineering",
+      "Full-stack AI Development",
+      "Business Intelligence"
     ]
   },
   "education": [
@@ -114,35 +136,35 @@
     }
   ],
   "projects": [
-  {
-  "name": "Email Automator & AI Sales Agent",
-  "github_link": "https://github.com/krish1440/LangGraph-Email-Automator",
-  "tech_stack": [
-    "Python",
-    "LangGraph",
-    "Google Workspace APIs",
-    "OAuth 2.0",
-    "Agentic AI Pipelines",
-    "GitHub Actions",
-    "State Machine Architecture"
-  ],
-  "master_narrative": "Constructed an advanced, dual-purpose agentic email automation engine powered by LangGraph and Google Gemini 2.5 Flash, designed to act as a 24/7 intelligent responder for both a personal AI/ML portfolio and a live B2B engineering business (Abhay Engineering). The system leverages a state-machine architecture with conditional LLM-based routing to deliver contextually accurate, knowledge-grounded replies autonomously, using a serverless GitHub Actions deployment pipeline.",
-  "quantified_impact": [
-    "Eliminated 100% of manual email triage effort by deploying a fully autonomous LangGraph state-machine that classifies, routes, and responds to inbound inquiries without human intervention.",
-    "Achieved zero-cost 24/7 operation by provisioning a serverless GitHub Actions cron pipeline that triggers the full AI workflow every 15 minutes across both live production domains.",
-    "Reduced average lead response time from hours to under 15 minutes by automating contextual B2B sales reply generation with professional office CC-routing logic.",
-    "Maintained 100% reply accuracy across 2 distinct knowledge domains by constructing separate Markdown-based knowledge bases for precise product, pricing, and project-level retrieval.",
-    "Scaled the system to handle dual-site inquiry volumes simultaneously by architecting a modular, node-based LangGraph pipeline with isolated processing stages per domain."
-  ],
-  "core_actions": [
-    "Constructed a stateful agentic pipeline using LangGraph's StateGraph, defining modular nodes for email fetching, LLM-based intent parsing, knowledge retrieval, reply generation, and Gmail dispatch.",
-    "Formulated a dual-persona AI routing system with conditional edges that distinguish between B2B sales inquiries and personal portfolio outreach, applying domain-specific response policies to each.",
-    "Provisioned a serverless CI/CD automation workflow via GitHub Actions with a 15-minute cron schedule, enabling zero-infrastructure continuous operation in production.",
-    "Assembled two structured Markdown knowledge bases encoding product specifications, pricing policies, project details, and persona-specific communication guidelines for grounded LLM response generation.",
-    "Orchestrated the full email lifecycle — from inbox monitoring and entity extraction to AI-driven reply synthesis and automated dispatch — using LangChain and Gmail API v1."
-  ]
-},
-{
+    {
+      "name": "Email Automator & AI Sales Agent",
+      "github_link": "https://github.com/krish1440/LangGraph-Email-Automator",
+      "tech_stack": [
+        "Python",
+        "LangGraph",
+        "Google Workspace APIs",
+        "OAuth 2.0",
+        "Agentic AI Pipelines",
+        "GitHub Actions",
+        "State Machine Architecture"
+      ],
+      "master_narrative": "Constructed an advanced, dual-purpose agentic email automation engine powered by LangGraph and Google Gemini 2.5 Flash, designed to act as a 24/7 intelligent responder for both a personal AI/ML portfolio and a live B2B engineering business (Abhay Engineering). The system leverages a state-machine architecture with conditional LLM-based routing to deliver contextually accurate, knowledge-grounded replies autonomously, using a serverless GitHub Actions deployment pipeline.",
+      "quantified_impact": [
+        "Eliminated 100% of manual email triage effort by deploying a fully autonomous LangGraph state-machine that classifies, routes, and responds to inbound inquiries without human intervention.",
+        "Achieved zero-cost 24/7 operation by provisioning a serverless GitHub Actions cron pipeline that triggers the full AI workflow every 15 minutes across both live production domains.",
+        "Reduced average lead response time from hours to under 15 minutes by automating contextual B2B sales reply generation with professional office CC-routing logic.",
+        "Maintained 100% reply accuracy across 2 distinct knowledge domains by constructing separate Markdown-based knowledge bases for precise product, pricing, and project-level retrieval.",
+        "Scaled the system to handle dual-site inquiry volumes simultaneously by architecting a modular, node-based LangGraph pipeline with isolated processing stages per domain."
+      ],
+      "core_actions": [
+        "Constructed a stateful agentic pipeline using LangGraph's StateGraph, defining modular nodes for email fetching, LLM-based intent parsing, knowledge retrieval, reply generation, and Gmail dispatch.",
+        "Formulated a dual-persona AI routing system with conditional edges that distinguish between B2B sales inquiries and personal portfolio outreach, applying domain-specific response policies to each.",
+        "Provisioned a serverless CI/CD automation workflow via GitHub Actions with a 15-minute cron schedule, enabling zero-infrastructure continuous operation in production.",
+        "Assembled two structured Markdown knowledge bases encoding product specifications, pricing policies, project details, and persona-specific communication guidelines for grounded LLM response generation.",
+        "Orchestrated the full email lifecycle — from inbox monitoring and entity extraction to AI-driven reply synthesis and automated dispatch — using LangChain and Gmail API v1."
+      ]
+    },
+    {
       "name": "TailoredResume.ai",
       "github_link": "https://github.com/krish1440/TailoredResume.ai",
       "tech_stack": [
