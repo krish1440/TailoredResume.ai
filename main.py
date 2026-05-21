@@ -31,7 +31,7 @@ from dotenv import load_dotenv
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable, Table, TableStyle, Indenter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.colors import Color
+from reportlab.lib.colors import Color, HexColor
 
 load_dotenv()
 
@@ -57,7 +57,466 @@ MODELS_TO_TRY = [
 
 import io
 
-def create_pdf(data: dict, output_buffer):
+def create_two_column_pdf(data: dict, output_buffer):
+    doc = SimpleDocTemplate(
+        output_buffer,
+        pagesize=letter,
+        rightMargin=22,
+        leftMargin=22,
+        topMargin=13,
+        bottomMargin=10
+    )
+
+    primary_color = HexColor("#4f46e5")
+    text_dark = HexColor("#111827")
+    text_muted = HexColor("#4b5563")
+
+    styles = {}
+
+    styles['TCName'] = ParagraphStyle(
+        name='TCName',
+        fontName='Helvetica-Bold',
+        fontSize=18,
+        leading=22,
+        textColor=primary_color,
+        spaceAfter=1
+    )
+    styles['TCTitle'] = ParagraphStyle(
+        name='TCTitle',
+        fontName='Helvetica-Bold',
+        fontSize=10,
+        leading=13,
+        textColor=text_muted,
+        spaceAfter=3
+    )
+    styles['TCSummary'] = ParagraphStyle(
+        name='TCSummary',
+        fontName='Helvetica',
+        fontSize=8.0,
+        leading=9.5,
+        textColor=text_dark,
+        spaceAfter=4
+    )
+    styles['TCSectionHeader'] = ParagraphStyle(
+        name='TCSectionHeader',
+        fontName='Helvetica-Bold',
+        fontSize=9.0,
+        leading=12,
+        textColor=primary_color,
+        spaceBefore=6,
+        spaceAfter=1,
+        textTransform='uppercase'
+    )
+    styles['TCItemTitle'] = ParagraphStyle(
+        name='TCItemTitle',
+        fontName='Helvetica-Bold',
+        fontSize=8.5,
+        leading=11.5,
+        textColor=text_dark
+    )
+    styles['TCItemDate'] = ParagraphStyle(
+        name='TCItemDate',
+        fontName='Helvetica-Oblique',
+        fontSize=8.0,
+        leading=11.0,
+        alignment=2,
+        textColor=text_muted
+    )
+    styles['TCBullet'] = ParagraphStyle(
+        name='TCBullet',
+        fontName='Helvetica',
+        fontSize=8.0,
+        leading=9.2,
+        leftIndent=10,
+        bulletIndent=2,
+        spaceAfter=0.5,
+        textColor=text_dark
+    )
+
+    styles['TCSidebarHeader'] = ParagraphStyle(
+        name='TCSidebarHeader',
+        fontName='Helvetica-Bold',
+        fontSize=9.0,
+        leading=12,
+        textColor=primary_color,
+        spaceBefore=6,
+        spaceAfter=1,
+        textTransform='uppercase'
+    )
+    styles['TCSidebarText'] = ParagraphStyle(
+        name='TCSidebarText',
+        fontName='Helvetica',
+        fontSize=7.8,
+        leading=9.2,
+        textColor=text_dark,
+        spaceAfter=1.0
+    )
+    styles['TCSidebarBullet'] = ParagraphStyle(
+        name='TCSidebarBullet',
+        fontName='Helvetica',
+        fontSize=7.8,
+        leading=9.2,
+        leftIndent=8,
+        bulletIndent=0,
+        spaceAfter=0.5,
+        textColor=text_dark
+    )
+    styles['TCSidebarCategory'] = ParagraphStyle(
+        name='TCSidebarCategory',
+        fontName='Helvetica-Oblique',
+        fontSize=7.8,
+        leading=9.2,
+        textColor=text_muted,
+        spaceBefore=1.5,
+        spaceAfter=0.2
+    )
+
+    def create_left_header_table(left_text, right_text):
+        t = Table(
+            [[Paragraph(left_text, styles['TCItemTitle']), Paragraph(right_text, styles['TCItemDate'])]], 
+            colWidths=[278, 80]
+        )
+        t.setStyle(TableStyle([
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+            ('TOPPADDING', (0,0), (-1,-1), 0.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0.5),
+        ]))
+        return t
+
+    def create_right_header_table(left_text, right_text):
+        t = Table(
+            [[Paragraph(left_text, styles['TCSidebarText']), Paragraph(right_text, styles['TCItemDate'])]], 
+            colWidths=[114, 80]
+        )
+        t.setStyle(TableStyle([
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+            ('TOPPADDING', (0,0), (-1,-1), 0.5),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0.5),
+        ]))
+        return t
+
+    left_flowables = []
+
+    # 1. Personal Info
+    pi = data.get("personal_info") or {}
+    name = (pi.get("name") or "RESUME").upper()
+    left_flowables.append(Paragraph(f"<b>{name}</b>", styles['TCName']))
+
+    experience_list = data.get("experience") or []
+    first_role = experience_list[0].get("role", "") if experience_list else ""
+    title = (pi.get("title") or first_role or "Candidate").upper()
+    left_flowables.append(Paragraph(title, styles['TCTitle']))
+
+    right_flowables = []
+
+    # 1. Contact Info
+    right_flowables.append(Paragraph("<b>Contact</b>", styles['TCSidebarHeader']))
+    right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+
+    contacts = []
+    if pi.get("location"):
+        contacts.append(f"• {pi.get('location')}")
+
+    for field in ["phone", "email", "linkedin", "github", "portfolio", "kaggle"]:
+        val = pi.get(field)
+        if val:
+            if "@" in val:
+                contacts.append(f'• <a href="mailto:{val}">{val}</a>')
+            elif "." in val:
+                link = val if val.startswith("http") else f"https://{val}"
+                display = val.replace("https://", "").replace("www.", "")
+                contacts.append(f'• <a href="{link}">{display}</a>')
+            else:
+                contacts.append(f"• {val}")
+
+    for c in contacts:
+        right_flowables.append(Paragraph(c, styles['TCSidebarBullet']))
+    right_flowables.append(Spacer(1, 4))
+
+    # Default column lists
+    left_order = ["summary", "experience", "projects", "education", "certifications"]
+    right_order = ["skills"]
+
+    # Build Left Column Flowables dynamically
+    for sec in left_order:
+        if sec == "summary":
+            summary = data.get("summary")
+            if summary:
+                left_flowables.append(Paragraph(summary, styles['TCSummary']))
+        elif sec == "skills":
+            skills_data = data.get("skills") or {}
+            if skills_data:
+                left_flowables.append(Paragraph("<b>Skills</b>", styles['TCSectionHeader']))
+                left_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                skills_rows = []
+                if isinstance(skills_data, dict):
+                    for cat, items in skills_data.items():
+                        label = cat.replace('_', ' ').title()
+                        skills_rows.append([
+                            Paragraph(f"<b>{label}:</b>", styles['TCSummary']),
+                            Paragraph(", ".join(items), styles['TCSummary'])
+                        ])
+                    s_table = Table(skills_rows, colWidths=[100, 258])
+                    s_table.setStyle(TableStyle([
+                        ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                        ('LEFTPADDING', (0,0), (-1,-1), 0),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 0),
+                        ('TOPPADDING', (0,0), (-1,-1), 0.5),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 0.5),
+                    ]))
+                    left_flowables.append(s_table)
+                elif isinstance(skills_data, list):
+                    for item in skills_data:
+                        left_flowables.append(Paragraph(f"• {item}", styles['TCBullet']))
+                left_flowables.append(Spacer(1, 1.5))
+        elif sec == "experience":
+            if experience_list:
+                left_flowables.append(Paragraph("<b>Work Experience</b>", styles['TCSectionHeader']))
+                left_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for exp in experience_list:
+                    left_text = f"<b>{exp.get('company') or ''}</b> | {exp.get('role') or ''}"
+                    right_text = f"<i>{exp.get('start_date') or ''} - {exp.get('end_date') or ''}</i>"
+                    left_flowables.append(create_left_header_table(left_text, right_text))
+                    for b in exp.get("bullet_points") or []:
+                        left_flowables.append(Paragraph(f"• {b}", styles['TCBullet']))
+                    left_flowables.append(Spacer(1, 1.5))
+        elif sec == "projects":
+            projects_list = data.get("projects") or []
+            if projects_list:
+                left_flowables.append(Paragraph("<b>Projects</b>", styles['TCSectionHeader']))
+                left_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for p in projects_list:
+                    pname = p.get("name") or ""
+                    techs_list = p.get("technologies") or p.get("tech_stack") or []
+                    if isinstance(techs_list, str):
+                        techs = techs_list
+                    else:
+                        techs = ", ".join(techs_list) if techs_list else ""
+                    github = p.get("github_link") or ""
+                    right_text = ""
+                    if github:
+                        link = github if github.startswith("http") else f"https://{github}"
+                        display_link = github.replace("https://", "").replace("www.", "").replace("github.com/", "")
+                        if len(display_link) > 15:
+                            display_link = "GitHub"
+                        right_text = f'<a href="{link}"><i>{display_link}</i></a>'
+                    left_text = f"<b>{pname}</b> | <i>{techs}</i>"
+                    left_flowables.append(create_left_header_table(left_text, right_text))
+                    for b in p.get("bullet_points") or []:
+                        left_flowables.append(Paragraph(f"• {b}", styles['TCBullet']))
+                    left_flowables.append(Spacer(1, 1.5))
+        elif sec == "education":
+            education_list = data.get("education") or []
+            if education_list:
+                left_flowables.append(Paragraph("<b>Education</b>", styles['TCSectionHeader']))
+                left_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for edu in education_list:
+                    degree_inst = f"<b>{edu.get('institution') or ''}</b> | {edu.get('degree') or ''}"
+                    date_str = f"<i>{edu.get('start_date') or ''} - {edu.get('end_date') or ''}</i>"
+                    left_flowables.append(create_left_header_table(degree_inst, date_str))
+                    gpa = edu.get('cgpa') or edu.get('gpa')
+                    if gpa:
+                        left_flowables.append(Paragraph(f"GPA: {gpa}", styles['TCBullet']))
+                    left_flowables.append(Spacer(1, 1.5))
+        elif sec == "certifications":
+            certs = data.get("certifications") or []
+            if certs:
+                left_flowables.append(Paragraph("<b>Certifications</b>", styles['TCSectionHeader']))
+                left_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for cert in certs:
+                    left_flowables.append(Paragraph(f"• {cert}", styles['TCBullet']))
+                left_flowables.append(Spacer(1, 1.5))
+
+    # Build Right Column Flowables dynamically
+    for sec in right_order:
+        if sec == "summary":
+            summary = data.get("summary")
+            if summary:
+                right_flowables.append(Paragraph(summary, styles['TCSidebarText']))
+        elif sec == "skills":
+            skills_data = data.get("skills") or {}
+            if skills_data:
+                right_flowables.append(Paragraph("<b>Skills</b>", styles['TCSidebarHeader']))
+                right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                if isinstance(skills_data, dict):
+                    for cat, items in skills_data.items():
+                        label = cat.replace('_', ' ').title()
+                        right_flowables.append(Paragraph(f"<i>{label}:</i>", styles['TCSidebarCategory']))
+                        if items:
+                            for item in items:
+                                right_flowables.append(Paragraph(f"• {item}", styles['TCSidebarBullet']))
+                elif isinstance(skills_data, list):
+                    for item in skills_data:
+                        right_flowables.append(Paragraph(f"• {item}", styles['TCSidebarBullet']))
+                right_flowables.append(Spacer(1, 1.5))
+        elif sec == "experience":
+            if experience_list:
+                right_flowables.append(Paragraph("<b>Work Experience</b>", styles['TCSidebarHeader']))
+                right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for exp in experience_list:
+                    left_text = f"<b>{exp.get('company') or ''}</b>"
+                    right_text = f"<i>{exp.get('start_date') or ''} - {exp.get('end_date') or ''}</i>"
+                    right_flowables.append(create_right_header_table(left_text, right_text))
+                    right_flowables.append(Paragraph(exp.get('role') or '', styles['TCSidebarCategory']))
+                    for b in exp.get("bullet_points") or []:
+                        right_flowables.append(Paragraph(f"• {b}", styles['TCSidebarBullet']))
+                    right_flowables.append(Spacer(1, 1.5))
+        elif sec == "projects":
+            projects_list = data.get("projects") or []
+            if projects_list:
+                right_flowables.append(Paragraph("<b>Projects</b>", styles['TCSidebarHeader']))
+                right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for p in projects_list:
+                    pname = p.get("name") or ""
+                    techs_list = p.get("technologies") or p.get("tech_stack") or []
+                    if isinstance(techs_list, str):
+                        techs = techs_list
+                    else:
+                        techs = ", ".join(techs_list) if techs_list else ""
+                    github = p.get("github_link") or ""
+                    right_text = ""
+                    if github:
+                        link = github if github.startswith("http") else f"https://{github}"
+                        right_text = f'<a href="{link}"><i>GitHub</i></a>'
+                    left_text = f"<b>{pname}</b>"
+                    right_flowables.append(create_right_header_table(left_text, right_text))
+                    if techs:
+                        right_flowables.append(Paragraph(f"<i>{techs}</i>", styles['TCSidebarCategory']))
+                    for b in p.get("bullet_points") or []:
+                        right_flowables.append(Paragraph(f"• {b}", styles['TCSidebarBullet']))
+                    right_flowables.append(Spacer(1, 1.5))
+        elif sec == "education":
+            education_list = data.get("education") or []
+            if education_list:
+                right_flowables.append(Paragraph("<b>Education</b>", styles['TCSidebarHeader']))
+                right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for edu in education_list:
+                    inst = f"<b>{edu.get('institution') or ''}</b>"
+                    date_str = f"<i>{edu.get('start_date') or ''} - {edu.get('end_date') or ''}</i>"
+                    right_flowables.append(create_right_header_table(inst, date_str))
+                    right_flowables.append(Paragraph(edu.get('degree') or '', styles['TCSidebarCategory']))
+                    gpa = edu.get('cgpa') or edu.get('gpa')
+                    if gpa:
+                        right_flowables.append(Paragraph(f"GPA: {gpa}", styles['TCSidebarBullet']))
+                    right_flowables.append(Spacer(1, 1.5))
+        elif sec == "certifications":
+            certs = data.get("certifications") or []
+            if certs:
+                right_flowables.append(Paragraph("<b>Certifications</b>", styles['TCSidebarHeader']))
+                right_flowables.append(HRFlowable(width="100%", thickness=0.6, color=primary_color, spaceAfter=3, spaceBefore=0.5))
+                for cert in certs:
+                    right_flowables.append(Paragraph(f"• {cert}", styles['TCSidebarBullet']))
+                right_flowables.append(Spacer(1, 1.5))
+    import math
+    from reportlab.platypus import PageBreak
+
+    def estimate_flowable_height(f, width):
+        if isinstance(f, Paragraph):
+            text = f.text
+            clean_text = re.sub(r'<[^>]+>', '', text)
+            font_size = f.style.fontSize
+            leading = f.style.leading
+            space_before = f.style.spaceBefore
+            space_after = f.style.spaceAfter
+            
+            char_width = font_size * 0.52
+            chars_per_line = max(1, int(width / char_width))
+            
+            lines = math.ceil(len(clean_text) / chars_per_line) if clean_text else 1
+            return lines * leading + space_before + space_after
+        elif isinstance(f, Spacer):
+            return f.height
+        elif isinstance(f, HRFlowable):
+            sb = getattr(f, 'spaceBefore', 0.5)
+            sa = getattr(f, 'spaceAfter', 3.0)
+            return sb + sa + 2.0
+        elif isinstance(f, Table):
+            total_h = 0
+            col_widths = getattr(f, '_colWidths', None)
+            for row in f._cellvalues:
+                row_h = 0
+                for cell_idx, cell in enumerate(row):
+                    w = 100
+                    if col_widths and cell_idx < len(col_widths):
+                        w = col_widths[cell_idx]
+                    cell_h = estimate_flowable_height(cell, w) if cell else 0
+                    if cell_h > row_h:
+                        row_h = cell_h
+                total_h += row_h + 1.0
+            return total_h
+        elif isinstance(f, list):
+            return sum(estimate_flowable_height(item, width) for item in f)
+        return 10
+
+    left_pages = []
+    right_pages = []
+    
+    current_left = []
+    current_height = 0
+    max_page_height = 745
+    
+    for f in left_flowables:
+        h = estimate_flowable_height(f, 358)
+        if current_height + h > max_page_height and current_left:
+            left_pages.append(current_left)
+            current_left = [f]
+            current_height = h
+        else:
+            current_left.append(f)
+            current_height += h
+    if current_left:
+        left_pages.append(current_left)
+        
+    current_right = []
+    current_height = 0
+    for f in right_flowables:
+        h = estimate_flowable_height(f, 194)
+        if current_height + h > max_page_height and current_right:
+            right_pages.append(current_right)
+            current_right = [f]
+            current_height = h
+        else:
+            current_right.append(f)
+            current_height += h
+    if current_right:
+        right_pages.append(current_right)
+
+    num_pages = max(len(left_pages), len(right_pages))
+    while len(left_pages) < num_pages:
+        left_pages.append([])
+    while len(right_pages) < num_pages:
+        right_pages.append([])
+
+    col_widths = [358, 16, 194]
+    elements = []
+    
+    for i in range(num_pages):
+        page_left = left_pages[i]
+        page_right = right_pages[i]
+        page_table = Table([[page_left, [], page_right]], colWidths=col_widths)
+        page_table.setStyle(TableStyle([
+            ('VALIGN', (0,0), (-1,-1), 'TOP'),
+            ('LEFTPADDING', (0,0), (-1,-1), 0),
+            ('RIGHTPADDING', (0,0), (-1,-1), 0),
+            ('TOPPADDING', (0,0), (-1,-1), 0),
+            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
+        ]))
+        elements.append(page_table)
+        if i < num_pages - 1:
+            elements.append(PageBreak())
+
+    def add_meta(canvas, doc):
+        canvas.setTitle("Tailored Resume - TailoredResume.ai")
+        canvas.setAuthor("TailoredResume.ai")
+        canvas.setSubject("ATS Optimized Resume")
+
+    doc.build(elements, onFirstPage=add_meta, onLaterPages=add_meta)
+def create_pdf(data: dict, output_buffer, template: str = "classic"):
+    if template == "two_column":
+        create_two_column_pdf(data, output_buffer)
+        return
     """Generates an ATS-optimized PDF resume from structured JSON data.
 
     This function uses the ReportLab library to build a professional resume layout.
@@ -146,12 +605,20 @@ def create_pdf(data: dict, output_buffer):
     elements.append(Paragraph(" | ".join(contacts), styles['CompContact']))
 
     sections_keys = ["summary", "skills", "experience", "projects", "education", "certifications"]
-    sections_titles = ["PROFESSIONAL SUMMARY", "TECHNICAL SKILLS", "EXPERIENCE", "PROJECTS", "EDUCATION", "CERTIFICATIONS"]
 
-    for i, key in enumerate(sections_keys):
+    sections_titles_map = {
+        "summary": "PROFESSIONAL SUMMARY",
+        "skills": "TECHNICAL SKILLS",
+        "experience": "EXPERIENCE",
+        "projects": "PROJECTS",
+        "education": "EDUCATION",
+        "certifications": "CERTIFICATIONS"
+    }
+
+    for key in sections_keys:
         if not data.get(key): continue
-        
-        elements.append(Paragraph(f"<b>{sections_titles[i]}</b>", styles['CompSectionHeader']))
+        title = sections_titles_map.get(key, key.upper())
+        elements.append(Paragraph(f"<b>{title}</b>", styles['CompSectionHeader']))
         elements.append(line)
         
         if key == "summary":
@@ -724,18 +1191,19 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
         return JSONResponse(status_code=500, content={"success": False, "error": str(e)})
 
 @app.post("/api/download")
-async def download_pdf_direct(data: dict):
+async def download_pdf_direct(data: dict, template: str = "classic"):
     """API endpoint to generate and stream a PDF resume.
 
     Args:
         data (dict): The finalized resume JSON data.
+        template (str): The template style to render.
 
     Returns:
         StreamingResponse: A PDF file stream with appropriate headers.
     """
     try:
         buffer = io.BytesIO()
-        create_pdf(data, buffer)
+        create_pdf(data, buffer, template=template)
         buffer.seek(0)
         
         filename = f"Tailored_Resume_{datetime.now().strftime('%Y%m%d%H%M')}.pdf"
@@ -745,6 +1213,8 @@ async def download_pdf_direct(data: dict):
             headers={"Content-Disposition": f"attachment; filename={filename}"}
         )
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/sample_master")
