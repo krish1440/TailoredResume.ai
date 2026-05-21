@@ -440,19 +440,6 @@
             <!-- Template Grid -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 1rem;">
                 
-                <!-- Double Column Option -->
-                <div onclick="selectModalTemplate('two_column')" style="cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
-                    <div id="modal-card-two_column" style="position: relative; width: 100%; aspect-ratio: 1 / 1.29; background: #ffffff; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-                        <div id="modal-card-two_column-preview" style="width: 100%; height: 100%; overflow: hidden; user-select: none; pointer-events: none;"></div>
-                        
-                        <!-- Selected Checkmark Overlay (Triangle and check icon) -->
-                        <div id="modal-check-two_column" style="display: none; position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: linear-gradient(135deg, transparent 50%, #10b981 50%); z-index: 10;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; bottom: 4px; right: 4px; width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"/></svg>
-                        </div>
-                    </div>
-                    <span id="modal-label-two_column" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 600; color: #64748b; transition: color 0.3s;">Double Column</span>
-                </div>
-                
                 <!-- Classic Option -->
                 <div onclick="selectModalTemplate('classic')" style="cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
                     <div id="modal-card-classic" style="position: relative; width: 100%; aspect-ratio: 1 / 1.29; background: #ffffff; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
@@ -464,6 +451,19 @@
                         </div>
                     </div>
                     <span id="modal-label-classic" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 600; color: #64748b; transition: color 0.3s;">Classic</span>
+                </div>
+                
+                <!-- Double Column Option -->
+                <div onclick="selectModalTemplate('two_column')" style="cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+                    <div id="modal-card-two_column" style="position: relative; width: 100%; aspect-ratio: 1 / 1.29; background: #ffffff; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                        <div id="modal-card-two_column-preview" style="width: 100%; height: 100%; overflow: hidden; user-select: none; pointer-events: none;"></div>
+                        
+                        <!-- Selected Checkmark Overlay (Triangle and check icon) -->
+                        <div id="modal-check-two_column" style="display: none; position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: linear-gradient(135deg, transparent 50%, #10b981 50%); z-index: 10;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; bottom: 4px; right: 4px; width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+                    <span id="modal-label-two_column" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 600; color: #64748b; transition: color 0.3s;">Double Column</span>
                 </div>
             </div>
         </div>
@@ -527,12 +527,17 @@
             if (data.skills) {
                 let rows = '';
                 if (typeof data.skills === 'object' && !Array.isArray(data.skills)) {
-                    Object.entries(data.skills).slice(0, 3).forEach(([cat, items]) => {
+                    Object.entries(data.skills).forEach(([cat, items]) => {
                         const label = cat.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
-                        rows += `<div style="font-size: 4.8px; margin-bottom: 1px; line-height: 1.1;"><b>${label}:</b> ${items.slice(0, 5).join(', ')}</div>`;
+                        rows += `
+                            <div style="display: flex; font-size: 4.5px; margin-bottom: 1px; line-height: 1.15;">
+                                <div style="width: 25%; font-weight: 700; color: #000000; flex-shrink: 0;">${label}:</div>
+                                <div style="width: 75%; color: #111827;">${items.join(', ')}</div>
+                            </div>
+                        `;
                     });
                 } else if (Array.isArray(data.skills)) {
-                    rows = `<div style="font-size: 4.8px; line-height: 1.1;">${data.skills.slice(0, 10).join(', ')}</div>`;
+                    rows = `<div style="font-size: 4.5px; line-height: 1.15; color: #111827;">${data.skills.join(', ')}</div>`;
                 }
                 classicSkillsHtml = `
                     <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Technical Skills</div>
@@ -546,12 +551,12 @@
             if (data.skills) {
                 let rows = '';
                 if (typeof data.skills === 'object' && !Array.isArray(data.skills)) {
-                    Object.entries(data.skills).slice(0, 3).forEach(([cat, items]) => {
+                    Object.entries(data.skills).forEach(([cat, items]) => {
                         const label = cat.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
                         rows += `
                             <div style="margin-bottom: 2px;">
-                                <div style="font-size: 4.5px; font-weight: 700; color: #4b5563; font-style: italic;">${label}</div>
-                                <div style="font-size: 4.2px; color: #111827; padding-left: 2px; line-height: 1.1;">• ${items.slice(0, 4).join('<br>• ')}</div>
+                                <div style="font-size: 4.5px; font-weight: 700; color: #4b5563; font-style: italic;">${label}:</div>
+                                <div style="font-size: 4.2px; color: #111827; padding-left: 2px; line-height: 1.1;">• ${items.join('<br>• ')}</div>
                             </div>
                         `;
                     });
@@ -566,121 +571,149 @@
             // Experience (Classic)
             let classicExpHtml = '';
             if (data.experience && data.experience.length > 0) {
-                const exp = data.experience[0];
-                const jobTitle = exp.role || exp.job_title || 'Software Engineer';
-                const company = exp.company || 'Company';
-                const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
-                const bullets = (exp.bullet_points || []).slice(0, 1);
-                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
                 classicExpHtml = `
                     <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Experience</div>
                     <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
-                        <span><b>${company}</b> | ${jobTitle}</span>
-                        <span style="font-style: italic; font-weight: normal;">${dates}</span>
-                    </div>
-                    ${bulletsHtml}
                 `;
+                data.experience.forEach(exp => {
+                    const jobTitle = exp.role || exp.job_title || 'Software Engineer';
+                    const company = exp.company || 'Company';
+                    const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
+                    const bullets = exp.bullet_points || [];
+                    let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                    classicExpHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                            <span><b>${company}</b> | ${jobTitle}</span>
+                            <span style="font-style: italic; font-weight: normal;">${dates}</span>
+                        </div>
+                        ${bulletsHtml}
+                    `;
+                });
             }
 
             // Experience (Double Column)
             let doubleExpHtml = '';
             if (data.experience && data.experience.length > 0) {
-                const exp = data.experience[0];
-                const jobTitle = exp.role || exp.job_title || 'Software Engineer';
-                const company = exp.company || 'Company';
-                const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
-                const bullets = (exp.bullet_points || []).slice(0, 1);
-                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
                 doubleExpHtml = `
                     <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Work Experience</div>
                     <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
-                        <span><b>${company}</b> | ${jobTitle}</span>
-                    </div>
-                    <div style="font-size: 4.5px; font-style: italic; color: #4b5563; margin-bottom: 1px;">${dates}</div>
-                    ${bulletsHtml}
                 `;
+                data.experience.forEach(exp => {
+                    const jobTitle = exp.role || exp.job_title || 'Software Engineer';
+                    const company = exp.company || 'Company';
+                    const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
+                    const bullets = exp.bullet_points || [];
+                    let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                    doubleExpHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                            <span><b>${company}</b> | ${jobTitle}</span>
+                        </div>
+                        <div style="font-size: 4.5px; font-style: italic; color: #4b5563; margin-bottom: 1px;">${dates}</div>
+                        ${bulletsHtml}
+                    `;
+                });
             }
 
             // Projects (Classic)
             let classicProjHtml = '';
             if (data.projects && data.projects.length > 0) {
-                const proj = data.projects[0];
-                const pName = proj.name || 'Project Name';
-                const techs = Array.isArray(proj.technologies) ? proj.technologies.slice(0, 4).join(', ') : (proj.technologies || '');
-                const bullets = (proj.bullet_points || []).slice(0, 1);
-                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
                 classicProjHtml = `
                     <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Projects</div>
                     <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
-                        <span><b>${pName}</b> | <span style="font-style: italic; font-weight: normal; color: #4b5563;">${techs}</span></span>
-                        <span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>
-                    </div>
-                    ${bulletsHtml}
                 `;
+                data.projects.forEach(proj => {
+                    const pName = proj.name || 'Project Name';
+                    const techs = Array.isArray(proj.technologies) ? proj.technologies.join(', ') : (proj.technologies || '');
+                    const github = proj.github_link || '';
+                    let gitHtml = '';
+                    if (github) {
+                        gitHtml = `<span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>`;
+                    }
+                    const bullets = proj.bullet_points || [];
+                    let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                    classicProjHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                            <span><b>${pName}</b> | <span style="font-style: italic; font-weight: normal; color: #4b5563;">${techs}</span></span>
+                            ${gitHtml}
+                        </div>
+                        ${bulletsHtml}
+                    `;
+                });
             }
 
             // Projects (Double Column)
             let doubleProjHtml = '';
             if (data.projects && data.projects.length > 0) {
-                const proj = data.projects[0];
-                const pName = proj.name || 'Project Name';
-                const techs = Array.isArray(proj.technologies) ? proj.technologies.slice(0, 4).join(', ') : (proj.technologies || '');
-                const bullets = (proj.bullet_points || []).slice(0, 1);
-                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
                 doubleProjHtml = `
                     <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Projects</div>
                     <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
-                        <span><b>${pName}</b></span>
-                        <span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>
-                    </div>
-                    <div style="font-size: 4.5px; font-style: italic; color: #4b5563;">${techs}</div>
-                    ${bulletsHtml}
                 `;
+                data.projects.forEach(proj => {
+                    const pName = proj.name || 'Project Name';
+                    const techs = Array.isArray(proj.technologies) ? proj.technologies.join(', ') : (proj.technologies || '');
+                    const github = proj.github_link || '';
+                    let gitHtml = '';
+                    if (github) {
+                        gitHtml = `<span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>`;
+                    }
+                    const bullets = proj.bullet_points || [];
+                    let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                    doubleProjHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                            <span><b>${pName}</b></span>
+                            ${gitHtml}
+                        </div>
+                        <div style="font-size: 4.5px; font-style: italic; color: #4b5563;">${techs}</div>
+                        ${bulletsHtml}
+                    `;
+                });
             }
 
             // Education (Classic)
             let classicEduHtml = '';
             if (data.education && data.education.length > 0) {
-                const edu = data.education[0];
-                const inst = edu.institution || 'University';
-                const loc = edu.location || 'Location';
-                const degree = edu.degree || 'Degree';
-                const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
-                const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
                 classicEduHtml = `
                     <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Education</div>
                     <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
-                        <span><b>${inst}</b> | ${loc}</span>
-                        <span style="font-style: italic; font-weight: normal;">${dates}</span>
-                    </div>
-                    <div style="font-size: 4.5px; color: #111827; margin-top: 1px;">
-                        ${degree}${gpa ? ` | ${gpa}` : ''}
-                    </div>
                 `;
+                data.education.forEach(edu => {
+                    const inst = edu.institution || 'University';
+                    const loc = edu.location || 'Location';
+                    const degree = edu.degree || 'Degree';
+                    const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
+                    const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
+                    classicEduHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                            <span><b>${inst}</b> | ${loc}</span>
+                            <span style="font-style: italic; font-weight: normal;">${dates}</span>
+                        </div>
+                        <div style="font-size: 4.5px; color: #111827; margin-top: 1px;">
+                            ${degree}${gpa ? ` | ${gpa}` : ''}
+                        </div>
+                    `;
+                });
             }
 
             // Education (Double Column)
             let doubleEduHtml = '';
             if (data.education && data.education.length > 0) {
-                const edu = data.education[0];
-                const inst = edu.institution || 'University';
-                const degree = edu.degree || 'Degree';
-                const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
-                const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
                 doubleEduHtml = `
                     <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Education</div>
                     <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
-                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
-                        <span><b>${inst}</b> | ${degree}</span>
-                        <span style="font-style: italic; font-weight: normal; color: #4b5563;">${dates}</span>
-                    </div>
-                    ${gpa ? `<div style="font-size: 4.5px; color: #111827; margin-top: 1px; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>${gpa}</div>` : ''}
                 `;
+                data.education.forEach(edu => {
+                    const inst = edu.institution || 'University';
+                    const degree = edu.degree || 'Degree';
+                    const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
+                    const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
+                    doubleEduHtml += `
+                        <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                            <span><b>${inst}</b> | ${degree}</span>
+                            <span style="font-style: italic; font-weight: normal; color: #4b5563;">${dates}</span>
+                        </div>
+                        ${gpa ? `<div style="font-size: 4.5px; color: #111827; margin-top: 1px; padding-left: 6px;">GPA: ${edu.cgpa || edu.gpa}</div>` : ''}
+                    `;
+                });
             }
 
             // Certifications (Classic)
@@ -699,8 +732,14 @@
                 doubleCertHtml = `
                     <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Certifications</div>
                     <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
-                    <div style="font-size: 4.5px; color: #111827; line-height: 1.25; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>${data.certifications.slice(0, 2).join('</div><div style="font-size: 4.5px; color: #111827; line-height: 1.25; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>')}</div>
                 `;
+                data.certifications.forEach(cert => {
+                    doubleCertHtml += `
+                        <div style="font-size: 4.5px; color: #111827; line-height: 1.25; padding-left: 6px; position: relative;">
+                            <span style="position: absolute; left: 0;">•</span>${cert}
+                        </div>
+                    `;
+                });
             }
 
             // Render Classic Preview
