@@ -113,6 +113,135 @@
             margin-bottom: 1.5rem;
             color: var(--text-secondary);
         }
+
+        .template-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        
+        .template-card {
+            background: var(--surface-low);
+            border: 2px solid var(--outline);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .template-card:hover {
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .template-card.active {
+            border-color: var(--primary-accent);
+            background: var(--surface-medium);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.1);
+        }
+        
+        
+        .mini-resume {
+            width: 70px;
+            height: 90px;
+            background: #ffffff;
+            border: 1px solid var(--outline);
+            border-radius: 2px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: var(--shadow-ambient);
+        }
+        
+        .classic-mini {
+            align-items: center;
+        }
+        
+        .classic-mini .header-line {
+            width: 70%;
+            height: 6px;
+            background: #4b5563;
+            border-radius: 1px;
+        }
+        .classic-mini .sub-line {
+            width: 50%;
+            height: 4px;
+            background: #9ca3af;
+            border-radius: 1px;
+            margin-bottom: 2px;
+        }
+        .classic-mini .body-line {
+            width: 90%;
+            height: 3px;
+            background: #e5e7eb;
+            border-radius: 1px;
+        }
+        
+        .two-col-mini {
+            flex-direction: row;
+            gap: 6px;
+        }
+        
+        .two-col-mini .left-col {
+            flex: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .two-col-mini .left-col .header-line {
+            width: 80%;
+            height: 6px;
+            background: #4f46e5;
+            border-radius: 1px;
+        }
+        
+        .two-col-mini .left-col .body-line {
+            width: 100%;
+            height: 3px;
+            background: #e5e7eb;
+            border-radius: 1px;
+        }
+        
+        .two-col-mini .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-left: 1px solid #f3f4f6;
+            padding-left: 4px;
+        }
+        
+        .two-col-mini .right-col .sidebar-line {
+            width: 100%;
+            height: 3px;
+            background: #9ca3af;
+            border-radius: 1px;
+        }
+        
+        .tmpl-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Spinner & Loading styles */
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .spinner {
+            animation: rotate 2s linear infinite;
+        }
+
     </style>
     <meta name="robots" content="noindex, nofollow">
     <title>Your Tailored Resume | Precision AI Result | TailoredResume.ai</title>
@@ -204,8 +333,14 @@
         <div class="result-grid">
             <div class="resume-preview-container" style="position: sticky; top: 8rem;">
                 <div class="badge" style="margin-bottom: 1rem; background: var(--primary-accent); color: white; border: none;">Live PDF Preview</div>
-                <div class="card" style="height: 1100px; padding: 0; overflow: hidden; border: 1px solid var(--outline); background: #525659;">
+                <div class="card" style="height: 1100px; padding: 0; overflow: hidden; border: 1px solid var(--outline); background: #525659; position: relative;">
                     <iframe id="pdf-preview-frame" style="width: 100%; height: 100%; border: none;"></iframe>
+                    <div id="pdf-loading-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; gap: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100;">
+                        <svg class="spinner" viewBox="0 0 50 50" style="width: 40px; height: 40px;">
+                            <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="80, 200" stroke-dashoffset="0" stroke-linecap="round" style="stroke: var(--primary-accent);"></circle>
+                        </svg>
+                        <span style="font-weight: 600; font-size: 0.95rem;">Updating Preview...</span>
+                    </div>
                 </div>
             </div>
 
@@ -214,6 +349,40 @@
                     <div class="score-circle" id="ats-score-val">0</div>
                     <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary);">Optimization Score</p>
                 </div>
+
+                <div class="action-card">
+                    <h3>Select Resume Template</h3>
+                    <div class="template-selector">
+                        <div onclick="setTemplate('classic')" id="tmpl-card-classic" class="template-card active">
+                            <div class="mini-resume classic-mini">
+                                <div class="line header-line"></div>
+                                <div class="line sub-line"></div>
+                                <div class="line body-line"></div>
+                                <div class="line body-line"></div>
+                                <div class="line body-line"></div>
+                            </div>
+                            <span class="tmpl-name">Classic Layout</span>
+                        </div>
+                        <div onclick="setTemplate('two_column')" id="tmpl-card-two_column" class="template-card">
+                            <div class="mini-resume two-col-mini">
+                                <div class="left-col">
+                                    <div class="line header-line"></div>
+                                    <div class="line body-line"></div>
+                                    <div class="line body-line"></div>
+                                    <div class="line body-line"></div>
+                                </div>
+                                <div class="right-col">
+                                    <div class="line sidebar-line"></div>
+                                    <div class="line sidebar-line"></div>
+                                    <div class="line sidebar-line"></div>
+                                </div>
+                            </div>
+                            <span class="tmpl-name">Modern 2-Column</span>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <div class="action-card">
                     <h3>Detailed Insights</h3>
@@ -276,8 +445,24 @@
         </footer>
     </div>
 
+
+
     <script src="js/scripts.js"></script>
     <script>
+        let currentTemplate = 'classic';
+
+        function setTemplate(tmpl) {
+            if (currentTemplate === tmpl) return;
+            currentTemplate = tmpl;
+
+            document.getElementById('tmpl-card-classic').classList.toggle('active', tmpl === 'classic');
+            document.getElementById('tmpl-card-two_column').classList.toggle('active', tmpl === 'two_column');
+
+            loadPDFPreview();
+        }
+
+        let previewObjectUrl = null;
+
         const tailoredData = JSON.parse(sessionStorage.getItem('tailored_resume'));
         if (!tailoredData) {
             window.location.href = '/input';
@@ -313,7 +498,6 @@
                     'diversity': 'metric-diversity'
                 };
                 
-                // Animate bars slightly after load for effect
                 setTimeout(() => {
                     for (const [key, id] of Object.entries(mapping)) {
                         const val = metrics[key] || 0;
@@ -335,7 +519,7 @@
             showNotify('Generating PDF... Please wait.');
 
             try {
-                const response = await fetch('/api/download', {
+                const response = await fetch(`/api/download?template=${currentTemplate}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(res.data)
@@ -363,8 +547,14 @@
             const res = JSON.parse(sessionStorage.getItem('tailored_resume'));
             if (!res) return;
 
+            const overlay = document.getElementById('pdf-loading-overlay');
+            if (overlay) {
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
+
             try {
-                const response = await fetch('/api/download', {
+                const response = await fetch(`/api/download?template=${currentTemplate}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(res.data)
@@ -372,11 +562,34 @@
 
                 if (response.ok) {
                     const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    document.getElementById('pdf-preview-frame').src = url + '#toolbar=0&navpanes=0';
+                    if (previewObjectUrl) {
+                        window.URL.revokeObjectURL(previewObjectUrl);
+                    }
+                    previewObjectUrl = window.URL.createObjectURL(blob);
+                    
+                    const iframe = document.getElementById('pdf-preview-frame');
+                    iframe.onload = () => {
+                        if (overlay) {
+                            overlay.style.opacity = '0';
+                            overlay.style.pointerEvents = 'none';
+                        }
+                    };
+                    iframe.src = 'about:blank';
+                    setTimeout(() => {
+                        iframe.src = previewObjectUrl + '#toolbar=0&navpanes=0';
+                    }, 50);
+                } else {
+                    if (overlay) {
+                        overlay.style.opacity = '0';
+                        overlay.style.pointerEvents = 'none';
+                    }
                 }
             } catch (err) {
                 console.error("PDF Preview Error:", err);
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    overlay.style.pointerEvents = 'none';
+                }
             }
         }
 
