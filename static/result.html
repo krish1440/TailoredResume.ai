@@ -351,33 +351,15 @@
                 </div>
 
                 <div class="action-card">
-                    <h3>Select Resume Template</h3>
-                    <div class="template-selector">
-                        <div onclick="setTemplate('classic')" id="tmpl-card-classic" class="template-card active">
-                            <div class="mini-resume classic-mini">
-                                <div class="line header-line"></div>
-                                <div class="line sub-line"></div>
-                                <div class="line body-line"></div>
-                                <div class="line body-line"></div>
-                                <div class="line body-line"></div>
+                    <h3>Resume Template</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div onclick="openTemplateModal()" style="cursor: pointer; border: 1px solid var(--outline); border-radius: var(--radius-sm); padding: 0.75rem; background: var(--surface-low); display: flex; align-items: center; gap: 1rem; transition: var(--transition-smooth);" onmouseover="this.style.borderColor='var(--text-secondary)'" onmouseout="this.style.borderColor='var(--outline)'">
+                            <div id="sidebar-active-preview-container" style="width: 48px; height: 60px; background: #ffffff; border: 1px solid var(--outline); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; user-select: none; pointer-events: none;"></div>
+                            <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600;">Active Layout</span>
+                                <span id="sidebar-active-name" style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Classic</span>
                             </div>
-                            <span class="tmpl-name">Classic Layout</span>
-                        </div>
-                        <div onclick="setTemplate('two_column')" id="tmpl-card-two_column" class="template-card">
-                            <div class="mini-resume two-col-mini">
-                                <div class="left-col">
-                                    <div class="line header-line"></div>
-                                    <div class="line body-line"></div>
-                                    <div class="line body-line"></div>
-                                    <div class="line body-line"></div>
-                                </div>
-                                <div class="right-col">
-                                    <div class="line sidebar-line"></div>
-                                    <div class="line sidebar-line"></div>
-                                    <div class="line sidebar-line"></div>
-                                </div>
-                            </div>
-                            <span class="tmpl-name">Modern 2-Column</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="m9 18 6-6-6-6"/></svg>
                         </div>
                     </div>
                 </div>
@@ -445,8 +427,48 @@
         </footer>
     </div>
 
-
-
+    <!-- Template Selector Modal -->
+    <div id="template-modal" class="rearrange-modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(8px); align-items: center; justify-content: center;">
+        <div class="rearrange-modal-content" style="background-color: #ffffff; border-radius: 16px; width: 90%; max-width: 680px; padding: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); position: relative; border: 1px solid rgba(226, 232, 240, 0.8);">
+            
+            <!-- Close Button -->
+            <button onclick="closeTemplateModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: none; border: none; font-size: 2rem; color: #64748b; cursor: pointer; transition: color 0.2s; line-height: 1; padding: 0.25rem;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#64748b'">&times;</button>
+            
+            <!-- Modal Title -->
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 700; color: #0f172a; text-align: center; margin-bottom: 2.5rem; margin-top: 0.5rem;">Select a template</h2>
+            
+            <!-- Template Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 1rem;">
+                
+                <!-- Double Column Option -->
+                <div onclick="selectModalTemplate('two_column')" style="cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+                    <div id="modal-card-two_column" style="position: relative; width: 100%; aspect-ratio: 1 / 1.29; background: #ffffff; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                        <div id="modal-card-two_column-preview" style="width: 100%; height: 100%; overflow: hidden; user-select: none; pointer-events: none;"></div>
+                        
+                        <!-- Selected Checkmark Overlay (Triangle and check icon) -->
+                        <div id="modal-check-two_column" style="display: none; position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: linear-gradient(135deg, transparent 50%, #10b981 50%); z-index: 10;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; bottom: 4px; right: 4px; width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+                    <span id="modal-label-two_column" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 600; color: #64748b; transition: color 0.3s;">Double Column</span>
+                </div>
+                
+                <!-- Classic Option -->
+                <div onclick="selectModalTemplate('classic')" style="cursor: pointer; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+                    <div id="modal-card-classic" style="position: relative; width: 100%; aspect-ratio: 1 / 1.29; background: #ffffff; border: 3px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+                        <div id="modal-card-classic-preview" style="width: 100%; height: 100%; overflow: hidden; user-select: none; pointer-events: none;"></div>
+                        
+                        <!-- Selected Checkmark Overlay (Triangle and check icon) -->
+                        <div id="modal-check-classic" style="display: none; position: absolute; bottom: 0; right: 0; width: 50px; height: 50px; background: linear-gradient(135deg, transparent 50%, #10b981 50%); z-index: 10;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; bottom: 4px; right: 4px; width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+                    <span id="modal-label-classic" style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 600; color: #64748b; transition: color 0.3s;">Classic</span>
+                </div>
+            </div>
+        </div>
+    </div>
+                
     <script src="js/scripts.js"></script>
     <script>
         let currentTemplate = 'classic';
@@ -455,11 +477,404 @@
             if (currentTemplate === tmpl) return;
             currentTemplate = tmpl;
 
-            document.getElementById('tmpl-card-classic').classList.toggle('active', tmpl === 'classic');
-            document.getElementById('tmpl-card-two_column').classList.toggle('active', tmpl === 'two_column');
+            const nameEl = document.getElementById('sidebar-active-name');
+            if (tmpl === 'classic') {
+                if (nameEl) nameEl.innerText = 'Classic';
+            } else {
+                if (nameEl) nameEl.innerText = 'Double Column';
+            }
+            
+            if (tailoredData && tailoredData.data) {
+                populateSidebarPreview(tailoredData.data, tmpl);
+            }
 
             loadPDFPreview();
         }
+
+        function populateMiniPreviews(data) {
+            if (!data || !data.personal_info) return;
+
+            const name = data.personal_info.name || 'Your Name';
+            const email = data.personal_info.email || 'email@example.com';
+            const phone = data.personal_info.phone || '123-456-7890';
+            const location = data.personal_info.location || 'City, State';
+            const summary = data.summary || '';
+            const shortSummary = summary.length > 130 ? summary.substring(0, 130) + '...' : summary;
+            
+            // Build Contact parts for Classic
+            let contactParts = [];
+            if (location) contactParts.push(location);
+            if (phone) contactParts.push(phone);
+            if (email) contactParts.push(email);
+            if (data.personal_info.linkedin) contactParts.push(data.personal_info.linkedin.replace("https://", "").replace("www.", ""));
+            if (data.personal_info.github) contactParts.push(data.personal_info.github.replace("https://", "").replace("www.", ""));
+            if (data.personal_info.portfolio) contactParts.push(data.personal_info.portfolio.replace("https://", "").replace("www.", ""));
+            if (data.personal_info.kaggle) contactParts.push(data.personal_info.kaggle.replace("https://", "").replace("www.", ""));
+            const classicContactString = contactParts.join(' | ');
+
+            // Build Contacts for Double Column
+            let doubleContactsHtml = '';
+            if (location) doubleContactsHtml += `<div style="margin-bottom: 1.5px;">• ${location}</div>`;
+            if (phone) doubleContactsHtml += `<div style="margin-bottom: 1.5px;">• ${phone}</div>`;
+            if (email) doubleContactsHtml += `<div style="margin-bottom: 1.5px; word-break: break-all;">• ${email}</div>`;
+            if (data.personal_info.linkedin) doubleContactsHtml += `<div style="margin-bottom: 1.5px; word-break: break-all;">• ${data.personal_info.linkedin.replace("https://", "").replace("www.", "")}</div>`;
+            if (data.personal_info.github) doubleContactsHtml += `<div style="margin-bottom: 1.5px; word-break: break-all;">• ${data.personal_info.github.replace("https://", "").replace("www.", "")}</div>`;
+            if (data.personal_info.portfolio) doubleContactsHtml += `<div style="margin-bottom: 1.5px; word-break: break-all;">• ${data.personal_info.portfolio.replace("https://", "").replace("www.", "")}</div>`;
+            if (data.personal_info.kaggle) doubleContactsHtml += `<div style="margin-bottom: 1.5px; word-break: break-all;">• ${data.personal_info.kaggle.replace("https://", "").replace("www.", "")}</div>`;
+
+            // Skills (Classic)
+            let classicSkillsHtml = '';
+            if (data.skills) {
+                let rows = '';
+                if (typeof data.skills === 'object' && !Array.isArray(data.skills)) {
+                    Object.entries(data.skills).slice(0, 3).forEach(([cat, items]) => {
+                        const label = cat.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        rows += `<div style="font-size: 4.8px; margin-bottom: 1px; line-height: 1.1;"><b>${label}:</b> ${items.slice(0, 5).join(', ')}</div>`;
+                    });
+                } else if (Array.isArray(data.skills)) {
+                    rows = `<div style="font-size: 4.8px; line-height: 1.1;">${data.skills.slice(0, 10).join(', ')}</div>`;
+                }
+                classicSkillsHtml = `
+                    <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Technical Skills</div>
+                    <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                    ${rows}
+                `;
+            }
+
+            // Skills (Double Column)
+            let doubleSkillsHtml = '';
+            if (data.skills) {
+                let rows = '';
+                if (typeof data.skills === 'object' && !Array.isArray(data.skills)) {
+                    Object.entries(data.skills).slice(0, 3).forEach(([cat, items]) => {
+                        const label = cat.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        rows += `
+                            <div style="margin-bottom: 2px;">
+                                <div style="font-size: 4.5px; font-weight: 700; color: #4b5563; font-style: italic;">${label}</div>
+                                <div style="font-size: 4.2px; color: #111827; padding-left: 2px; line-height: 1.1;">• ${items.slice(0, 4).join('<br>• ')}</div>
+                            </div>
+                        `;
+                    });
+                }
+                doubleSkillsHtml = `
+                    <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Skills</div>
+                    <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                    ${rows}
+                `;
+            }
+
+            // Experience (Classic)
+            let classicExpHtml = '';
+            if (data.experience && data.experience.length > 0) {
+                const exp = data.experience[0];
+                const jobTitle = exp.role || exp.job_title || 'Software Engineer';
+                const company = exp.company || 'Company';
+                const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
+                const bullets = (exp.bullet_points || []).slice(0, 1);
+                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                classicExpHtml = `
+                    <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Experience</div>
+                    <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                        <span><b>${company}</b> | ${jobTitle}</span>
+                        <span style="font-style: italic; font-weight: normal;">${dates}</span>
+                    </div>
+                    ${bulletsHtml}
+                `;
+            }
+
+            // Experience (Double Column)
+            let doubleExpHtml = '';
+            if (data.experience && data.experience.length > 0) {
+                const exp = data.experience[0];
+                const jobTitle = exp.role || exp.job_title || 'Software Engineer';
+                const company = exp.company || 'Company';
+                const dates = `${exp.start_date || 'Start'} - ${exp.end_date || 'Present'}`;
+                const bullets = (exp.bullet_points || []).slice(0, 1);
+                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                doubleExpHtml = `
+                    <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Work Experience</div>
+                    <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                        <span><b>${company}</b> | ${jobTitle}</span>
+                    </div>
+                    <div style="font-size: 4.5px; font-style: italic; color: #4b5563; margin-bottom: 1px;">${dates}</div>
+                    ${bulletsHtml}
+                `;
+            }
+
+            // Projects (Classic)
+            let classicProjHtml = '';
+            if (data.projects && data.projects.length > 0) {
+                const proj = data.projects[0];
+                const pName = proj.name || 'Project Name';
+                const techs = Array.isArray(proj.technologies) ? proj.technologies.slice(0, 4).join(', ') : (proj.technologies || '');
+                const bullets = (proj.bullet_points || []).slice(0, 1);
+                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                classicProjHtml = `
+                    <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Projects</div>
+                    <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                        <span><b>${pName}</b> | <span style="font-style: italic; font-weight: normal; color: #4b5563;">${techs}</span></span>
+                        <span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>
+                    </div>
+                    ${bulletsHtml}
+                `;
+            }
+
+            // Projects (Double Column)
+            let doubleProjHtml = '';
+            if (data.projects && data.projects.length > 0) {
+                const proj = data.projects[0];
+                const pName = proj.name || 'Project Name';
+                const techs = Array.isArray(proj.technologies) ? proj.technologies.slice(0, 4).join(', ') : (proj.technologies || '');
+                const bullets = (proj.bullet_points || []).slice(0, 1);
+                let bulletsHtml = bullets.map(b => `<div style="font-size: 4.5px; color: #111827; padding-left: 6px; position: relative; margin-top: 1px; line-height: 1.25;"><span style="position: absolute; left: 0;">•</span>${b}</div>`).join('');
+                doubleProjHtml = `
+                    <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Projects</div>
+                    <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                        <span><b>${pName}</b></span>
+                        <span style="font-style: italic; font-weight: normal; color: #2563eb; text-decoration: underline;">GitHub</span>
+                    </div>
+                    <div style="font-size: 4.5px; font-style: italic; color: #4b5563;">${techs}</div>
+                    ${bulletsHtml}
+                `;
+            }
+
+            // Education (Classic)
+            let classicEduHtml = '';
+            if (data.education && data.education.length > 0) {
+                const edu = data.education[0];
+                const inst = edu.institution || 'University';
+                const loc = edu.location || 'Location';
+                const degree = edu.degree || 'Degree';
+                const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
+                const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
+                classicEduHtml = `
+                    <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Education</div>
+                    <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #000000; margin-top: 1.5px;">
+                        <span><b>${inst}</b> | ${loc}</span>
+                        <span style="font-style: italic; font-weight: normal;">${dates}</span>
+                    </div>
+                    <div style="font-size: 4.5px; color: #111827; margin-top: 1px;">
+                        ${degree}${gpa ? ` | ${gpa}` : ''}
+                    </div>
+                `;
+            }
+
+            // Education (Double Column)
+            let doubleEduHtml = '';
+            if (data.education && data.education.length > 0) {
+                const edu = data.education[0];
+                const inst = edu.institution || 'University';
+                const degree = edu.degree || 'Degree';
+                const dates = `${edu.start_date || 'Start'} - ${edu.end_date || 'End'}`;
+                const gpa = edu.cgpa || edu.gpa ? `GPA: ${edu.cgpa || edu.gpa}` : '';
+                doubleEduHtml = `
+                    <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Education</div>
+                    <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; font-size: 5px; font-weight: 700; color: #111827; margin-top: 1.5px;">
+                        <span><b>${inst}</b> | ${degree}</span>
+                        <span style="font-style: italic; font-weight: normal; color: #4b5563;">${dates}</span>
+                    </div>
+                    ${gpa ? `<div style="font-size: 4.5px; color: #111827; margin-top: 1px; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>${gpa}</div>` : ''}
+                `;
+            }
+
+            // Certifications (Classic)
+            let classicCertHtml = '';
+            if (data.certifications && data.certifications.length > 0) {
+                classicCertHtml = `
+                    <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 5px; text-transform: uppercase;">Certifications</div>
+                    <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                    <div style="font-size: 4.5px; color: #111827; line-height: 1.25; margin-top: 1px;">${data.certifications.join(', ')}</div>
+                `;
+            }
+
+            // Certifications (Double Column)
+            let doubleCertHtml = '';
+            if (data.certifications && data.certifications.length > 0) {
+                doubleCertHtml = `
+                    <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 5px;">Certifications</div>
+                    <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                    <div style="font-size: 4.5px; color: #111827; line-height: 1.25; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>${data.certifications.slice(0, 2).join('</div><div style="font-size: 4.5px; color: #111827; line-height: 1.25; padding-left: 6px; position: relative;"><span style="position: absolute; left: 0;">•</span>')}</div>
+                `;
+            }
+
+            // Render Classic Preview
+            const classicContainer = document.getElementById('modal-card-classic-preview');
+            if (classicContainer) {
+                classicContainer.innerHTML = `
+                    <div style="padding: 12px 14px; height: 100%; display: flex; flex-direction: column; background: #ffffff; font-family: 'Inter', Helvetica, Arial, sans-serif; box-sizing: border-box; overflow: hidden; justify-content: flex-start;">
+                        <div style="font-size: 10px; font-weight: 700; text-align: center; text-transform: uppercase; color: #000000; line-height: 1.1; letter-spacing: 0.5px; margin-bottom: 1px;">${name}</div>
+                        <div style="font-size: 5px; text-align: center; color: #334155; margin-bottom: 3px; line-height: 1.1; word-break: break-all;">${classicContactString}</div>
+                        
+                        <div style="font-size: 6.5px; font-weight: 700; color: #000000; margin-top: 3px; text-transform: uppercase;">Professional Summary</div>
+                        <div style="border-bottom: 0.5px solid #000000; margin: 1px 0 2px 0;"></div>
+                        <div style="font-size: 4.5px; color: #111827; line-height: 1.25; text-align: justify;">${shortSummary}</div>
+                        
+                        ${classicSkillsHtml}
+                        ${classicExpHtml}
+                        ${classicProjHtml}
+                        ${classicEduHtml}
+                        ${classicCertHtml}
+                    </div>
+                `;
+            }
+
+            // Render Double Column Preview
+            const doubleContainer = document.getElementById('modal-card-two_column-preview');
+            if (doubleContainer) {
+                const experienceList = data.experience || [];
+                const firstRole = experienceList.length > 0 ? (experienceList[0].role || experienceList[0].job_title) : '';
+                const title = (data.personal_info.title || firstRole || 'Candidate').toUpperCase();
+                
+                doubleContainer.innerHTML = `
+                    <div style="padding: 12px 14px; height: 100%; display: flex; flex-direction: column; background: #ffffff; font-family: 'Inter', Helvetica, Arial, sans-serif; box-sizing: border-box; overflow: hidden; justify-content: flex-start;">
+                        <div style="display: flex; flex-direction: column; margin-bottom: 5px;">
+                            <div style="font-size: 11px; font-weight: 700; text-align: left; text-transform: uppercase; color: #4f46e5; line-height: 1.1; letter-spacing: 0.5px;">${name}</div>
+                            <div style="font-size: 5.5px; font-weight: 700; color: #4b5563; margin-top: 1px; text-align: left; letter-spacing: 0.5px; text-transform: uppercase;">${title}</div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; flex-grow: 1; overflow: hidden;">
+                            <!-- Left Column -->
+                            <div style="width: 58%; display: flex; flex-direction: column; gap: 1px;">
+                                <div style="font-size: 4.5px; color: #111827; line-height: 1.25; text-align: justify; margin-bottom: 3px;">${shortSummary}</div>
+                                
+                                ${doubleExpHtml}
+                                ${doubleProjHtml}
+                                ${doubleEduHtml}
+                                ${doubleCertHtml}
+                            </div>
+                            
+                            <!-- Right Column -->
+                            <div style="width: 42%; display: flex; flex-direction: column; gap: 1px; border-left: 0.5px solid #e2e8f0; padding-left: 8px;">
+                                <div style="font-size: 6px; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-top: 2px;">Contact</div>
+                                <div style="border-bottom: 0.5px solid #4f46e5; margin: 1px 0 2px 0;"></div>
+                                <div style="font-size: 4.5px; color: #111827; line-height: 1.3; text-align: left; padding-left: 2px;">
+                                    ${doubleContactsHtml}
+                                </div>
+                                
+                                ${doubleSkillsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function populateSidebarPreview(data, tmpl) {
+            if (!data || !data.personal_info) return;
+
+            const name = data.personal_info.name || 'Name';
+            const container = document.getElementById('sidebar-active-preview-container');
+            if (!container) return;
+
+            if (tmpl === 'classic') {
+                container.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; background: #ffffff; padding: 4px; font-family: sans-serif; gap: 2px; border: 1px solid #e2e8f0; box-sizing: border-box; justify-content: flex-start;">
+                        <div style="font-size: 3.5px; font-weight: 700; text-align: center; color: #000000; line-height: 1; text-transform: uppercase; letter-spacing: 0.1px;">${name}</div>
+                        <div style="border-bottom: 0.2px solid #e2e8f0; width: 100%; margin-bottom: 2px;"></div>
+                        <div style="font-size: 2.2px; font-weight: 700; color: #000000; text-align: left; line-height: 1; text-transform: uppercase;">SUMMARY</div>
+                        <div style="border-bottom: 0.2px solid #000000; width: 100%;"></div>
+                        <div style="background: #f1f5f9; height: 5px; width: 100%;"></div>
+                        <div style="font-size: 2.2px; font-weight: 700; color: #000000; text-align: left; line-height: 1; text-transform: uppercase;">EXPERIENCE</div>
+                        <div style="border-bottom: 0.2px solid #000000; width: 100%;"></div>
+                        <div style="background: #f1f5f9; height: 10px; width: 100%;"></div>
+                        <div style="font-size: 2.2px; font-weight: 700; color: #000000; text-align: left; line-height: 1; text-transform: uppercase;">PROJECTS</div>
+                        <div style="border-bottom: 0.2px solid #000000; width: 100%;"></div>
+                        <div style="background: #f1f5f9; height: 10px; width: 100%;"></div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; background: #ffffff; padding: 4px; font-family: sans-serif; gap: 2px; border: 1px solid #e2e8f0; box-sizing: border-box; justify-content: flex-start;">
+                        <div style="font-size: 3.5px; font-weight: 700; text-align: left; color: #4f46e5; line-height: 1; text-transform: uppercase;">${name}</div>
+                        <div style="border-bottom: 0.2px solid #4f46e5; width: 100%; margin-bottom: 2px;"></div>
+                        <div style="display: flex; gap: 3px; height: 100%; overflow: hidden;">
+                            <div style="width: 58%; display: flex; flex-direction: column; gap: 2px;">
+                                <div style="background: #f1f5f9; height: 6px; width: 100%;"></div>
+                                <div style="background: #f1f5f9; height: 12px; width: 100%;"></div>
+                                <div style="background: #f1f5f9; height: 12px; width: 100%;"></div>
+                                <div style="background: #f1f5f9; height: 8px; width: 100%;"></div>
+                                <div style="background: #f1f5f9; height: 6px; width: 100%;"></div>
+                            </div>
+                            <div style="width: 42%; display: flex; flex-direction: column; gap: 2px; border-left: 0.2px solid #e2e8f0; padding-left: 2px;">
+                                <div style="background: #f8fafc; height: 5px; width: 100%;"></div>
+                                <div style="background: #f1f5f9; height: 16px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function openTemplateModal() {
+            const modal = document.getElementById('template-modal');
+            modal.style.display = 'flex';
+            updateModalSelectionUI(currentTemplate);
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeTemplateModal();
+            }
+        });
+
+        function closeTemplateModal() {
+            document.getElementById('template-modal').style.display = 'none';
+        }
+
+        function updateModalSelectionUI(tmpl) {
+            const classicCard = document.getElementById('modal-card-classic');
+            const classicCheck = document.getElementById('modal-check-classic');
+            const classicLabel = document.getElementById('modal-label-classic');
+            
+            const twoColCard = document.getElementById('modal-card-two_column');
+            const twoColCheck = document.getElementById('modal-check-two_column');
+            const twoColLabel = document.getElementById('modal-label-two_column');
+
+            if (tmpl === 'classic') {
+                classicCard.style.borderColor = '#10b981';
+                classicCheck.style.display = 'block';
+                classicLabel.style.color = '#10b981';
+                classicLabel.style.fontWeight = '700';
+
+                twoColCard.style.borderColor = '#e2e8f0';
+                twoColCheck.style.display = 'none';
+                twoColLabel.style.color = '#64748b';
+                twoColLabel.style.fontWeight = '600';
+            } else {
+                twoColCard.style.borderColor = '#10b981';
+                twoColCheck.style.display = 'block';
+                twoColLabel.style.color = '#10b981';
+                twoColLabel.style.fontWeight = '700';
+
+                classicCard.style.borderColor = '#e2e8f0';
+                classicCheck.style.display = 'none';
+                classicLabel.style.color = '#64748b';
+                classicLabel.style.fontWeight = '600';
+            }
+        }
+
+        function selectModalTemplate(tmpl) {
+            if (currentTemplate === tmpl) {
+                closeTemplateModal();
+                return;
+            }
+            setTemplate(tmpl);
+            closeTemplateModal();
+        }
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('template-modal');
+            if (event.target === modal) {
+                closeTemplateModal();
+            }
+        });
 
         let previewObjectUrl = null;
 
@@ -468,6 +883,8 @@
             window.location.href = '/input';
         } else {
             loadPDFPreview();
+            populateMiniPreviews(tailoredData.data);
+            populateSidebarPreview(tailoredData.data, currentTemplate);
             
             // Populate Metadata Sidebar
             document.getElementById('res-title').innerText = tailoredData.data.personal_info.name.split(' ')[0] || 'Target Role';
