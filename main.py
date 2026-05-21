@@ -1181,6 +1181,10 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
 
         if not best_data: raise Exception("Iterative tailoring failed.")
 
+        if 'personal_info' not in best_data:
+            best_data['personal_info'] = {}
+        best_data['personal_info']['title'] = analysis.get('ideal_job_title', 'Target Role')
+
         return {
             "success": True,
             "data": best_data,

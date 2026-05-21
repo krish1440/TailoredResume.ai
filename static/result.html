@@ -400,8 +400,7 @@
                 <div id="metadata-card" class="action-card" style="background: var(--bg-primary); border-style: dashed;">
                     <h3>Tailoring Metadata</h3>
                     <div style="font-size: 0.85rem; color:var(--text-secondary)">
-                        <p style="margin-bottom: 0.8rem;"><strong>Base Role:</strong> <span id="res-title">...</span></p>
-                        <div id="project-links-meta" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--outline);">
+                        <div id="project-links-meta" style="margin-top: 0;">
                             <p style="margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Project Repositories:</p>
                             <!-- Links will be injected here -->
                         </div>
@@ -925,8 +924,6 @@
             populateMiniPreviews(tailoredData.data);
             populateSidebarPreview(tailoredData.data, currentTemplate);
             
-            // Populate Metadata Sidebar
-            document.getElementById('res-title').innerText = tailoredData.data.personal_info.name.split(' ')[0] || 'Target Role';
             const linksMeta = document.getElementById('project-links-meta');
             (tailoredData.data.projects || []).forEach(p => {
                 if (p.github_link) {
