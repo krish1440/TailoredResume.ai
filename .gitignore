@@ -36,3 +36,10 @@ build/
 dist/
 *.egg-info/
 
+# Generated PDFs and source images
+docs/*.pdf
+static/Image/
+
+# Scratch files and temporary scripts
+scratch/
+
