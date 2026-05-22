@@ -1224,7 +1224,6 @@ footer p {
 .hero-section {
     padding: 4.5rem 0 4rem;
     position: relative;
-    overflow: hidden;
 }
 
 .hero-container {
@@ -1271,12 +1270,12 @@ footer p {
 
 .mockup-glow {
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
+    top: -120px;
+    left: -120px;
+    right: -120px;
+    bottom: -120px;
     background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(217, 119, 6, 0.18) 0%, rgba(217, 119, 6, 0.03) 50%, transparent 70%);
-    filter: blur(40px);
+    filter: blur(60px);
     z-index: -1;
     pointer-events: none;
     transition: background 0.5s ease;
