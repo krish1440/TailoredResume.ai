@@ -234,7 +234,7 @@
 
         async function loadSample() {
             try {
-                const res = await fetch('/api/sample_master');
+                const res = await fetch('/api/sample_tailored');
                 const data = await res.json();
                 jsonInput.value = JSON.stringify(data, null, 2);
                 updatePreview();

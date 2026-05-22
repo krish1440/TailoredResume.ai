@@ -1227,9 +1227,22 @@ async def get_sample():
     try:
         sample_path = os.path.join(STATIC_DIR, "sample_master.json")
         with open(sample_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+        return JSONResponse(content=data, headers={"Cache-Control": "no-store, no-cache, must-revalidate"})
     except Exception as e:
-        return {"error": f"Could not load sample: {str(e)}"}
+        return JSONResponse(content={"error": f"Could not load sample: {str(e)}"}, status_code=500)
+
+@app.get("/api/sample_tailored")
+async def get_sample_tailored():
+    """Returns the standardized sample_tailored.json for direct JSON to PDF editor reference."""
+    try:
+        sample_path = os.path.join(STATIC_DIR, "sample_tailored.json")
+        with open(sample_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return JSONResponse(content=data, headers={"Cache-Control": "no-store, no-cache, must-revalidate"})
+    except Exception as e:
+        return JSONResponse(content={"error": f"Could not load sample: {str(e)}"}, status_code=500)
+
 
 @app.get("/")
 async def home_page():

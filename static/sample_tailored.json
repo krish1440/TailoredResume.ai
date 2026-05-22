@@ -1,0 +1,59 @@
+{
+  "personal_info": {
+    "name": "Krish Chaudhary",
+    "location": "Vadodara, Gujarat",
+    "email": "krishchaudhary144@gmail.com",
+    "phone": "+91 6353530662",
+    "linkedin": "linkedin.com/in/krish-chaudhary-krc8252/",
+    "github": "github.com/krish1440",
+    "portfolio": "portfolio-krish-chaudhary.vercel.app",
+    "kaggle": "kaggle.com/krishchaudhary14"
+  },
+  "summary": "AI/ML Engineer and BTech Computer Science student specializing in Artificial Intelligence, delivering end-to-end Generative AI and RAG-based applications. Architect complex NLP workflows using LangChain and LangGraph to drive operational automation and predictive analytics. Deploying production-grade MLOps pipelines with FastAPI and Docker to transform raw data into scalable AI agents that solve business gaps.",
+  "skills": {
+    "Programming Languages": ["Python", "Java", "C++", "JavaScript", "SQL"],
+    "AI & ML Frameworks": ["PyTorch", "TensorFlow", "Scikit-Learn", "Hugging Face", "LangChain"],
+    "MLOps & Backend": ["FastAPI", "Docker", "Git", "GitHub Actions", "Uvicorn"],
+    "Data Science": ["Pandas", "NumPy", "Matplotlib", "Seaborn", "SQLAlchemy"]
+  },
+  "experience": [
+    {
+      "company": "TechCorp Solutions",
+      "role": "AI Engineer Intern",
+      "start_date": "Jun 2024",
+      "end_date": "Present",
+      "bullet_points": [
+        "Architected an agentic RAG system using LangGraph and FastAPI, cutting customer support response times by 40% in production.",
+        "Optimized deep learning model inferences using quantization techniques, reducing GPU memory footprint by 25% for 10k daily requests.",
+        "Designed automated evaluation pipelines for LLM outputs, increasing output accuracy to 96% and ensuring strict brand compliance."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "TailoredResume.ai",
+      "github_link": "github.com/krish1440/TailoredResume.ai",
+      "technologies": ["Python", "FastAPI", "Gemini API", "ReportLab"],
+      "bullet_points": [
+        "Built a multi-agent resume tailoring backend utilizing Gemini API and FastAPI to match job description keywords and format criteria.",
+        "Implemented real-time ATS scoring algorithms to evaluate resume linguistic diversity, quantification metrics, and word limits.",
+        "Designed a precise PDF rendering engine using ReportLab supporting single-page classic and two-column resume templates.",
+        "Deployed the service to Vercel and optimized static file serving, achieving 100% Core Web Vitals on mobile and desktop viewports."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "B.Tech in Computer Science (AI)",
+      "degree": "Gujarat Technological University",
+      "location": "Vadodara, Gujarat",
+      "start_date": "Aug 2021",
+      "end_date": "May 2025",
+      "cgpa": "9.2"
+    }
+  ],
+  "certifications": [
+    "Generative AI with Large Language Models — DeepLearning.AI",
+    "TensorFlow Developer Professional Certificate — Coursera"
+  ]
+}
