@@ -313,6 +313,82 @@ header {
     margin-top: 4rem;
 }
 
+.sections-grid.workflow-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (min-width: 1025px) {
+    .sections-grid.workflow-grid {
+        position: relative;
+    }
+    
+    /* Horizontal connector for Row 1 */
+    .sections-grid.workflow-grid::before {
+        content: "";
+        position: absolute;
+        top: 25%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        z-index: 0;
+        opacity: 0.5;
+        border-top: 1px dashed var(--primary-accent);
+        pointer-events: none;
+    }
+    
+    /* Horizontal connector for Row 2 */
+    .sections-grid.workflow-grid::after {
+        content: "";
+        position: absolute;
+        top: 75%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        z-index: 0;
+        opacity: 0.5;
+        border-top: 1px dashed var(--primary-accent);
+        pointer-events: none;
+    }
+    
+    /* Ensure the cards stack above the background connector lines */
+    .sections-grid.workflow-grid > .stat-card {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+@media (max-width: 1024px) {
+    .sections-grid.workflow-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+}
+
+/* General single-row grid connector styling */
+@media (min-width: 769px) {
+    .sections-grid.connected-grid {
+        position: relative;
+    }
+    
+    .sections-grid.connected-grid::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        right: 5%;
+        height: 1px;
+        z-index: 0;
+        opacity: 0.5;
+        border-top: 1px dashed var(--primary-accent);
+        pointer-events: none;
+    }
+    
+    .sections-grid.connected-grid > .stat-card {
+        position: relative;
+        z-index: 1;
+    }
+}
+
 /* Advanced Stats Section */
 .stat-card {
     padding: 3.5rem;
@@ -362,25 +438,7 @@ header {
     line-height: 1.6;
 }
 
-/* Steps Connection Decorative Element */
-@media (min-width: 992px) {
-    .sections-grid {
-        position: relative;
-    }
-    
-    .sections-grid::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 5%;
-        right: 5%;
-        height: 1px;
-        background: var(--outline);
-        z-index: -1;
-        opacity: 0.5;
-        border-top: 1px dashed var(--primary-accent);
-    }
-}
+/* Steps Connection Decorative Element removed to prevent overlapping on grid contents */
 
 /* Form Styles */
 .card {
@@ -828,6 +886,72 @@ footer p {
 .add-btn:hover {
     background: var(--surface-high);
     border-style: solid;
+}
+
+.btn-sample {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary-accent);
+    background: rgba(217, 119, 6, 0.02);
+    border: 1px dashed var(--primary-accent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-sample:hover {
+    background: var(--primary-gradient);
+    color: white;
+    border-style: solid;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+.btn-sample:active {
+    transform: translateY(0);
+}
+
+.btn-sample .loading-spinner {
+    margin: 0 !important;
+    display: inline-block;
+}
+
+.btn-utility {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    background: var(--surface-low);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-utility:hover {
+    background: var(--surface-high);
+    border-color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn-utility:active {
+    transform: translateY(0);
 }
 
 .form-tabs {
