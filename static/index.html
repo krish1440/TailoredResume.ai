@@ -277,42 +277,106 @@
 
     <main class="container">
 
-        <section class="hero">
-            <div class="background-visuals">
-                <svg class="bg-shape bg-shape-1" width="100" height="100" viewBox="0 0 100 100" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M50 0L53.0612 37.7551L91.8367 40.8163L53.0612 43.8776L50 81.6327L46.9388 43.8776L8.16327 40.8163L46.9388 37.7551L50 0Z"
-                        fill="var(--primary-accent)" fill-opacity="0.12" />
-                </svg>
-                <svg class="bg-shape bg-shape-2" width="120" height="150" viewBox="0 0 120 150" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect x="10" y="10" width="100" height="130" rx="2" stroke="var(--primary-accent)"
-                        stroke-opacity="0.15" stroke-width="2" />
-                    <line x1="30" y1="40" x2="90" y2="40" stroke="var(--primary-accent)" stroke-opacity="0.15"
-                        stroke-width="2" />
-                    <line x1="30" y1="60" x2="90" y2="60" stroke="var(--primary-accent)" stroke-opacity="0.15"
-                        stroke-width="2" />
-                    <line x1="30" y1="80" x2="70" y2="80" stroke="var(--primary-accent)" stroke-opacity="0.15"
-                        stroke-width="2" />
-                </svg>
-                <svg class="bg-shape bg-shape-3" width="200" height="200" viewBox="0 0 200 200" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="40" cy="40" r="4" fill="var(--primary-accent)" fill-opacity="0.18" />
-                    <circle cx="160" cy="70" r="3" fill="var(--primary-accent)" fill-opacity="0.18" />
-                    <circle cx="100" cy="150" r="5" fill="var(--primary-accent)" fill-opacity="0.18" />
-                    <path d="M40 40L160 70 M160 70L100 150" stroke="var(--primary-accent)" stroke-opacity="0.12"
-                        stroke-width="1" stroke-dasharray="4 4" />
-                </svg>
-            </div>
-            <div class="badge">V1.0 LIVE</div>
-            <h1>Perfectly Tailored <span style="color:var(--primary-accent)">Resumes</span> in Seconds.</h1>
-            <p>Our AI analyzes your master profile and target job description to build an ATS-optimized resume that gets
-                you noticed.</p>
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="badge">V1.0 LIVE</div>
+                    <h1>Perfectly Tailored <span style="color:var(--primary-accent)">Resumes</span> in Seconds.</h1>
+                    <p>Our AI analyzes your master profile and target job description to build an ATS-optimized resume that gets
+                        you noticed.</p>
+                    <div class="hero-actions">
+                        <a href="/input" id="start-tailoring-btn" class="btn btn-primary">Start Tailoring Now</a>
+                        <a href="/about" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-mockup-wrapper">
+                    <div class="mockup-glow"></div>
+                    <div class="mockup-dashboard">
+                        <!-- Score Card -->
+                        <div class="mockup-card scorecard">
+                            <div class="card-header">
+                                <span>ATS SCORE</span>
+                                <span style="color: #10b981;">● Tailored</span>
+                            </div>
+                            <div class="gauge-container">
+                                <svg class="gauge-svg" viewBox="0 0 100 50">
+                                    <!-- Semicircle arc -->
+                                    <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round" />
+                                    <!-- Semicircle progress, matching 98% (dashoffset 3) -->
+                                    <path class="gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="125" stroke-dashoffset="3" />
+                                </svg>
+                                <div class="gauge-value">98</div>
+                            </div>
+                            <div class="gauge-sub">ATS Match Score</div>
+                            <div class="checklist-items">
+                                <div class="check-item passed">
+                                    <svg class="icon check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>Keyword Match</span>
+                                    <span class="pct">100%</span>
+                                </div>
+                                <div class="check-item passed">
+                                    <svg class="icon check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>Linguistic Diversity</span>
+                                    <span class="pct">100%</span>
+                                </div>
+                                <div class="check-item warn">
+                                    <svg class="icon warn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <span>Impact Ratio</span>
+                                    <span class="pct">83%</span>
+                                </div>
+                            </div>
+                        </div>
 
-            <div style="display: flex; gap: 1.5rem;">
-                <a href="/input" id="start-tailoring-btn" class="btn btn-primary">Start Tailoring Now</a>
-                <a href="/about" class="btn btn-secondary">Learn More</a>
+                        <!-- Tailored Resume Content Card -->
+                        <div class="mockup-card contentcard">
+                            <div class="card-header">
+                                <span>Tailored Resume Preview</span>
+                            </div>
+                            <div class="content-preview">
+                                <div style="text-align: center; margin-bottom: 0.2rem;">
+                                    <div style="font-family: 'Newsreader', serif; font-size: 0.8rem; font-weight: 800; color: var(--text-primary); line-height: 1.2;">KRISH CHAUDHARY</div>
+                                    <div style="font-size: 0.55rem; font-weight: 700; letter-spacing: 0.05em; color: var(--primary-accent); line-height: 1.2; margin-top: 0.1rem;">AI & MLOPS ENGINEER</div>
+                                </div>
+                                <div class="spacer-line"></div>
+                                <div class="preview-group">
+                                    <div class="preview-label">SUMMARY</div>
+                                    <p style="margin: 0; font-size: 0.52rem; line-height: 1.4; color: var(--text-primary); opacity: 0.9;">
+                                        Driven AI Engineer and Data Analyst specializing in Generative AI, RAG, and MLOps. Skilled in building autonomous agentic workflows using LangGraph and deploying scalable backend services via FastAPI.
+                                    </p>
+                                </div>
+                                <div class="spacer-line"></div>
+                                <div class="preview-group">
+                                    <div class="preview-label">EXPERIENCE</div>
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.52rem; color: var(--text-primary); margin-bottom: 0.1rem; line-height: 1.2;">
+                                        <span>Abhay Engineering — Business Analyst</span>
+                                        <span style="font-weight: normal; color: var(--text-secondary); font-size: 0.48rem;">2025</span>
+                                    </div>
+                                    <p style="margin: 0; font-size: 0.52rem; line-height: 1.4; color: var(--text-primary); opacity: 0.9; padding-left: 0.3rem; text-indent: -0.3rem;">
+                                        • Transformed manual billing records into structured technical roadmaps for an automated BI platform, aligning 100% of operational gaps.
+                                    </p>
+                                </div>
+                                <div class="spacer-line"></div>
+                                <div class="preview-group">
+                                    <div class="preview-label">TAILORED SKILLS</div>
+                                    <div class="preview-skills">
+                                        <span class="skill-tag">LangGraph</span>
+                                        <span class="skill-tag">Gemini 2.5 Flash</span>
+                                        <span class="skill-tag">FastAPI</span>
+                                        <span class="skill-tag">MLOps</span>
+                                        <span class="skill-tag">Docker</span>
+                                        <span class="skill-tag">RAG Pipelines</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -321,7 +385,7 @@
                 <div class="badge">Workflow</div>
                 <h2 style="font-family: 'Newsreader', serif; font-size: 2.5rem;">How it Works</h2>
             </div>
-            <div class="sections-grid">
+            <div class="sections-grid workflow-grid">
 
                 <div class="stat-card">
                     <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
@@ -339,19 +403,82 @@
                 </div>
                 <div class="stat-card">
                     <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
                     </div>
-                    <h3>3. Download</h3>
-                    <p>Download your perfectly formatted, ATS-compliant PDF resume instantly.</p>
+                    <h3>3. Agentic Tailoring</h3>
+                    <p>AI automatically rewrites bullet points, diversifies action verbs, and aligns skills.</p>
                 </div>
-                <div class="stat-card" style="border: 1px dashed var(--primary-accent); background: rgba(217, 119, 6, 0.03);">
+                <div class="stat-card">
+                    <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5-1.5-2.5-3.5-2.5-5.5C2 6.5 6.5 2 12 2s10 4.5 10 9c0 2-1 4-2.5 5.5"/><path d="m12 12 4-4"/></svg>
+                    </div>
+                    <h3>4. ATS Score Audit</h3>
+                    <p>Analyze keyword density, linguistic diversity, and impact metrics in real-time.</p>
+                </div>
+                <div class="stat-card" style="border: 1px dashed var(--primary-accent); background: #fdfbf7;">
                     <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"/><polyline points="14 2 14 8 20 8"/><path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l1-3.95 5.42-5.44Z"/></svg>
                     </div>
-                    <h3>4. Edit & Export</h3>
-                    <p>Paste any resume JSON, make manual tweaks, and export to PDF instantly. <br><a href="/editor" style="color:var(--primary-accent); font-weight:600;">Open Editor ↗</a></p>
+                    <h3>5. Edit & Export</h3>
+                    <p>Make fine-grained manual adjustments to the tailored JSON in our visual editor. <br><a href="/editor" style="color:var(--primary-accent); font-weight:600;">Open Editor ↗</a></p>
+                </div>
+                <div class="stat-card">
+                    <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </div>
+                    <h3>6. Download</h3>
+                    <p>Download your perfectly formatted, ATS-compliant PDF resume instantly.</p>
                 </div>
 
+            </div>
+        </section>
+
+        <section id="rules-and-guardrails" style="padding: 6rem 0 8rem; border-top: 1px solid var(--outline);">
+            <div style="text-align: center; margin-bottom: 5rem;">
+                <div class="badge">Rules & Guardrails</div>
+                <h2 style="font-family: 'Newsreader', serif; font-size: 2.5rem; margin-bottom: 1rem;">Core ATS Optimization Directives</h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.05rem;">Our agentic engine enforces strict design and content policies to ensure your resume scores in the top 1% of candidate filters.</p>
+            </div>
+            
+            <div class="sections-grid connected-grid" style="margin-top: 2rem;">
+                <div class="stat-card">
+                    <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
+                    <h3>1. Quantification Requirement</h3>
+                    <p>The engine flags bullets lacking concrete metrics. Every achievement must be quantified (e.g., efficiency gain, query latency reduced, error margins cut) to demonstrate direct business impact.</p>
+                </div>
+                <div class="stat-card">
+                    <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.886a1 1 0 0 1-.95.69H2.926l5.028 3.653a1 1 0 0 1 .364 1.118L6.406 21l5.028-3.653a1 1 0 0 1 1.132 0L17.594 21l-1.912-5.653a1 1 0 0 1 .364-1.118l5.028-3.653h-6.212a1 1 0 0 1-.95-.69L12 3Z"/></svg>
+                    </div>
+                    <h3>2. Zero Action Verb Repetition</h3>
+                    <p>Starting multiple experience bullets with the same action verb is prohibited. The AI automatically parses sentence structures and replaces duplicate starter verbs with diverse alternatives.</p>
+                </div>
+                <div class="stat-card">
+                    <div style="color:var(--primary-accent); margin-bottom: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <h3>3. Contextual Keyword Flow</h3>
+                    <p>Instead of dense, spammy keyword stuffing, which modern ATS parsers flag, our algorithm distributes required skills organically into experience descriptions and professional summaries.</p>
+                </div>
+            </div>
+
+            <div class="sections-grid connected-grid" style="margin-top: 4rem; grid-template-columns: repeat(2, 1fr);">
+                <div class="stat-card" style="padding: 2.5rem; background: #fdfbf8; border: 1px solid var(--outline);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; color: var(--primary-accent);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <h4 style="font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Session-Local Privacy Policy</h4>
+                    </div>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">Your personal resume profile and job target entries are never permanently written to database storage or sold to external brokers. Data is processed in-memory for the duration of the tailoring cycle and exists purely within your local browser session.</p>
+                </div>
+                <div class="stat-card" style="padding: 2.5rem; background: #fdfbf8; border: 1px solid var(--outline);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; color: var(--primary-accent);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                        <h4 style="font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Multi-Model Fallback & Resiliency</h4>
+                    </div>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">Our agentic pipeline is built on a resilient architecture using primary and fallback models (Gemini Flash & Pro versions). If a rate limit or API block occurs, the fallback model seamlessly takes over to ensure reliable, uninterrupted generation.</p>
+                </div>
             </div>
         </section>
 
