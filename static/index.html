@@ -538,6 +538,46 @@
                 modal.classList.remove('active');
                 window.location.href = '/input';
             }
+
+            // Interactive 3D Mockup Tilt & Spotlight Shine
+            const wrapper = document.querySelector('.hero-mockup-wrapper');
+            const dashboard = document.querySelector('.mockup-dashboard');
+
+            if (wrapper && dashboard) {
+                let rect = wrapper.getBoundingClientRect();
+                
+                // Recalculate dimensions on resize/scroll
+                window.addEventListener('resize', () => {
+                    rect = wrapper.getBoundingClientRect();
+                });
+                window.addEventListener('scroll', () => {
+                    rect = wrapper.getBoundingClientRect();
+                });
+
+                wrapper.addEventListener('mousemove', (e) => {
+                    rect = wrapper.getBoundingClientRect(); // Update in case layout shifted
+                    const x = (e.clientX - rect.left) / rect.width; // 0 to 1
+                    const y = (e.clientY - rect.top) / rect.height; // 0 to 1
+                    
+                    // Map X/Y to tilt angles:
+                    // rotateY: tilt towards left when mouse is on left (-15deg), right when mouse is on right (+15deg)
+                    // rotateX: tilt towards top when mouse is on top (+10deg), bottom when mouse is on bottom (-10deg)
+                    const tiltX = (x - 0.5) * 30; // -15deg to 15deg
+                    const tiltY = (0.5 - y) * 20; // 10deg to -10deg
+
+                    wrapper.classList.add('tracking');
+                    wrapper.style.setProperty('--mouse-x', `${x * 100}%`);
+                    wrapper.style.setProperty('--mouse-y', `${y * 100}%`);
+                    wrapper.style.setProperty('--tilt-x', `${tiltX}deg`);
+                    wrapper.style.setProperty('--tilt-y', `${tiltY}deg`);
+                });
+
+                wrapper.addEventListener('mouseleave', () => {
+                    wrapper.classList.remove('tracking');
+                    wrapper.style.removeProperty('--tilt-x');
+                    wrapper.style.removeProperty('--tilt-y');
+                });
+            }
         </script>
 
 
