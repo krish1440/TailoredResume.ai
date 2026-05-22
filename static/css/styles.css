@@ -1275,23 +1275,60 @@ footer p {
     left: -20px;
     right: -20px;
     bottom: -20px;
-    background: radial-gradient(circle, rgba(217, 119, 6, 0.18) 0%, rgba(217, 119, 6, 0.03) 50%, transparent 70%);
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(217, 119, 6, 0.18) 0%, rgba(217, 119, 6, 0.03) 50%, transparent 70%);
     filter: blur(40px);
     z-index: -1;
     pointer-events: none;
+    transition: background 0.5s ease;
+}
+
+.hero-mockup-wrapper.tracking .mockup-glow {
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(217, 119, 6, 0.28) 0%, rgba(217, 119, 6, 0.04) 50%, transparent 70%);
+    transition: none;
 }
 
 /* 3D Mockup Dashboard */
 .mockup-dashboard {
     display: flex;
     gap: 1.25rem;
-    transform: perspective(1000px) rotateY(-10deg) rotateX(4deg) scale(0.98);
+    transform: perspective(1000px) rotateY(var(--tilt-x, -10deg)) rotateX(var(--tilt-y, 4deg)) scale(0.98);
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     transform-style: preserve-3d;
+    position: relative;
 }
 
-.mockup-dashboard:hover {
-    transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(1.02);
+.hero-mockup-wrapper:hover .mockup-dashboard {
+    transform: perspective(1000px) rotateY(var(--tilt-x, -2deg)) rotateX(var(--tilt-y, 1deg)) scale(1.02);
+}
+
+.hero-mockup-wrapper.tracking .mockup-dashboard {
+    transition: transform 0.1s ease-out;
+}
+
+/* Spotlight Shine overlay on the mockup cards */
+.mockup-dashboard::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(217, 119, 6, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.35) 0%, transparent 35%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 8px;
+}
+
+.hero-mockup-wrapper:hover .mockup-dashboard::after {
+    opacity: 1;
+}
+
+.hero-mockup-wrapper.tracking .mockup-dashboard::after {
+    transition: opacity 0.5s ease;
 }
 
 /* Mockup Cards */
