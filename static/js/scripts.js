@@ -76,6 +76,79 @@ document.addEventListener('DOMContentLoaded', () => {
             const loading = document.getElementById('loading');
             loading.style.display = 'flex';
 
+            // Circular Simulation logic
+            let currentStepIdx = 0;
+            let simTimeout = null;
+            const stepTimeline = [
+                { percent: 15, duration: 1800 },
+                { percent: 32, duration: 2000 },
+                { percent: 50, duration: 2500 },
+                { percent: 72, duration: 2800 },
+                { percent: 88, duration: 3200 },
+                { percent: 97, duration: 4000 }
+            ];
+
+            // Hide all steps initially
+            for (let i = 0; i < stepTimeline.length; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                if (stepEl) {
+                    stepEl.style.display = 'none';
+                    stepEl.style.opacity = '0';
+                    stepEl.style.transform = 'translateY(10px)';
+                    const statusSpan = stepEl.querySelector('.step-status');
+                    if (statusSpan) statusSpan.innerHTML = '';
+                }
+            }
+
+            function runSimulatorStep() {
+                if (currentStepIdx >= stepTimeline.length) return;
+                const cur = stepTimeline[currentStepIdx];
+                const percentText = document.getElementById('loader-percent');
+                const ringEl = document.getElementById('loader-ring');
+                
+                if (percentText) percentText.innerText = cur.percent + '%';
+                if (ringEl) {
+                    ringEl.style.background = `conic-gradient(var(--primary-accent) 0%, var(--primary-accent) ${cur.percent}%, rgba(255,255,255,0.08) ${cur.percent}%, rgba(255,255,255,0.08) 100%)`;
+                }
+
+                // Show and checkmark previous steps
+                for (let i = 0; i < currentStepIdx; i++) {
+                    const stepEl = document.getElementById(`step-${i}`);
+                    if (stepEl) {
+                        stepEl.style.display = 'flex';
+                        stepEl.style.opacity = '0.75';
+                        stepEl.style.transform = 'translateY(0)';
+                        const statusSpan = stepEl.querySelector('.step-status');
+                        if (statusSpan) {
+                            statusSpan.innerHTML = '✓';
+                            statusSpan.style.color = '#10b981';
+                        }
+                    }
+                }
+
+                // Show current active step
+                const activeStepEl = document.getElementById(`step-${currentStepIdx}`);
+                if (activeStepEl) {
+                    activeStepEl.style.display = 'flex';
+                    // Force reflow
+                    activeStepEl.offsetHeight;
+                    activeStepEl.style.opacity = '1.0';
+                    activeStepEl.style.transform = 'translateY(0)';
+                    const statusSpan = activeStepEl.querySelector('.step-status');
+                    if (statusSpan) {
+                        statusSpan.innerHTML = '●';
+                        statusSpan.style.color = 'var(--primary-accent)';
+                    }
+                }
+
+                simTimeout = setTimeout(() => {
+                    currentStepIdx++;
+                    runSimulatorStep();
+                }, cur.duration);
+            }
+            
+            runSimulatorStep();
+
             const formData = new FormData();
             formData.append('master_json', masterJsonRaw);
             formData.append('jd', jd);
@@ -105,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Submission failed:', error);
                 showNotify('Technical error: ' + error.message, 'error');
             } finally {
+                if (simTimeout) clearTimeout(simTimeout);
                 loading.style.display = 'none';
                 submitBtn.disabled = false;
             }
