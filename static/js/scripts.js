@@ -116,13 +116,32 @@ document.addEventListener('DOMContentLoaded', () => {
      * Monitors all inputs within the builder to ensure the JSON state 
      * is always up-to-date for the backend request.
      */
-    document.getElementById('tailor-form').addEventListener('input', (e) => {
-        if (e.target.closest('#builder-container')) {
-            syncFormToJson();
-        }
-    });
+    const tailorForm = document.getElementById('tailor-form');
+    if (tailorForm) {
+        tailorForm.addEventListener('input', (e) => {
+            if (e.target.closest('#builder-container')) {
+                syncFormToJson();
+            }
+            autoSaveToLocalStorage();
+        });
+    }
 
-    // Start with a clean slate (NO auto-items)
+    // Load from localStorage if available
+    const savedMaster = localStorage.getItem('master_resume_saved');
+    const savedJd = localStorage.getItem('job_description_saved');
+    const savedTab = localStorage.getItem('active_tab_pref') || 'json';
+
+    if (savedMaster && document.getElementById('master_json')) {
+        document.getElementById('master_json').value = savedMaster;
+    }
+    if (savedJd && document.getElementById('jd')) {
+        document.getElementById('jd').value = savedJd;
+    }
+    
+    // Switch to saved tab and populate if builder
+    if (savedTab === 'form') {
+        switchTab('form');
+    }
 });
 
 /**
@@ -135,6 +154,7 @@ function switchTab(target) {
     const btns = document.querySelectorAll('.tab-btn');
 
     btns.forEach(b => b.classList.remove('active'));
+    localStorage.setItem('active_tab_pref', target);
     
     if (target === 'form') {
         builder.style.display = 'block';
@@ -410,3 +430,53 @@ async function loadSample() {
     }
 }
 // Version 1.2.1
+
+function autoSaveToLocalStorage() {
+    const masterJson = document.getElementById('master_json')?.value || '';
+    const jd = document.getElementById('jd')?.value || '';
+    localStorage.setItem('master_resume_saved', masterJson);
+    localStorage.setItem('job_description_saved', jd);
+}
+
+window.saveToLocalStorage = () => {
+    try {
+        const masterJson = document.getElementById('master_json').value.trim();
+        const jd = document.getElementById('jd').value.trim();
+        localStorage.setItem('master_resume_saved', masterJson);
+        localStorage.setItem('job_description_saved', jd);
+        showNotify('Progress saved to browser! 💾');
+    } catch (e) {
+        showNotify('Failed to save progress.', 'error');
+    }
+};
+
+window.clearLocalStorage = () => {
+    localStorage.removeItem('master_resume_saved');
+    localStorage.removeItem('job_description_saved');
+    
+    // Clear elements
+    if (document.getElementById('master_json')) {
+        document.getElementById('master_json').value = '';
+    }
+    if (document.getElementById('jd')) {
+        document.getElementById('jd').value = '';
+    }
+    
+    // Reset builder form fields
+    const builder = document.getElementById('builder-container');
+    if (builder) {
+        document.getElementById('summaries-list').innerHTML = '';
+        document.getElementById('experience-list').innerHTML = '';
+        document.getElementById('projects-list').innerHTML = '';
+        document.getElementById('education-list').innerHTML = '';
+        document.getElementById('skills-list').innerHTML = '';
+        
+        // Clear personal info
+        document.querySelectorAll('[data-path^="personal_info."]').forEach(input => {
+            input.value = '';
+        });
+    }
+    
+    showNotify('Form and storage cleared! 🧹');
+};
+

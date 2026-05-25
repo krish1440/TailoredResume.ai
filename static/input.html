@@ -150,9 +150,15 @@
             <p style="color:var(--text-secondary); max-width: 600px;">Provide your full, multi-narrative profile. The AI will select the best stories for each job.</p>
         </section>
 
-        <div class="form-tabs">
-            <button type="button" class="tab-btn active" onclick="switchTab('json')">Direct JSON Editor</button>
-            <button type="button" class="tab-btn" onclick="switchTab('form')">Profile Builder</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+            <div class="form-tabs" style="margin-bottom: 0;">
+                <button type="button" class="tab-btn active" onclick="switchTab('json')">Direct JSON Editor</button>
+                <button type="button" class="tab-btn" onclick="switchTab('form')">Profile Builder</button>
+            </div>
+            <div style="display: flex; gap: 0.8rem;">
+                <button type="button" onclick="saveToLocalStorage()" class="btn-sample btn-progress-save">Save Progress 💾</button>
+                <button type="button" onclick="clearLocalStorage()" class="btn-sample btn-progress-clear">Clear Form 🧹</button>
+            </div>
         </div>
 
         <form id="tailor-form">
