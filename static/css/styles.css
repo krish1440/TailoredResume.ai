@@ -519,9 +519,8 @@ textarea:focus, input[type="text"]:focus {
 .score-circle {
     width: 120px;
     height: 120px;
-    border: 8px solid var(--surface-low);
-    border-top: 8px solid var(--primary-accent);
     border-radius: 50%;
+    background: conic-gradient(var(--primary-accent) 0%, var(--primary-accent) var(--score-percent, 0%), var(--surface-low) var(--score-percent, 0%), var(--surface-low) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -529,6 +528,24 @@ textarea:focus, input[type="text"]:focus {
     font-size: 2rem;
     font-family: 'Newsreader', serif;
     font-weight: 700;
+    position: relative;
+}
+
+.score-circle::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    background: var(--surface);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.score-circle-text {
+    position: relative;
+    z-index: 2;
 }
 
 /* Insight Bars */
@@ -917,6 +934,36 @@ footer p {
 
 .btn-sample:active {
     transform: translateY(0);
+}
+
+.btn-progress-save {
+    color: var(--primary-accent);
+    background: rgba(217, 119, 6, 0.02);
+    border: 1px dashed var(--primary-accent);
+}
+
+.btn-progress-save:hover {
+    background: var(--primary-gradient) !important;
+    color: #ffffff !important;
+    border-style: solid !important;
+    border-color: var(--primary-accent) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+}
+
+.btn-progress-clear {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.02);
+    border: 1px dashed #ef4444;
+}
+
+.btn-progress-clear:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    border-style: solid !important;
+    border-color: #ef4444 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .btn-sample .loading-spinner {
