@@ -76,6 +76,79 @@ document.addEventListener('DOMContentLoaded', () => {
             const loading = document.getElementById('loading');
             loading.style.display = 'flex';
 
+            // Circular Simulation logic
+            let currentStepIdx = 0;
+            let simTimeout = null;
+            const stepTimeline = [
+                { percent: 15, duration: 1800 },
+                { percent: 32, duration: 2000 },
+                { percent: 50, duration: 2500 },
+                { percent: 72, duration: 2800 },
+                { percent: 88, duration: 3200 },
+                { percent: 97, duration: 4000 }
+            ];
+
+            // Hide all steps initially
+            for (let i = 0; i < stepTimeline.length; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                if (stepEl) {
+                    stepEl.style.display = 'none';
+                    stepEl.style.opacity = '0';
+                    stepEl.style.transform = 'translateY(10px)';
+                    const statusSpan = stepEl.querySelector('.step-status');
+                    if (statusSpan) statusSpan.innerHTML = '';
+                }
+            }
+
+            function runSimulatorStep() {
+                if (currentStepIdx >= stepTimeline.length) return;
+                const cur = stepTimeline[currentStepIdx];
+                const percentText = document.getElementById('loader-percent');
+                const ringEl = document.getElementById('loader-ring');
+                
+                if (percentText) percentText.innerText = cur.percent + '%';
+                if (ringEl) {
+                    ringEl.style.background = `conic-gradient(var(--primary-accent) 0%, var(--primary-accent) ${cur.percent}%, rgba(255,255,255,0.08) ${cur.percent}%, rgba(255,255,255,0.08) 100%)`;
+                }
+
+                // Show and checkmark previous steps
+                for (let i = 0; i < currentStepIdx; i++) {
+                    const stepEl = document.getElementById(`step-${i}`);
+                    if (stepEl) {
+                        stepEl.style.display = 'flex';
+                        stepEl.style.opacity = '0.75';
+                        stepEl.style.transform = 'translateY(0)';
+                        const statusSpan = stepEl.querySelector('.step-status');
+                        if (statusSpan) {
+                            statusSpan.innerHTML = '✓';
+                            statusSpan.style.color = '#10b981';
+                        }
+                    }
+                }
+
+                // Show current active step
+                const activeStepEl = document.getElementById(`step-${currentStepIdx}`);
+                if (activeStepEl) {
+                    activeStepEl.style.display = 'flex';
+                    // Force reflow
+                    activeStepEl.offsetHeight;
+                    activeStepEl.style.opacity = '1.0';
+                    activeStepEl.style.transform = 'translateY(0)';
+                    const statusSpan = activeStepEl.querySelector('.step-status');
+                    if (statusSpan) {
+                        statusSpan.innerHTML = '●';
+                        statusSpan.style.color = 'var(--primary-accent)';
+                    }
+                }
+
+                simTimeout = setTimeout(() => {
+                    currentStepIdx++;
+                    runSimulatorStep();
+                }, cur.duration);
+            }
+            
+            runSimulatorStep();
+
             const formData = new FormData();
             formData.append('master_json', masterJsonRaw);
             formData.append('jd', jd);
@@ -105,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Submission failed:', error);
                 showNotify('Technical error: ' + error.message, 'error');
             } finally {
+                if (simTimeout) clearTimeout(simTimeout);
                 loading.style.display = 'none';
                 submitBtn.disabled = false;
             }
@@ -116,13 +190,32 @@ document.addEventListener('DOMContentLoaded', () => {
      * Monitors all inputs within the builder to ensure the JSON state 
      * is always up-to-date for the backend request.
      */
-    document.getElementById('tailor-form').addEventListener('input', (e) => {
-        if (e.target.closest('#builder-container')) {
-            syncFormToJson();
-        }
-    });
+    const tailorForm = document.getElementById('tailor-form');
+    if (tailorForm) {
+        tailorForm.addEventListener('input', (e) => {
+            if (e.target.closest('#builder-container')) {
+                syncFormToJson();
+            }
+            autoSaveToLocalStorage();
+        });
+    }
 
-    // Start with a clean slate (NO auto-items)
+    // Load from localStorage if available
+    const savedMaster = localStorage.getItem('master_resume_saved');
+    const savedJd = localStorage.getItem('job_description_saved');
+    const savedTab = localStorage.getItem('active_tab_pref') || 'json';
+
+    if (savedMaster && document.getElementById('master_json')) {
+        document.getElementById('master_json').value = savedMaster;
+    }
+    if (savedJd && document.getElementById('jd')) {
+        document.getElementById('jd').value = savedJd;
+    }
+    
+    // Switch to saved tab and populate if builder
+    if (savedTab === 'form') {
+        switchTab('form');
+    }
 });
 
 /**
@@ -135,6 +228,7 @@ function switchTab(target) {
     const btns = document.querySelectorAll('.tab-btn');
 
     btns.forEach(b => b.classList.remove('active'));
+    localStorage.setItem('active_tab_pref', target);
     
     if (target === 'form') {
         builder.style.display = 'block';
@@ -410,3 +504,53 @@ async function loadSample() {
     }
 }
 // Version 1.2.1
+
+function autoSaveToLocalStorage() {
+    const masterJson = document.getElementById('master_json')?.value || '';
+    const jd = document.getElementById('jd')?.value || '';
+    localStorage.setItem('master_resume_saved', masterJson);
+    localStorage.setItem('job_description_saved', jd);
+}
+
+window.saveToLocalStorage = () => {
+    try {
+        const masterJson = document.getElementById('master_json').value.trim();
+        const jd = document.getElementById('jd').value.trim();
+        localStorage.setItem('master_resume_saved', masterJson);
+        localStorage.setItem('job_description_saved', jd);
+        showNotify('Progress saved to browser! 💾');
+    } catch (e) {
+        showNotify('Failed to save progress.', 'error');
+    }
+};
+
+window.clearLocalStorage = () => {
+    localStorage.removeItem('master_resume_saved');
+    localStorage.removeItem('job_description_saved');
+    
+    // Clear elements
+    if (document.getElementById('master_json')) {
+        document.getElementById('master_json').value = '';
+    }
+    if (document.getElementById('jd')) {
+        document.getElementById('jd').value = '';
+    }
+    
+    // Reset builder form fields
+    const builder = document.getElementById('builder-container');
+    if (builder) {
+        document.getElementById('summaries-list').innerHTML = '';
+        document.getElementById('experience-list').innerHTML = '';
+        document.getElementById('projects-list').innerHTML = '';
+        document.getElementById('education-list').innerHTML = '';
+        document.getElementById('skills-list').innerHTML = '';
+        
+        // Clear personal info
+        document.querySelectorAll('[data-path^="personal_info."]').forEach(input => {
+            input.value = '';
+        });
+    }
+    
+    showNotify('Form and storage cleared! 🧹');
+};
+
