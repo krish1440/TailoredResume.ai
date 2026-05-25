@@ -57,14 +57,21 @@ MODELS_TO_TRY = [
 
 import io
 
-def create_two_column_pdf(data: dict, output_buffer):
+def create_two_column_pdf(data: dict, output_buffer, density: str = "high"):
+    margin_map = {
+        "low": {"right": 32, "left": 32, "top": 24, "bottom": 20},
+        "medium": {"right": 26, "left": 26, "top": 18, "bottom": 14},
+        "high": {"right": 22, "left": 22, "top": 13, "bottom": 10},
+        "max": {"right": 16, "left": 16, "top": 8, "bottom": 6}
+    }
+    m = margin_map.get(density, margin_map["high"])
     doc = SimpleDocTemplate(
         output_buffer,
         pagesize=letter,
-        rightMargin=22,
-        leftMargin=22,
-        topMargin=13,
-        bottomMargin=10
+        rightMargin=m["right"],
+        leftMargin=m["left"],
+        topMargin=m["top"],
+        bottomMargin=m["bottom"]
     )
 
     primary_color = HexColor("#4f46e5")
@@ -513,9 +520,9 @@ def create_two_column_pdf(data: dict, output_buffer):
         canvas.setSubject("ATS Optimized Resume")
 
     doc.build(elements, onFirstPage=add_meta, onLaterPages=add_meta)
-def create_pdf(data: dict, output_buffer, template: str = "classic"):
+def create_pdf(data: dict, output_buffer, template: str = "classic", density: str = "high"):
     if template == "two_column":
-        create_two_column_pdf(data, output_buffer)
+        create_two_column_pdf(data, output_buffer, density=density)
         return
     """Generates an ATS-optimized PDF resume from structured JSON data.
 
@@ -544,26 +551,81 @@ def create_pdf(data: dict, output_buffer, template: str = "classic"):
     Returns:
         None: The PDF is written directly to the output_buffer.
     """
+    density_configs = {
+        "low": {
+            "rightMargin": 36, "leftMargin": 36, "topMargin": 30, "bottomMargin": 25,
+            "fontSize_name": 18, "spaceAfter_name": 4,
+            "fontSize_contact": 10.0, "spaceAfter_contact": 8,
+            "fontSize_header": 12, "spaceAfter_header": 1.5, "spaceBefore_header": 8,
+            "fontSize_summary": 10.5, "spaceAfter_summary": 3, "leading_summary": 13,
+            "fontSize_title": 11, "spaceAfter_title": 1, "spaceBefore_title": 4,
+            "fontSize_date": 10,
+            "fontSize_bullet": 10, "leading_bullet": 12.5, "spaceAfter_bullet": 2,
+            "fontSize_content": 10, "leading_content": 12.5,
+            "skills_spacer": 6, "edu_spacer": 6
+        },
+        "medium": {
+            "rightMargin": 28, "leftMargin": 28, "topMargin": 20, "bottomMargin": 16,
+            "fontSize_name": 16, "spaceAfter_name": 1,
+            "fontSize_contact": 9.2, "spaceAfter_contact": 4,
+            "fontSize_header": 11, "spaceAfter_header": 0.5, "spaceBefore_header": 4,
+            "fontSize_summary": 9.5, "spaceAfter_summary": 1.5, "leading_summary": 11,
+            "fontSize_title": 10.2, "spaceAfter_title": 0.5, "spaceBefore_title": 2,
+            "fontSize_date": 9.2,
+            "fontSize_bullet": 9.2, "leading_bullet": 10.8, "spaceAfter_bullet": 1,
+            "fontSize_content": 9.2, "leading_content": 10.8,
+            "skills_spacer": 3, "edu_spacer": 3
+        },
+        "high": {
+            "rightMargin": 22, "leftMargin": 22, "topMargin": 13, "bottomMargin": 10,
+            "fontSize_name": 15, "spaceAfter_name": 0,
+            "fontSize_contact": 8.5, "spaceAfter_contact": 3,
+            "fontSize_header": 10, "spaceAfter_header": 0.2, "spaceBefore_header": 2,
+            "fontSize_summary": 9, "spaceAfter_summary": 1, "leading_summary": 10,
+            "fontSize_title": 9.5, "spaceAfter_title": 0.2, "spaceBefore_title": 0.8,
+            "fontSize_date": 8.5,
+            "fontSize_bullet": 8.8, "leading_bullet": 9.8, "spaceAfter_bullet": 0.5,
+            "fontSize_content": 8.8, "leading_content": 9.8,
+            "skills_spacer": 1, "edu_spacer": 2
+        },
+        "max": {
+            "rightMargin": 16, "leftMargin": 16, "topMargin": 8, "bottomMargin": 6,
+            "fontSize_name": 13.5, "spaceAfter_name": 0,
+            "fontSize_contact": 8.0, "spaceAfter_contact": 1.5,
+            "fontSize_header": 9, "spaceAfter_header": 0.1, "spaceBefore_header": 1,
+            "fontSize_summary": 8.0, "spaceAfter_summary": 0.5, "leading_summary": 9,
+            "fontSize_title": 8.5, "spaceAfter_title": 0.1, "spaceBefore_title": 0.4,
+            "fontSize_date": 8.0,
+            "fontSize_bullet": 8.0, "leading_bullet": 9.0, "spaceAfter_bullet": 0.2,
+            "fontSize_content": 8.0, "leading_content": 9.0,
+            "skills_spacer": 0.5, "edu_spacer": 0.5
+        }
+    }
+
+    config = density_configs.get(density, density_configs["high"])
+    left_margin = config["leftMargin"]
+    right_margin = config["rightMargin"]
+
     doc = SimpleDocTemplate(
         output_buffer,
         pagesize=letter,
-        rightMargin=22,
-        leftMargin=22,
-        topMargin=13,
-        bottomMargin=10
+        rightMargin=right_margin,
+        leftMargin=left_margin,
+        topMargin=config["topMargin"],
+        bottomMargin=config["bottomMargin"]
     )
 
     styles = getSampleStyleSheet()
     
     # Custom styles
-    styles.add(ParagraphStyle(name='CompName', parent=styles['Heading1'], fontSize=15, spaceAfter=0, alignment=1))
-    styles.add(ParagraphStyle(name='CompContact', parent=styles['Normal'], fontSize=8.5, spaceAfter=3, alignment=1, textColor=Color(0.15, 0.15, 0.15)))
-    styles.add(ParagraphStyle(name='CompSectionHeader', parent=styles['Heading2'], fontSize=10, spaceAfter=0.2, spaceBefore=2, textColor=Color(0, 0, 0)))
-    styles.add(ParagraphStyle(name='CompSummary', parent=styles['Normal'], fontSize=9, spaceAfter=1, leading=10))
-    styles.add(ParagraphStyle(name='CompItemTitle', parent=styles['Normal'], fontSize=9.5, spaceAfter=0.2, spaceBefore=0.8))
-    styles.add(ParagraphStyle(name='CompItemDate', parent=styles['Normal'], fontSize=8.5, alignment=2, textColor=Color(0.2, 0.2, 0.2)))
-    styles.add(ParagraphStyle(name='CompResumeBullet', parent=styles['Normal'], fontSize=8.8, leading=9.8, leftIndent=10, bulletIndent=3, spaceAfter=0.5))
-    styles.add(ParagraphStyle(name='CompContent', parent=styles['Normal'], fontSize=8.8, leading=9.8))
+    styles.add(ParagraphStyle(name='CompName', parent=styles['Heading1'], fontSize=config["fontSize_name"], spaceAfter=config["spaceAfter_name"], alignment=1))
+    styles.add(ParagraphStyle(name='CompContact', parent=styles['Normal'], fontSize=config["fontSize_contact"], spaceAfter=config["spaceAfter_contact"], alignment=1, textColor=Color(0.15, 0.15, 0.15)))
+    styles.add(ParagraphStyle(name='CompSectionHeader', parent=styles['Heading2'], fontSize=config["fontSize_header"], spaceAfter=config["spaceAfter_header"], spaceBefore=config["spaceBefore_header"], textColor=Color(0, 0, 0)))
+    styles.add(ParagraphStyle(name='CompSummary', parent=styles['Normal'], fontSize=config["fontSize_summary"], spaceAfter=config["spaceAfter_summary"], leading=config["leading_summary"]))
+    styles.add(ParagraphStyle(name='CompItemTitle', parent=styles['Normal'], fontSize=config["fontSize_title"], spaceAfter=config["spaceAfter_title"], spaceBefore=config["spaceBefore_title"]))
+    styles.add(ParagraphStyle(name='CompItemDate', parent=styles['Normal'], fontSize=config["fontSize_date"], alignment=2, textColor=Color(0.2, 0.2, 0.2)))
+    styles.add(ParagraphStyle(name='CompResumeBullet', parent=styles['Normal'], fontSize=config["fontSize_bullet"], leading=config["leading_bullet"], leftIndent=10, bulletIndent=3, spaceAfter=config["spaceAfter_bullet"]))
+    styles.add(ParagraphStyle(name='CompContent', parent=styles['Normal'], fontSize=config["fontSize_content"], leading=config["leading_content"]))
 
     elements = []
     line = HRFlowable(width="100%", thickness=0.8, color=Color(0, 0, 0), spaceAfter=1.5, spaceBefore=0)
@@ -634,9 +696,10 @@ def create_pdf(data: dict, output_buffer, template: str = "classic"):
                     ])
             
             # Create a table for the skills section to align domains on the left
-            # Total width is 612 (letter) - 22*2 (margins) = 568
-            # Domain column: 135, Skills column: 433
-            s_table = Table(skills_data, colWidths=[135, 433])
+            total_width = 612 - (left_margin + right_margin)
+            domain_width = 135
+            skills_width = total_width - domain_width
+            s_table = Table(skills_data, colWidths=[domain_width, skills_width])
             s_table.setStyle(TableStyle([
                 ('VALIGN', (0,0), (-1,-1), 'TOP'),
                 ('LEFTPADDING', (0,0), (-1,-1), 0),
@@ -647,7 +710,7 @@ def create_pdf(data: dict, output_buffer, template: str = "classic"):
             elements.append(Indenter(left=10))
             elements.append(s_table)
             elements.append(Indenter(left=-10))
-            elements.append(Spacer(1, 1))
+            elements.append(Spacer(1, config["skills_spacer"]))
         elif key == "experience":
             for exp in data[key]:
                 left = f"<b>{exp.get('company', '')}</b> | {exp.get('role', '')}"
@@ -676,9 +739,13 @@ def create_pdf(data: dict, output_buffer, template: str = "classic"):
                 gpa = edu.get('cgpa') or edu.get('gpa')
                 if gpa: deg += f" | GPA: {gpa}"
                 elements.append(Paragraph(deg, styles['CompContent']))
-                elements.append(Spacer(1, 2))
+                elements.append(Spacer(1, config["edu_spacer"]))
         elif key == "certifications":
-            elements.append(Paragraph(", ".join(data[key]), styles['CompSummary']))
+            if density == "low":
+                for cert in data[key]:
+                    elements.append(Paragraph(f"• {cert}", styles['CompResumeBullet']))
+            else:
+                elements.append(Paragraph(", ".join(data[key]), styles['CompSummary']))
 
     def add_meta(canvas, doc):
         canvas.setTitle(f"Tailored Resume - TailoredResume.ai")
@@ -1195,19 +1262,20 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
         return JSONResponse(status_code=500, content={"success": False, "error": str(e)})
 
 @app.post("/api/download")
-async def download_pdf_direct(data: dict, template: str = "classic"):
+async def download_pdf_direct(data: dict, template: str = "classic", density: str = "high"):
     """API endpoint to generate and stream a PDF resume.
 
     Args:
         data (dict): The finalized resume JSON data.
         template (str): The template style to render.
+        density (str): The density layout style.
 
     Returns:
         StreamingResponse: A PDF file stream with appropriate headers.
     """
     try:
         buffer = io.BytesIO()
-        create_pdf(data, buffer, template=template)
+        create_pdf(data, buffer, template=template, density=density)
         buffer.seek(0)
         
         filename = f"Tailored_Resume_{datetime.now().strftime('%Y%m%d%H%M')}.pdf"
