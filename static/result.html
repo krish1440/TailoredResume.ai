@@ -346,7 +346,9 @@
 
             <div class="sidebar">
                 <div class="score-display">
-                    <div class="score-circle" id="ats-score-val">0</div>
+                    <div class="score-circle" id="ats-score-circle">
+                        <span class="score-circle-text" id="ats-score-val">0%</span>
+                    </div>
                     <p style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary);">Optimization Score</p>
                 </div>
 
@@ -360,6 +362,15 @@
                                 <span id="sidebar-active-name" style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Classic</span>
                             </div>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600;">Content Density</span>
+                            <select id="density-select" onchange="changeDensity(this.value)" style="width: 100%; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--outline); background: var(--surface-low); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; outline: none; transition: var(--transition-smooth);" onfocus="this.style.borderColor='var(--primary-accent)'" onblur="this.style.borderColor='var(--outline)'">
+                                <option value="low">Minimalist (Low Content)</option>
+                                <option value="medium">Balanced (Medium Content)</option>
+                                <option value="high" selected>Compact (High Content)</option>
+                                <option value="max">Dense (Max Content)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -471,6 +482,12 @@
     <script src="js/scripts.js"></script>
     <script>
         let currentTemplate = 'classic';
+        let currentDensity = 'high';
+
+        function changeDensity(density) {
+            currentDensity = density;
+            loadPDFPreview();
+        }
 
         function setTemplate(tmpl) {
             if (currentTemplate === tmpl) return;
@@ -941,6 +958,10 @@
             // Populate Main Score
             const score = sessionStorage.getItem('ats_score') || '0';
             document.getElementById('ats-score-val').innerText = score + '%';
+            const scoreCircle = document.getElementById('ats-score-circle');
+            if (scoreCircle) {
+                scoreCircle.style.setProperty('--score-percent', score + '%');
+            }
             
             // Populate Detailed Metrics
             try {
@@ -972,7 +993,7 @@
             showNotify('Generating PDF... Please wait.');
 
             try {
-                const response = await fetch(`/api/download?template=${currentTemplate}`, {
+                const response = await fetch(`/api/download?template=${currentTemplate}&density=${currentDensity}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(res.data)
@@ -1007,7 +1028,7 @@
             }
 
             try {
-                const response = await fetch(`/api/download?template=${currentTemplate}`, {
+                const response = await fetch(`/api/download?template=${currentTemplate}&density=${currentDensity}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(res.data)
