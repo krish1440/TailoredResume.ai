@@ -112,22 +112,51 @@
             <p style="color:var(--text-secondary); max-width: 600px;">Paste your resume JSON below to instantly generate and preview your professional PDF. Perfect for manual edits.</p>
         </section>
 
-        <div class="toolbar">
-            <div>
+        <div class="toolbar" style="flex-wrap: wrap; gap: 1rem; align-items: center;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <button onclick="beautifyJSON()" class="btn-utility">Beautify JSON</button>
                 <button onclick="loadSample()" class="btn-sample">Load Sample 📋</button>
             </div>
-            <div style="display: flex; gap: 1rem;">
+            <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label for="template-select" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Template:</label>
+                    <select id="template-select" onchange="updatePreview()" style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--outline); background: var(--surface-low); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
+                        <option value="classic" selected>Classic</option>
+                        <option value="two_column">Double Column</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label for="density-select" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Density:</label>
+                    <select id="density-select" onchange="updatePreview()" style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--outline); background: var(--surface-low); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
+                        <option value="low">Minimalist (Low Content)</option>
+                        <option value="medium">Balanced (Medium Content)</option>
+                        <option value="high" selected>Compact (High Content)</option>
+                        <option value="max">Dense (Max Content)</option>
+                    </select>
+                </div>
                 <button onclick="updatePreview()" class="btn btn-secondary">Refresh Preview</button>
                 <button onclick="downloadPDF()" class="btn btn-primary">Download PDF</button>
             </div>
         </div>
 
         <div class="editor-container">
-            <div class="json-editor-pane">
-                <textarea id="json-input" placeholder="Paste your resume JSON here..." spellcheck="false"></textarea>
+            <div class="json-editor-pane" style="height: 750px; display: flex; flex-direction: column;">
+                <div class="form-tabs" style="margin-bottom: 1rem; width: 100%; display: flex; gap: 0.5rem;">
+                    <button type="button" class="tab-btn active" id="btn-editor-form" onclick="switchEditorTab('form')" style="flex: 1;">Visual Form Editor ✍️</button>
+                    <button type="button" class="tab-btn" id="btn-editor-json" onclick="switchEditorTab('json')" style="flex: 1;">Raw JSON Editor 💻</button>
+                </div>
+                
+                <!-- Visual Form Editor Container -->
+                <div id="form-editor-container" style="display: block; overflow-y: auto; flex-grow: 1; padding-right: 8px; margin-bottom: 1rem;">
+                    <!-- Dynamically populated via JS -->
+                </div>
+
+                <!-- Raw JSON Editor Container -->
+                <div id="json-editor-container" style="display: none; flex-grow: 1; flex-direction: column; height: 100%;">
+                    <textarea id="json-input" placeholder="Paste your resume JSON here..." spellcheck="false" style="height: 100%;"></textarea>
+                </div>
             </div>
-            <div class="preview-pane">
+            <div class="preview-pane" style="height: 750px;">
                 <div style="background: #323639; color: #fff; padding: 0.5rem 1rem; font-size: 0.8rem; border-bottom: 1px solid #444;">PDF Preview</div>
                 <iframe id="pdf-preview" src="about:blank"></iframe>
             </div>
@@ -157,6 +186,7 @@
     <script>
         const jsonInput = document.getElementById('json-input');
         const pdfPreview = document.getElementById('pdf-preview');
+        let timeout = null;
 
         // Check if there is data in session storage from the result page
         const existingData = sessionStorage.getItem('tailored_resume');
@@ -164,8 +194,17 @@
             try {
                 const parsed = JSON.parse(existingData);
                 jsonInput.value = JSON.stringify(parsed.data, null, 2);
+                syncJsonToForm();
                 updatePreview();
             } catch (e) {}
+        } else {
+            // Load visual builder default state
+            syncJsonToForm();
+        }
+
+        function triggerPreviewUpdate() {
+            clearTimeout(timeout);
+            timeout = setTimeout(updatePreview, 1200);
         }
 
         async function updatePreview() {
@@ -174,8 +213,10 @@
 
             try {
                 const data = JSON.parse(content);
+                const template = document.getElementById('template-select').value;
+                const density = document.getElementById('density-select').value;
 
-                const response = await fetch('/api/download', {
+                const response = await fetch(`/api/download?template=${template}&density=${density}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -189,16 +230,18 @@
                     showNotify("Server failed to generate PDF.", "error");
                 }
             } catch (e) {
-                // Silently wait for valid JSON if auto-updating
+                // Wait for valid JSON
             }
         }
 
         async function downloadPDF() {
             try {
                 const data = JSON.parse(jsonInput.value);
+                const template = document.getElementById('template-select').value;
+                const density = document.getElementById('density-select').value;
                 showNotify("Generating download...");
                 
-                const response = await fetch('/api/download', {
+                const response = await fetch(`/api/download?template=${template}&density=${density}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -226,6 +269,7 @@
             try {
                 const obj = JSON.parse(jsonInput.value);
                 jsonInput.value = JSON.stringify(obj, null, 2);
+                syncJsonToForm();
                 showNotify("JSON formatted.");
             } catch (e) {
                 showNotify("Cannot format: Invalid JSON.", "error");
@@ -237,6 +281,7 @@
                 const res = await fetch('/api/sample_tailored');
                 const data = await res.json();
                 jsonInput.value = JSON.stringify(data, null, 2);
+                syncJsonToForm();
                 updatePreview();
                 showNotify("Sample loaded.");
             } catch (e) {
@@ -244,12 +289,561 @@
             }
         }
 
-        // Add auto-update on pause (debounced)
-        let timeout = null;
-        jsonInput.addEventListener('input', () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(updatePreview, 1500);
-        });
+        // Toggles editor tabs
+        function switchEditorTab(target) {
+            const formEditor = document.getElementById('form-editor-container');
+            const jsonEditor = document.getElementById('json-editor-container');
+            const btnForm = document.getElementById('btn-editor-form');
+            const btnJson = document.getElementById('btn-editor-json');
+
+            if (target === 'form') {
+                formEditor.style.display = 'block';
+                jsonEditor.style.display = 'none';
+                btnForm.classList.add('active');
+                btnJson.classList.remove('active');
+                syncJsonToForm();
+            } else {
+                formEditor.style.display = 'none';
+                jsonEditor.style.display = 'flex';
+                btnForm.classList.remove('active');
+                btnJson.classList.add('active');
+            }
+        }
+
+        // Synchronize the raw JSON into the visual form elements
+        function syncJsonToForm() {
+            const container = document.getElementById('form-editor-container');
+            if (!container) return;
+
+            try {
+                const data = JSON.parse(jsonInput.value);
+                let html = '';
+
+                // --- Personal Info ---
+                const pi = data.personal_info || {};
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Personal Information</h3>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.8rem;">
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Full Name</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.name" value="${pi.name || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Location</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.location" value="${pi.location || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Email</label>
+                                <input type="email" class="input-field" data-form-path="personal_info.email" value="${pi.email || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Phone</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.phone" value="${pi.phone || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">LinkedIn</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.linkedin" value="${pi.linkedin || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">GitHub</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.github" value="${pi.github || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Portfolio</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.portfolio" value="${pi.portfolio || ''}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">Kaggle</label>
+                                <input type="text" class="input-field" data-form-path="personal_info.kaggle" value="${pi.kaggle || ''}" oninput="syncFormToJson()">
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // --- Summary ---
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Professional Summary</h3>
+                        <div style="margin-top: 0.8rem;">
+                            <textarea class="input-field" data-form-path="summary" rows="4" style="width:100%; resize:vertical;" oninput="syncFormToJson()">${data.summary || ''}</textarea>
+                        </div>
+                    </div>
+                `;
+
+                // --- Skills ---
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Technical Skills</h3>
+                        <div id="form-skills-list" style="margin-top: 0.8rem;">
+                `;
+                Object.entries(data.skills || {}).forEach(([category, items]) => {
+                    html += `
+                        <div class="skill-category-block" style="margin-bottom: 0.8rem; border: 1px solid var(--outline); padding: 0.8rem; border-radius: 4px;">
+                            <div style="margin-bottom: 0.4rem;">
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Category Name</label>
+                                <input type="text" class="input-field skill-cat-name" value="${category}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Skills (comma-separated)</label>
+                                <input type="text" class="input-field skill-cat-items" value="${items.join(', ')}" oninput="syncFormToJson()">
+                            </div>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.4rem; font-size: 0.75rem; padding: 3px 8px;">Remove Category</button>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addFormSkillCategory()" style="font-size: 0.75rem; padding: 5px 10px; margin-top: 0.4rem;">+ Add Skill Category</button>
+                    </div>
+                `;
+
+                // --- Experience ---
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Professional Experience</h3>
+                        <div id="form-experience-list" style="margin-top: 0.8rem;">
+                `;
+                (data.experience || []).forEach((exp) => {
+                    html += `
+                        <div class="form-experience-card" style="margin-bottom: 1rem; border: 1px solid var(--outline); padding: 1rem; border-radius: 4px;">
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem;">
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Company</label>
+                                    <input type="text" class="input-field exp-company" value="${exp.company || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Role</label>
+                                    <input type="text" class="input-field exp-role" value="${exp.role || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Start Date</label>
+                                    <input type="text" class="input-field exp-start" value="${exp.start_date || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">End Date</label>
+                                    <input type="text" class="input-field exp-end" value="${exp.end_date || ''}" oninput="syncFormToJson()">
+                                </div>
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.3rem;">Bullet Points</label>
+                                <div class="exp-bullets-container">
+                    `;
+                    (exp.bullet_points || []).forEach((bp, bpIdx) => {
+                        html += `
+                                    <div style="display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;">
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">${bpIdx + 1}.</span>
+                                        <input type="text" class="input-field exp-bullet" value="${bp}" oninput="syncFormToJson()" style="flex-grow:1;">
+                                        <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+                                    </div>
+                        `;
+                    });
+                    html += `
+                                </div>
+                                <button type="button" class="btn btn-secondary" onclick="addFormExperienceBullet(this)" style="font-size: 0.7rem; padding: 3px 8px; margin-top: 0.3rem;">+ Add Bullet</button>
+                            </div>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.8rem; width:100%; font-size:0.8rem; padding: 4px;">Remove Job</button>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addFormExperienceCard()" style="font-size: 0.75rem; padding: 5px 10px; margin-top: 0.4rem;">+ Add Experience</button>
+                    </div>
+                `;
+
+                // --- Projects ---
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Projects</h3>
+                        <div id="form-projects-list" style="margin-top: 0.8rem;">
+                `;
+                (data.projects || []).forEach((proj) => {
+                    html += `
+                        <div class="form-project-card" style="margin-bottom: 1rem; border: 1px solid var(--outline); padding: 1rem; border-radius: 4px;">
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem;">
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Project Name</label>
+                                    <input type="text" class="input-field proj-name" value="${proj.name || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">GitHub Link</label>
+                                    <input type="text" class="input-field proj-link" value="${proj.github_link || ''}" oninput="syncFormToJson()">
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 0.6rem;">
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Technologies (comma-separated)</label>
+                                <input type="text" class="input-field proj-techs" value="${(proj.technologies || []).join(', ')}" oninput="syncFormToJson()">
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.3rem;">Bullet Points (Exactly 4 bullets checked)</label>
+                                <div class="proj-bullets-container">
+                    `;
+                    (proj.bullet_points || []).forEach((bp, bpIdx) => {
+                        html += `
+                                    <div style="display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;">
+                                        <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">${bpIdx + 1}.</span>
+                                        <input type="text" class="input-field proj-bullet" value="${bp}" oninput="syncFormToJson()" style="flex-grow:1;">
+                                        <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+                                    </div>
+                        `;
+                    });
+                    html += `
+                                </div>
+                                <button type="button" class="btn btn-secondary" onclick="addFormProjectBullet(this)" style="font-size: 0.7rem; padding: 3px 8px; margin-top: 0.3rem;">+ Add Bullet</button>
+                            </div>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.8rem; width:100%; font-size:0.8rem; padding: 4px;">Remove Project</button>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addFormProjectCard()" style="font-size: 0.75rem; padding: 5px 10px; margin-top: 0.4rem;">+ Add Project</button>
+                    </div>
+                `;
+
+                // --- Education ---
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Education</h3>
+                        <div id="form-education-list" style="margin-top: 0.8rem;">
+                `;
+                (data.education || []).forEach((edu) => {
+                    html += `
+                        <div class="form-education-card" style="margin-bottom: 0.8rem; border: 1px solid var(--outline); padding: 0.8rem; border-radius: 4px;">
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.4rem;">
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Institution</label>
+                                    <input type="text" class="input-field edu-inst" value="${edu.institution || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Degree</label>
+                                    <input type="text" class="input-field edu-degree" value="${edu.degree || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Location</label>
+                                    <input type="text" class="input-field edu-loc" value="${edu.location || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">CGPA / GPA</label>
+                                    <input type="text" class="input-field edu-cgpa" value="${edu.cgpa || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Start Date</label>
+                                    <input type="text" class="input-field edu-start" value="${edu.start_date || ''}" oninput="syncFormToJson()">
+                                </div>
+                                <div>
+                                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">End Date</label>
+                                    <input type="text" class="input-field edu-end" value="${edu.end_date || ''}" oninput="syncFormToJson()">
+                                </div>
+                            </div>
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.4rem; font-size: 0.75rem; padding: 3px 8px;">Remove Education</button>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addFormEducationCard()" style="font-size: 0.75rem; padding: 5px 10px; margin-top: 0.4rem;">+ Add Education</button>
+                    </div>
+                `;
+
+                // --- Certifications ---
+                const certsStr = (data.certifications || []).join(', ');
+                html += `
+                    <div class="form-section card" style="margin-bottom: 1.5rem; padding: 1.2rem;">
+                        <h3 style="margin-top:0; border-bottom:1px solid var(--outline); padding-bottom:0.4rem; color:var(--primary-accent); font-size:1.1rem;">Certifications</h3>
+                        <div style="margin-top: 0.8rem;">
+                            <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom: 2px;">List of Certifications (comma-separated)</label>
+                            <input type="text" class="input-field" id="form-certs-input" value="${certsStr}" oninput="syncFormToJson()">
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+
+            } catch (e) {
+                console.warn("syncJsonToForm failed: JSON is invalid or incomplete.", e);
+                container.innerHTML = `<div class="card" style="border-color:#ef4444; color:#ef4444; padding:1.5rem;"><strong>Invalid JSON:</strong> Please fix the raw JSON editor to enable the visual form builder.</div>`;
+            }
+        }
+
+        // Gather data from form inputs and compile back into JSON
+        function syncFormToJson() {
+            const data = {
+                personal_info: {},
+                summary: '',
+                skills: {},
+                experience: [],
+                projects: [],
+                education: [],
+                certifications: []
+            };
+
+            // Personal Info
+            document.querySelectorAll('[data-form-path^="personal_info."]').forEach(input => {
+                const key = input.dataset.formPath.split('.')[1];
+                data.personal_info[key] = input.value;
+            });
+
+            // Summary
+            const summaryTa = document.querySelector('[data-form-path="summary"]');
+            if (summaryTa) {
+                data.summary = summaryTa.value;
+            }
+
+            // Skills
+            const skillBlocks = document.querySelectorAll('.skill-category-block');
+            skillBlocks.forEach(block => {
+                const nameInput = block.querySelector('.skill-cat-name');
+                const itemsInput = block.querySelector('.skill-cat-items');
+                if (nameInput && itemsInput) {
+                    const cat = nameInput.value.trim() || 'skills';
+                    const items = itemsInput.value.split(',').map(s => s.trim()).filter(s => s);
+                    data.skills[cat] = items;
+                }
+            });
+
+            // Experience
+            const expCards = document.querySelectorAll('.form-experience-card');
+            expCards.forEach(card => {
+                const company = card.querySelector('.exp-company')?.value || '';
+                const role = card.querySelector('.exp-role')?.value || '';
+                const start = card.querySelector('.exp-start')?.value || '';
+                const end = card.querySelector('.exp-end')?.value || '';
+                const bullets = Array.from(card.querySelectorAll('.exp-bullet')).map(b => b.value.trim()).filter(b => b);
+
+                data.experience.push({
+                    company,
+                    role,
+                    start_date: start,
+                    end_date: end,
+                    bullet_points: bullets
+                });
+            });
+
+            // Projects
+            const projCards = document.querySelectorAll('.form-project-card');
+            projCards.forEach(card => {
+                const name = card.querySelector('.proj-name')?.value || '';
+                const link = card.querySelector('.proj-link')?.value || '';
+                const techStr = card.querySelector('.proj-techs')?.value || '';
+                const techs = techStr.split(',').map(t => t.trim()).filter(t => t);
+                const bullets = Array.from(card.querySelectorAll('.proj-bullet')).map(b => b.value.trim()).filter(b => b);
+
+                data.projects.push({
+                    name,
+                    github_link: link,
+                    technologies: techs,
+                    bullet_points: bullets
+                });
+            });
+
+            // Education
+            const eduCards = document.querySelectorAll('.form-education-card');
+            eduCards.forEach(card => {
+                const inst = card.querySelector('.edu-inst')?.value || '';
+                const degree = card.querySelector('.edu-degree')?.value || '';
+                const loc = card.querySelector('.edu-loc')?.value || '';
+                const cgpa = card.querySelector('.edu-cgpa')?.value || '';
+                const start = card.querySelector('.edu-start')?.value || '';
+                const end = card.querySelector('.edu-end')?.value || '';
+
+                data.education.push({
+                    institution: inst,
+                    degree,
+                    location: loc,
+                    start_date: start,
+                    end_date: end,
+                    cgpa
+                });
+            });
+
+            // Certifications
+            const certsInput = document.getElementById('form-certs-input');
+            if (certsInput && certsInput.value.trim()) {
+                data.certifications = certsInput.value.split(',').map(c => c.trim()).filter(c => c);
+            }
+
+            // Set JSON input
+            jsonInput.value = JSON.stringify(data, null, 2);
+
+            // Trigger preview refresh (debounced)
+            triggerPreviewUpdate();
+        }
+
+        // Form Addition Helpers
+        function addFormSkillCategory() {
+            const list = document.getElementById('form-skills-list');
+            if (!list) return;
+            const div = document.createElement('div');
+            div.className = 'skill-category-block';
+            div.style = 'margin-bottom: 0.8rem; border: 1px solid var(--outline); padding: 0.8rem; border-radius: 4px;';
+            div.innerHTML = `
+                <div style="margin-bottom: 0.4rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Category Name</label>
+                    <input type="text" class="input-field skill-cat-name" placeholder="e.g. Databases" oninput="syncFormToJson()">
+                </div>
+                <div>
+                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Skills (comma-separated)</label>
+                    <input type="text" class="input-field skill-cat-items" placeholder="e.g. MongoDB, MySQL" oninput="syncFormToJson()">
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.4rem; font-size: 0.75rem; padding: 3px 8px;">Remove Category</button>
+            `;
+            list.appendChild(div);
+            syncFormToJson();
+        }
+
+        function addFormExperienceBullet(btn) {
+            const container = btn.parentElement.querySelector('.exp-bullets-container');
+            if (!container) return;
+            const idx = container.children.length;
+            const div = document.createElement('div');
+            div.style = 'display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;';
+            div.innerHTML = `
+                <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">${idx + 1}.</span>
+                <input type="text" class="input-field exp-bullet" placeholder="Achieved X by implementing Y resulting in Z..." oninput="syncFormToJson()" style="flex-grow:1;">
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+            `;
+            container.appendChild(div);
+            syncFormToJson();
+        }
+
+        function addFormProjectBullet(btn) {
+            const container = btn.parentElement.querySelector('.proj-bullets-container');
+            if (!container) return;
+            const idx = container.children.length;
+            const div = document.createElement('div');
+            div.style = 'display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;';
+            div.innerHTML = `
+                <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">${idx + 1}.</span>
+                <input type="text" class="input-field proj-bullet" placeholder="Built a responsive system to do X..." oninput="syncFormToJson()" style="flex-grow:1;">
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+            `;
+            container.appendChild(div);
+            syncFormToJson();
+        }
+
+        function addFormExperienceCard() {
+            const list = document.getElementById('form-experience-list');
+            if (!list) return;
+            const div = document.createElement('div');
+            div.className = 'form-experience-card';
+            div.style = 'margin-bottom: 1rem; border: 1px solid var(--outline); padding: 1rem; border-radius: 4px;';
+            div.innerHTML = `
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem;">
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Company</label>
+                        <input type="text" class="input-field exp-company" placeholder="Company Name" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Role</label>
+                        <input type="text" class="input-field exp-role" placeholder="Role Title" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Start Date</label>
+                        <input type="text" class="input-field exp-start" placeholder="e.g. Jun 2024" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">End Date</label>
+                        <input type="text" class="input-field exp-end" placeholder="e.g. Present" oninput="syncFormToJson()">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.3rem;">Bullet Points</label>
+                    <div class="exp-bullets-container">
+                        <div style="display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">1.</span>
+                            <input type="text" class="input-field exp-bullet" placeholder="Bullet Point Description" oninput="syncFormToJson()" style="flex-grow:1;">
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addFormExperienceBullet(this)" style="font-size: 0.7rem; padding: 3px 8px; margin-top: 0.3rem;">+ Add Bullet</button>
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.8rem; width:100%; font-size:0.8rem; padding: 4px;">Remove Job</button>
+            `;
+            list.appendChild(div);
+            syncFormToJson();
+        }
+
+        function addFormProjectCard() {
+            const list = document.getElementById('form-projects-list');
+            if (!list) return;
+            const div = document.createElement('div');
+            div.className = 'form-project-card';
+            div.style = 'margin-bottom: 1rem; border: 1px solid var(--outline); padding: 1rem; border-radius: 4px;';
+            div.innerHTML = `
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.6rem;">
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Project Name</label>
+                        <input type="text" class="input-field proj-name" placeholder="Project Name" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">GitHub Link</label>
+                        <input type="text" class="input-field proj-link" placeholder="GitHub link" oninput="syncFormToJson()">
+                    </div>
+                </div>
+                <div style="margin-bottom: 0.6rem;">
+                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Technologies (comma-separated)</label>
+                    <input type="text" class="input-field proj-techs" placeholder="e.g. Python, SQL" oninput="syncFormToJson()">
+                </div>
+                <div>
+                    <label style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.3rem;">Bullet Points</label>
+                    <div class="proj-bullets-container">
+                        <div style="display:flex; gap: 0.4rem; margin-bottom: 0.3rem; align-items: center;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary); width: 15px;">1.</span>
+                            <input type="text" class="input-field proj-bullet" placeholder="Bullet Point Description" oninput="syncFormToJson()" style="flex-grow:1;">
+                            <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="padding: 2px 6px; font-size: 0.75rem;">&times;</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addFormProjectBullet(this)" style="font-size: 0.7rem; padding: 3px 8px; margin-top: 0.3rem;">+ Add Bullet</button>
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.8rem; width:100%; font-size:0.8rem; padding: 4px;">Remove Project</button>
+            `;
+            list.appendChild(div);
+            syncFormToJson();
+        }
+
+        function addFormEducationCard() {
+            const list = document.getElementById('form-education-list');
+            if (!list) return;
+            const div = document.createElement('div');
+            div.className = 'form-education-card';
+            div.style = 'margin-bottom: 0.8rem; border: 1px solid var(--outline); padding: 0.8rem; border-radius: 4px;';
+            div.innerHTML = `
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.4rem;">
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Institution</label>
+                        <input type="text" class="input-field edu-inst" placeholder="Institution Name" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Degree</label>
+                        <input type="text" class="input-field edu-degree" placeholder="Degree" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Location</label>
+                        <input type="text" class="input-field edu-loc" placeholder="Location" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">CGPA / GPA</label>
+                        <input type="text" class="input-field edu-cgpa" placeholder="CGPA" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">Start Date</label>
+                        <input type="text" class="input-field edu-start" placeholder="Start Date" oninput="syncFormToJson()">
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--text-secondary); display:block;">End Date</label>
+                        <input type="text" class="input-field edu-end" placeholder="End Date" oninput="syncFormToJson()">
+                    </div>
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove(); syncFormToJson();" style="margin-top: 0.4rem; font-size: 0.75rem; padding: 3px 8px;">Remove Education</button>
+            `;
+            list.appendChild(div);
+            syncFormToJson();
+        }
+
+        // Add auto-update on raw input keyup (debounced)
+        jsonInput.addEventListener('input', triggerPreviewUpdate);
     </script>
 </body>
 </html>
