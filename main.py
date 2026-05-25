@@ -1177,12 +1177,17 @@ Return ONLY this JSON object with no extra text, no markdown fences:
     "certifications": ["Cert Name — Issuer", "Cert Name — Issuer"]
 }}
 """
+    last_err = "No models configured"
     for model_name in MODELS_TO_TRY:
         try:
             model = genai.GenerativeModel(model_name, generation_config={"response_mime_type": "application/json"})
             return json.loads(model.generate_content(prompt).text)
-        except: continue
-    return None
+        except Exception as e:
+            last_err = str(e)
+            if "quota" in last_err.lower() or "limit" in last_err.lower() or "api_key" in last_err.lower() or "429" in last_err or "403" in last_err:
+                raise Exception(f"Gemini API Quota/Auth Limit: {last_err}")
+            continue
+    raise Exception(f"Failed to generate content. Last error: {last_err}")
 
 @app.post("/api/tailor")
 async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
@@ -1207,7 +1212,6 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
         dict: A success payload containing the best tailored JSON data, 
             the final ATS score, and detailed performance metrics.
     """
-    # ... logic starts here ...
     try:
         master_data = json.loads(master_json)
         analysis = analyze_jd(jd)
@@ -1220,7 +1224,12 @@ async def tailor_endpoint(master_json: str = Form(...), jd: str = Form(...)):
         final_report = {"score": 0}
 
         while current_attempt <= max_attempts:
-            tailored_data = tailor_resume_attempt(master_data, jd, analysis, feedback)
+            try:
+                tailored_data = tailor_resume_attempt(master_data, jd, analysis, feedback)
+            except Exception as e:
+                # Stop immediately if there is a Gemini API/Quota interruption
+                raise Exception(str(e))
+                
             if not tailored_data:
                 current_attempt += 1
                 continue

@@ -172,15 +172,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.setItem('ats_metrics', JSON.stringify(result.metrics || {}));
                     window.location.href = '/result';
                 } else {
-                    showNotify('Tailoring failed: ' + result.error, 'error');
+                    const resErr = result.error || '';
+                    if (resErr.toLowerCase().includes('quota') || resErr.toLowerCase().includes('limit') || resErr.includes('429')) {
+                        showNotify('Google Gemini API limit exceeded. Please wait a minute before retrying.', 'error');
+                    } else {
+                        showNotify('AI Resume Tailoring failed. Please check your inputs and try again.', 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Submission failed:', error);
-                showNotify('Technical error: ' + error.message, 'error');
+                const errMsg = error.message || '';
+                if (errMsg.toLowerCase().includes('quota') || errMsg.toLowerCase().includes('limit') || errMsg.includes('429')) {
+                    showNotify('Google Gemini API limit exceeded. Please wait a minute before retrying.', 'error');
+                } else {
+                    showNotify('AI Resume Tailoring failed. Please check your inputs and try again.', 'error');
+                }
             } finally {
                 if (simTimeout) clearTimeout(simTimeout);
                 loading.style.display = 'none';
                 submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         });
     }
