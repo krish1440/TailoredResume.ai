@@ -133,8 +133,8 @@
             </a>
             <nav class="nav-links">
                 <a href="/">Home</a>
-                <a href="/editor">JSON Editor</a>
-                <a href="/guide">Master Resume Guide</a>
+                <a href="/editor">Resume Builder</a>
+                <a href="/guide">Master Profile Guide</a>
             </nav>
         </div>
     </header>
@@ -149,8 +149,8 @@
 
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
             <div class="form-tabs" style="margin-bottom: 0;">
-                <button type="button" class="tab-btn active" onclick="switchTab('json')">Direct JSON Editor</button>
-                <button type="button" class="tab-btn" onclick="switchTab('form')">Profile Builder</button>
+                <button type="button" class="tab-btn active" onclick="switchTab('json')">Direct JSON Input</button>
+                <button type="button" class="tab-btn" onclick="switchTab('form')">Visual Profile Builder</button>
             </div>
             <div style="display: flex; gap: 0.8rem;">
                 <button type="button" onclick="saveToLocalStorage()" class="btn-sample btn-progress-save">Save Progress 💾</button>
@@ -232,15 +232,15 @@
                 </div>
             </div>
 
-            <!-- JSON EDITOR -->
+            <!-- JSON INPUT -->
             <div id="json-container" style="display: block;">
                 <div class="card">
                     <div class="input-group">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <label style="margin-bottom: 0;">Master Resume (JSON Format)</label>
+                            <label style="margin-bottom: 0;">Master Profile (JSON Format)</label>
                             <button type="button" class="btn-sample" onclick="loadSample()">Load Sample Data 📋</button>
                         </div>
-                        <textarea id="master_json" required placeholder="Master Resume JSON" rows="18"></textarea>
+                        <textarea id="master_json" required placeholder="Master Profile JSON" rows="18"></textarea>
                     </div>
                 </div>
             </div>
