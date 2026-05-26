@@ -556,7 +556,8 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
             "rightMargin": 36, "leftMargin": 36, "topMargin": 30, "bottomMargin": 25,
             "fontSize_name": 18, "spaceAfter_name": 4,
             "fontSize_contact": 10.0, "spaceAfter_contact": 8,
-            "fontSize_header": 12, "spaceAfter_header": 1.5, "spaceBefore_header": 8,
+            "fontSize_header": 12, "leading_header": 13.5, "spaceAfter_header": 0.5, "spaceBefore_header": 8,
+            "hr_spaceAfter": 2.5,
             "fontSize_summary": 10.5, "spaceAfter_summary": 3, "leading_summary": 13,
             "fontSize_title": 11, "spaceAfter_title": 1, "spaceBefore_title": 4,
             "fontSize_date": 10,
@@ -568,7 +569,8 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
             "rightMargin": 28, "leftMargin": 28, "topMargin": 20, "bottomMargin": 16,
             "fontSize_name": 16, "spaceAfter_name": 1,
             "fontSize_contact": 9.2, "spaceAfter_contact": 4,
-            "fontSize_header": 11, "spaceAfter_header": 0.5, "spaceBefore_header": 4,
+            "fontSize_header": 11, "leading_header": 12.5, "spaceAfter_header": 0.3, "spaceBefore_header": 4,
+            "hr_spaceAfter": 1.5,
             "fontSize_summary": 9.5, "spaceAfter_summary": 1.5, "leading_summary": 11,
             "fontSize_title": 10.2, "spaceAfter_title": 0.5, "spaceBefore_title": 2,
             "fontSize_date": 9.2,
@@ -580,7 +582,8 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
             "rightMargin": 22, "leftMargin": 22, "topMargin": 13, "bottomMargin": 10,
             "fontSize_name": 15, "spaceAfter_name": 0,
             "fontSize_contact": 8.5, "spaceAfter_contact": 3,
-            "fontSize_header": 10, "spaceAfter_header": 0.2, "spaceBefore_header": 2,
+            "fontSize_header": 10, "leading_header": 11.5, "spaceAfter_header": 0.1, "spaceBefore_header": 2,
+            "hr_spaceAfter": 1.5,
             "fontSize_summary": 9, "spaceAfter_summary": 1, "leading_summary": 10,
             "fontSize_title": 9.5, "spaceAfter_title": 0.2, "spaceBefore_title": 0.8,
             "fontSize_date": 8.5,
@@ -592,7 +595,8 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
             "rightMargin": 16, "leftMargin": 16, "topMargin": 8, "bottomMargin": 6,
             "fontSize_name": 13.5, "spaceAfter_name": 0,
             "fontSize_contact": 8.0, "spaceAfter_contact": 1.5,
-            "fontSize_header": 9, "spaceAfter_header": 0.1, "spaceBefore_header": 1,
+            "fontSize_header": 9, "leading_header": 10.5, "spaceAfter_header": 0.1, "spaceBefore_header": 1,
+            "hr_spaceAfter": 1.0,
             "fontSize_summary": 8.0, "spaceAfter_summary": 0.5, "leading_summary": 9,
             "fontSize_title": 8.5, "spaceAfter_title": 0.1, "spaceBefore_title": 0.4,
             "fontSize_date": 8.0,
@@ -620,7 +624,7 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
     # Custom styles
     styles.add(ParagraphStyle(name='CompName', parent=styles['Heading1'], fontSize=config["fontSize_name"], spaceAfter=config["spaceAfter_name"], alignment=1))
     styles.add(ParagraphStyle(name='CompContact', parent=styles['Normal'], fontSize=config["fontSize_contact"], spaceAfter=config["spaceAfter_contact"], alignment=1, textColor=Color(0.15, 0.15, 0.15)))
-    styles.add(ParagraphStyle(name='CompSectionHeader', parent=styles['Heading2'], fontSize=config["fontSize_header"], spaceAfter=config["spaceAfter_header"], spaceBefore=config["spaceBefore_header"], textColor=Color(0, 0, 0)))
+    styles.add(ParagraphStyle(name='CompSectionHeader', parent=styles['Normal'], fontSize=config["fontSize_header"], leading=config["leading_header"], spaceAfter=config["spaceAfter_header"], spaceBefore=config["spaceBefore_header"], textColor=Color(0, 0, 0), fontName='Helvetica-Bold'))
     styles.add(ParagraphStyle(name='CompSummary', parent=styles['Normal'], fontSize=config["fontSize_summary"], spaceAfter=config["spaceAfter_summary"], leading=config["leading_summary"]))
     styles.add(ParagraphStyle(name='CompItemTitle', parent=styles['Normal'], fontSize=config["fontSize_title"], spaceAfter=config["spaceAfter_title"], spaceBefore=config["spaceBefore_title"]))
     styles.add(ParagraphStyle(name='CompItemDate', parent=styles['Normal'], fontSize=config["fontSize_date"], alignment=2, textColor=Color(0.2, 0.2, 0.2)))
@@ -628,7 +632,7 @@ def create_pdf(data: dict, output_buffer, template: str = "classic", density: st
     styles.add(ParagraphStyle(name='CompContent', parent=styles['Normal'], fontSize=config["fontSize_content"], leading=config["leading_content"]))
 
     elements = []
-    line = HRFlowable(width="100%", thickness=0.8, color=Color(0, 0, 0), spaceAfter=1.5, spaceBefore=0)
+    line = HRFlowable(width="100%", thickness=0.8, color=Color(0, 0, 0), spaceAfter=config["hr_spaceAfter"], spaceBefore=0)
 
     def create_header_table(left_text, right_text):
         t = Table(
