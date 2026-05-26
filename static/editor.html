@@ -125,7 +125,7 @@
                         <option value="two_column">Double Column</option>
                     </select>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div id="editor-density-container" style="display: flex; align-items: center; gap: 0.5rem;">
                     <label for="density-select" style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Density:</label>
                     <select id="density-select" onchange="updatePreview()" style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--outline); background: var(--surface-low); color: var(--text-primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
                         <option value="low">Minimalist (Low Content)</option>
@@ -215,6 +215,11 @@
                 const data = JSON.parse(content);
                 const template = document.getElementById('template-select').value;
                 const density = document.getElementById('density-select').value;
+
+                const densityContainer = document.getElementById('editor-density-container');
+                if (densityContainer) {
+                    densityContainer.style.display = template === 'classic' ? 'flex' : 'none';
+                }
 
                 const response = await fetch(`/api/download?template=${template}&density=${density}`, {
                     method: 'POST',
