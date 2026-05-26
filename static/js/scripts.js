@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const submitBtn = form.querySelector('button[type="submit"]');
 
             if (!masterJsonRaw) {
-                showNotify('Please provide your Master Resume data.', 'error');
+                showNotify('Please provide your Master Profile data.', 'error');
                 return;
             }
             if (!jd) {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 JSON.parse(masterJsonRaw);
             } catch (err) {
-                showNotify('Invalid JSON in Master Resume. Please fix it or use the Builder tab.', 'error');
+                showNotify('Invalid JSON in Master Profile. Please fix it or use the Visual Profile Builder tab.', 'error');
                 return;
             }
 
