@@ -369,7 +369,7 @@
                             </div>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.25rem;"><path d="m9 18 6-6-6-6"/></svg>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                        <div id="density-row" style="display: flex; flex-direction: column; gap: 0.25rem;">
                             <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-weight: 600;">Content Density</span>
                             <select id="density-select" onchange="changeDensity(this.value)" style="width: 100%; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--outline); background: var(--surface-low); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; outline: none; transition: var(--transition-smooth);" onfocus="this.style.borderColor='var(--primary-accent)'" onblur="this.style.borderColor='var(--outline)'">
                                 <option value="low">Minimalist (Low Content)</option>
@@ -504,6 +504,12 @@
                 if (nameEl) nameEl.innerText = 'Classic';
             } else {
                 if (nameEl) nameEl.innerText = 'Double Column';
+            }
+
+            // Show density selector only for Classic template
+            const densityRow = document.getElementById('density-row');
+            if (densityRow) {
+                densityRow.style.display = tmpl === 'classic' ? 'flex' : 'none';
             }
             
             if (tailoredData && tailoredData.data) {
