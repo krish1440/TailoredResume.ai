@@ -462,7 +462,7 @@ def create_two_column_pdf(data: dict, output_buffer, density: str = "high"):
     
     current_left = []
     current_height = 0
-    max_page_height = 745
+    max_page_height = 792 - m["top"] - m["bottom"] - 5
     
     for f in left_flowables:
         h = estimate_flowable_height(f, 358)
