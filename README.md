@@ -39,7 +39,7 @@ Our "Governance Prompting" enforces strict rules to ensure your resume stands ou
 ### 2. Quantification Engine
 Automatically re-interprets vague bullet points into data-backed metrics.
 - *Before:* "Improved pipeline performance."
-- *After:* "Optimized inference throughput by **38% across 1.2M rows** using parallel Dask processing."
+- *After:* "Optimized inference throughput by **38% across 1.2M rows** using parallel Task processing."
 
 ### 3. Linguistic Diversity (Zero-Verb-Repetition)
 Mandates that every single action verb used in the resume is unique. No more "Developed this, Developed that." The engine draws from a high-impact architectural vocabulary (e.g., *Orchestrated*, *Synthesized*, *Calibrated*).
@@ -134,5 +134,3 @@ uvicorn main:app --reload --port 8000
 
 ## 📜 License & Contribution
 This project is open-source under the **MIT License**. Contributions to the Agentic Loop logic or the PDF rendering engine are welcome.
-
-*Developed with Strategic Engineering for High-Growth Roles by **Krish Chaudhary**.*
