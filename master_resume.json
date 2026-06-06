@@ -32,17 +32,18 @@
       "LightGBM",
       "CatBoost"
     ],
-    "ai_specializations": [
-      "Generative AI",
-      "Large Language Models (LLMs)",
-      "LangChain",
-      "LangGraph",
-      "Agentic AI Pipelines",
-      "MCP (Model Context Protocol)",
-      "RAG-based systems",
-      "Prompt Engineering",
-      "Semantic Search"
-    ],
+   "ai_specializations": [
+  "Generative AI",
+  "Large Language Models (LLMs)",
+  "LangChain",
+  "LangGraph",
+  "Agentic AI Pipelines",
+  "MCP (Model Context Protocol)",
+  "RAG-based systems",
+  "Prompt Engineering",
+  "Semantic Search",
+  "Natural Language Processing (NLP)"
+],
     "deep_learning_cv": [
       "TensorFlow",
       "PyTorch",
@@ -136,6 +137,36 @@
     }
   ],
   "projects": [
+    {
+      "name": "MarketIntel AI: Total Market Intelligence Engine",
+      "github_link": "https://github.com/krish1440/MarketIntel_AI",
+      "tech_stack": [
+        "Python 3.10+",
+        "FastAPI",
+        "PyTorch (LSTM)",
+        "Hugging Face (DistilBERT)",
+        "PostgreSQL 15",
+        "Docker & Docker Compose",
+        "React.js",
+        "SQLAlchemy",
+        "Pandas"
+      ],
+      "master_narrative": "Architected a production-grade market intelligence platform providing total coverage for 2,360+ NSE/BSE equities. The system integrates real-time delta ingestion pipelines, an LSTM-based neural network for multi-day price forecasting, and a DistilBERT NLP engine for financial news sentiment analysis. I designed an institutional-grade dashboard paired with a high-performance FastAPI backend, enabling seamless historical data backfilling and live market monitoring.",
+      "quantified_impact": [
+        "Scaled automated data ingestion pipelines to autonomously process and manage 4.5M+ historical trading records across 2,360+ equities.",
+        "Attained a Kaggle Bronze Medal by publishing a high-density, 5-year Indian Stock Market dataset curated through the platform's automated export engine.",
+        "Eliminated manual analysis latency by implementing a 30-second background polling architecture, ensuring real-time UI synchronization for price and sentiment metrics.",
+        "Enhanced prediction reliability by deploying a custom PyTorch LSTM model trained on extensive historical data, synthesized with technical indicators for actionable signals.",
+        "Maximized news sentiment precision using a DistilBERT transformer, achieving zero-noise market mood quantification (-1.0 to +1.0) across high-volume live feeds."
+      ],
+      "core_actions": [
+        "Architected a centralized FastAPI backend to orchestrate incremental delta updates, batch data ingestion, and RESTful intelligence endpoints.",
+        "Engineered a high-performance institutional dashboard using React, featuring a 3-column grid layout and dual-exchange fallback logic.",
+        "Orchestrated containerized infrastructure using Docker Compose with persistent volume mapping to securely house a PostgreSQL 15 database.",
+        "Constructed a differential-ingestion algorithm to intelligently identify and patch missing market days without redundant network overhead.",
+        "Integrated natural language processing (NLP) pipelines with rotational scraping logic to analyze financial news streams continuously without hitting provider bans."
+      ]
+    },
     {
       "name": "Email Automator & AI Sales Agent",
       "github_link": "https://github.com/krish1440/LangGraph-Email-Automator",
@@ -258,7 +289,8 @@
       ]
     },
     {
-      "name": "EasyInterview ",
+      "name": "EasyInterview",
+      "github_link": "https://github.com/krish1440/EasyInterview",
       "tech_stack": [
         "React",
         "Google Gemini 2.5 Multimodal AI",
@@ -317,6 +349,7 @@
     },
     {
       "name": "FaceGeo Attendance System",
+      "github_link": "https://github.com/krish1440/FaceGeo-Attendance",
       "tech_stack": [
         "Python",
         "Flask",
@@ -345,6 +378,7 @@
     },
     {
       "name": "Crop Production Analysis",
+      "github_link": "https://github.com/krish1440/Crop-Production-Analysis",
       "tech_stack": [
         "Python (Pandas, NumPy)",
         "Power BI",
