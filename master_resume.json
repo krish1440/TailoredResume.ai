@@ -114,6 +114,17 @@
   ],
   "experience": [
     {
+      "company": "Freelance",
+      "role": "AI/ML Engineer",
+      "start_date": "Jun 2024",
+      "end_date": "Present",
+      "bullet_points": [
+        "Proficient in designing and deploying end-to-end ML pipelines, consistently reducing model deployment cycle time by up to 50% through containerization and experiment tracking.",
+        "Experienced in fine-tuning and optimizing Large Language Models for domain-specific tasks, achieving up to 40% accuracy improvement over baseline zero-shot performance.",
+        "Skilled in building production-grade Agentic AI and RAG-based systems, capable of automating complex workflows and cutting manual processing time by up to 65%."
+      ]
+    },
+    {
       "company": "Abhay Engineering",
       "role": "Business Analyst",
       "start_date": "April 2025",
