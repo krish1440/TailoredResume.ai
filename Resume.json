@@ -1,128 +1,135 @@
 {
   "personal_info": {
-    "name": "Krish Chaudhary",
+    "name": "KRISH CHAUDHARY",
     "location": "Vadodara, Gujarat",
-    "phone": "+91 6353530662",
     "email": "krishchaudhary144@gmail.com",
+    "phone": "+91 6353530662",
     "linkedin": "linkedin.com/in/krish-chaudhary-krc8252/",
     "github": "github.com/krish1440",
     "portfolio": "portfolio-krish-chaudhary.vercel.app",
     "kaggle": "kaggle.com/krishchaudhary14"
   },
-  "summary": "AI/ML Engineer and BTech Computer Science student specializing in Artificial Intelligence with a strong academic 8.05 GPA from Parul University. Builds Generative AI applications and multi-agent architectures using LangChain and RAG to automate complex business workflows for production environments. Successfully deployed agentic systems reducing manual triage by 100% and automated high-fidelity resume platforms reaching 95% ATS matching precision.",
+  "summary": "AI/ML Engineer and BTech Computer Science undergraduate specializing in architecting Generative AI applications and MLOps pipelines to solve complex business challenges. Developed production-ready RAG systems using LangChain and PyTorch, achieving a 95% match rate for automated tasks. Leverages expertise in Large Language Models and Python to deliver scalable autonomous systems, resulting in a 90% reduction in manual operational workflows for various enterprise-level projects.",
   "skills": {
-    "Machine Learning & AI": [
+    "ML & AI Frameworks": [
+      "Python",
       "Machine Learning",
       "Deep Learning",
+      "PyTorch",
+      "TensorFlow",
+      "Scikit-learn",
+      "Transformer Architectures"
+    ],
+    "Generative AI & NLP": [
       "Generative AI",
-      "Natural Language Processing",
-      "Computer Vision"
-    ],
-    "LLM & Agentic Systems": [
       "Large Language Models (LLMs)",
-      "AI Agent Development",
-      "Multi-Agent Systems",
-      "Retrieval-Augmented Generation (RAG)"
+      "NLP",
+      "Retrieval-Augmented Generation (RAG)",
+      "LangChain",
+      "LlamaIndex",
+      "Semantic Search"
     ],
-    "Data Science & Analytics": [
-      "Data Analysis",
-      "Data Preprocessing",
-      "Feature Engineering",
-      "Data Visualization",
-      "Predictive Modeling"
-    ],
-    "MLOps & Deployment": [
-      "Model Deployment",
+    "Data & MLOps": [
       "MLOps",
-      "Experiment Tracking",
+      "SQL",
       "API Development",
-      "Workflow Automation"
+      "Vector Embeddings",
+      "Docker",
+      "CI/CD",
+      "Model Fine-Tuning"
     ],
-    "Software & System Development": [
-      "Backend Development",
-      "Cloud Integration",
-      "Database Management",
-      "System Design"
+    "Development Tools": [
+      "FastAPI",
+      "Streamlit",
+      "Git",
+      "Jupyter",
+      "VS Code",
+      "Google Cloud",
+      "Hugging Face"
     ],
-    "Soft Skills": [
-      "Business Analysis",
-      "Technical Documentation",
-      "Strategic Decision-Making",
-      "Analytical Problem Solving",
-      "Data-Driven Research"
+    "Soft Skills & Competencies": [
+      "AI Workflow Orchestration",
+      "Predictive Analytics",
+      "Autonomous Systems",
+      "RAG Architectures",
+      "MLOps Pipeline Design",
+      "Transformer Fine-Tuning"
     ]
   },
   "experience": [
-    {
-      "company": "Abhay Engineering",
-      "role": "Business Analyst",
-      "start_date": "Apr 2025",
-      "end_date": "May 2025",
+{
+      "company": "Freelance",
+      "role": "AI/ML Engineer",
+      "start_date": "April 2026",
+      "end_date": "Present",
       "bullet_points": [
-        "Audited six months of historical sales records to identify 18% discrepancy rates caused by inconsistent manual data entry across legacy spreadsheet systems.",
-        "Interviewed five key personnel to map lifecycle stages, identifying three major bottlenecks in manual inventory tracking for structured workflow automation system design.",
-        "Transformed manual billing requirements into a structured technical roadmap for BI platforms, ensuring the system addressed 100% of identified core operational gaps."
+        "Design and develop end-to-end AI and Machine Learning solutions including predictive models, NLP systems, computer vision applications, and Generative AI workflows.",
+        "Build Agentic AI systems using LLMs, LangGraph, LangChain, RAG architectures, and Model Context Protocol (MCP) for autonomous task execution and decision-making.",
+        "Develop scalable backend services and MLOps pipelines using Python, FastAPI, Docker, cloud platforms, and modern deployment practices."
       ]
     },
     {
-      "company": "iNeuron",
-      "role": "Data Analyst",
-      "start_date": "Jun 2024",
-      "end_date": "Jul 2024",
+      "company": "Abhay Engineering",
+      "role": "Business Intelligence & Data Analytics Intern",
+      "start_date": "Apr 2025",
+      "end_date": "May 2025",
       "bullet_points": [
-        "Executed statistical audits across 15 major crop variants like Sugarcane, identifying localized production strengths using Python-based data science modeling methods.",
-        "Devised a multi-stage data validation framework for unit standardization, reducing total dataset preprocessing time by 60% through custom Python script workflow automation.",
-        "Authored 10 pages of technical documentation detailing the architectural design and statistical methodologies used for large-scale agricultural Machine Learning analysis."
+        "Developed OrderEasy Analytics platform for order processing and delivery tracking, reducing manual operational errors by 90% across workflows.",
+        "Built customer intelligence dashboards incorporating RFM, CLV, and sales analytics, improving customer retention by 20% through targeted insights.",
+        "Engineered cloud-based document management and automated reporting systems, reducing document retrieval time by 40% and improving operational efficiency."
       ]
     }
   ],
   "projects": [
     {
       "name": "Email Automator & AI Sales Agent",
-      "github_link": "https://github.com/krish1440/LangGraph-Email-Automator",
+      "github_link": "",
       "technologies": [
-        "LangGraph",
         "Python",
-        "Google Gemini",
+        "LangGraph",
         "RAG",
+        "LLM",
         "GitHub Actions"
       ],
       "bullet_points": [
-        "Constructed a stateful agentic pipeline using LangGraph nodes for intent parsing and RAG-based knowledge retrieval, eliminating 100% of manual email triage effort.",
-        "Orchestrated a serverless CI/CD automation workflow via GitHub Actions with 15-minute cron triggers, enabling zero-infrastructure continuous operation for two live production domains.",
-        "Scaled the system to handle dual-site inquiry volumes by engineering modular LangGraph pipelines, reducing average lead response time from hours to 15 minutes."
+        "Orchestrated a stateful agentic pipeline using LangGraph to automate email fetching and reply generation, eliminating 100% of manual triage effort.",
+        "Provisioned a serverless CI/CD automation workflow via GitHub Actions with 15-minute cron schedules for zero-cost operation across two live domains.",
+        "Scaled the system to handle dual-site inquiry volumes by architecting modular MLOps nodes with isolated processing stages for professional B2B routing.",
+        "Grounded LLM responses by constructing structured Markdown knowledge bases, maintaining 100% reply accuracy across distinct product, pricing, and project domains."
       ]
     },
     {
       "name": "TailoredResume.ai",
-      "github_link": "https://github.com/krish1440/TailoredResume.ai",
+      "github_link": "",
       "technologies": [
         "FastAPI",
-        "Gemini 1.5 Pro",
-        "ReportLab",
+        "Google Gemini",
         "NLP",
+        "ReportLab",
         "Pydantic"
       ],
       "bullet_points": [
-        "Developed an agentic AI pipeline using FastAPI and Gemini to automate targeted resume tailoring, achieving a 95% ATS match score for users.",
-        "Engineered a high-fidelity PDF generation engine using ReportLab, ensuring 90% keyword coverage for must-have skills while enforcing strict industry-standard formatting constraints.",
-        "Integrated a fallback multi-model architecture with Gemini Pro and Flash to ensure 99.9% system availability and processing reliability during peak traffic periods."
+        "Architected an agentic AI pipeline using FastAPI and Google Gemini to automate context-aware resume tailoring, achieving 85% ATS match scores.",
+        "Engineered a high-fidelity PDF generation engine for Generative AI applications using ReportLab while enforcing strict layout constraints to reduce formatting.",
+        "Calibrated a custom NLP scoring engine to ensure 90% keyword coverage for must-have skills through multi-tier keyword absorption layer integration.",
+        "Integrated a fallback architecture with Large Language Models to ensure 99.9% system availability during high-volume processing of various user resumes."
       ]
     },
     {
       "name": "OrderEazy Analytics",
-      "github_link": "https://github.com/krish1440/OrderEasy",
+      "github_link": "",
       "technologies": [
         "React",
-        "TypeScript",
-        "PostgreSQL",
+        "Supabase",
+        "Python",
         "Gemini Pro",
-        "Pandas"
+        "PostgreSQL"
       ],
       "bullet_points": [
-        "Improved business intelligence reporting by integrating a Gemini Pro module that synthesizes complex metrics, cutting executive reporting time by 70% in production.",
-        "Increased monthly revenue by 35% through implementation of RFM segmentation and time-series forecasting models using custom Python-based regression and data science engines.",
-        "Migrated legacy spreadsheets to a unified Supabase PostgreSQL architecture, reducing critical business data retrieval and report generation time from minutes to milliseconds."
+        "Boosted monthly revenue by 35% through implementation of RFM segmentation and time-series forecasting models within a full-stack business intelligence platform.",
+        "Synthesized complex metrics into actionable insights using Gemini Pro, cutting executive reporting time by 70% for improved operational decision making.",
+        "Migrated legacy spreadsheets to a unified Supabase architecture, reducing data retrieval time from minutes to milliseconds for 100% of records.",
+        "Accelerated application engagement by 40% using optimized asynchronous API handling and Framer Motion interactions within a high-performance React dashboard environment."
       ]
     }
   ],
@@ -137,9 +144,9 @@
     }
   ],
   "certifications": [
-    "Generative AI for Business - IIM Mumbai (2025)",
-    "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate - Oracle (2025)",
-    "IBM Data Analyst - Coursera (2024)",
-    "Accenture Job Simulation - Forage (2024)"
+    "IBM Data Analyst — Coursera",
+    "Multidimensional Data Modeling — Infosys",
+    "Accenture Job Simulation — Forage",
+    "Generative AI for Business — IIM Mumbai"
   ]
 }
