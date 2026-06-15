@@ -32,18 +32,18 @@
       "LightGBM",
       "CatBoost"
     ],
-   "ai_specializations": [
-  "Generative AI",
-  "Large Language Models (LLMs)",
-  "LangChain",
-  "LangGraph",
-  "Agentic AI Pipelines",
-  "MCP (Model Context Protocol)",
-  "RAG-based systems",
-  "Prompt Engineering",
-  "Semantic Search",
-  "Natural Language Processing (NLP)"
-],
+    "ai_specializations": [
+      "Generative AI",
+      "Large Language Models (LLMs)",
+      "LangChain",
+      "LangGraph",
+      "Agentic AI Pipelines",
+      "MCP (Model Context Protocol)",
+      "RAG-based systems",
+      "Prompt Engineering",
+      "Semantic Search",
+      "Natural Language Processing (NLP)"
+    ],
     "deep_learning_cv": [
       "TensorFlow",
       "PyTorch",
@@ -116,34 +116,25 @@
     {
       "company": "Freelance",
       "role": "AI/ML Engineer",
-      "start_date": "Jun 2024",
+      "start_date": "April 2026",
       "end_date": "Present",
       "bullet_points": [
-        "Proficient in designing and deploying end-to-end ML pipelines, consistently reducing model deployment cycle time by up to 50% through containerization and experiment tracking.",
-        "Experienced in fine-tuning and optimizing Large Language Models for domain-specific tasks, achieving up to 40% accuracy improvement over baseline zero-shot performance.",
-        "Skilled in building production-grade Agentic AI and RAG-based systems, capable of automating complex workflows and cutting manual processing time by up to 65%."
+        "Design and develop end-to-end AI and Machine Learning solutions including predictive models, NLP systems, computer vision applications, and Generative AI workflows.",
+        "Build Agentic AI systems using LLMs, LangGraph, LangChain, RAG architectures, and Model Context Protocol (MCP) for autonomous task execution and decision-making.",
+        "Develop scalable backend services and MLOps pipelines using Python, FastAPI, Docker, cloud platforms, and modern deployment practices.",
+        "Perform data analysis, feature engineering, model optimization, and business intelligence reporting to transform raw data into actionable insights."
       ]
     },
     {
       "company": "Abhay Engineering",
-      "role": "Business Analyst",
-      "start_date": "April 2025",
+      "role": "Business Intelligence & Data Analytics Intern",
+      "start_date": "Apr 2025",
       "end_date": "May 2025",
       "bullet_points": [
-        "Analyzed 6+ months of historical sales and credit records to identify an 18% discrepancy rate caused by inconsistent manual data entry across multiple legacy spreadsheets.",
-        "Conducted field interviews and process walkthroughs with 5+ key personnel to map out the 'order-to-delivery' lifecycle, identifying 3 major bottlenecks in manual inventory tracking.",
-        "Transformed manual billing requirements into a structured technical roadmap for an automated BI platform, ensuring the system addressed 100% of the core operational gaps."
-      ]
-    },
-    {
-      "company": "iNeuron",
-      "role": "Data Analyst",
-      "start_date": "June 2024",
-      "end_date": "July 2024",
-      "bullet_points": [
-        "Executed granular statistical audits across 15+ major crop variants including Sugarcane and Wheat, identifying localized production strengths and soil-specific yield variations.",
-        "Devised a multi-stage data validation framework for multi-unit standardization (Hectares/Tonnes), reducing total dataset preprocessing time by ~60% through Python automation.",
-        "Authored 10+ pages of high-level and low-level technical documentation (HLD/LLD), detailing the architectural design and statistical methodologies used for agricultural analysis."
+        "Developed OrderEasy Analytics platform for order processing and delivery tracking, reducing manual operational errors by 90% across workflows.",
+        "Built customer intelligence dashboards incorporating RFM, CLV, and sales analytics, improving customer retention by 20% through targeted insights.",
+        "Implemented linear regression forecasting models and business performance analytics, enabling data-driven strategies that increased monthly revenue by 35%.",
+        "Engineered cloud-based document management and automated reporting systems, reducing document retrieval time by 40% and improving operational efficiency."
       ]
     }
   ],
